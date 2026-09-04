@@ -14,38 +14,36 @@ xkb_symbols "basic" {
 
     name[Group1] = "Norwegian (medieval runic)";
 
-    key <AD01> { [ U16E9, U16E2 ] };  // q  ᛩ | ᛢ cweorth
-    key <AD02> { [ U16A5, U16B9 ] };  // w  ᚥ | ᚹ wunjo
-    key <AD03> { [ U16C2, U16D6 ] };  // e  ᛂ | ᛖ ehwaz
-    key <AD04> { [ U16B1, U16E6 ] };  // r  ᚱ | ᛦ long-branch yr
-    key <AD05> { [ U16CF, U16A6 ] };  // t  ᛏ | ᚦ thorn
-    key <AD06> { [ U16A4, U16A3 ] };  // y  ᚤ | ᚣ yr
-    key <AD07> { [ U16A2, U16F3 ] };  // u  ᚢ | ᛳ oo
-    key <AD08> { [ U16C1, U16C7 ] };  // i  ᛁ | ᛇ iwaz
-    key <AD09> { [ U16AE, U16AC ] };  // o  ᚮ | ᚬ long-branch oss
-    key <AD10> { [ U16D4, U16C8 ] };  // p  ᛔ | ᛈ pertho
-    key <AD11> { [ U16AD, U16AA ] };  // å  ᚭ | ᚪ ac
-    key <AC01> { [ U16C6, U16A8 ] };  // a  ᛆ | ᚨ ansuz
-    key <AC02> { [ U16CB, U16CC ] };  // s  ᛋ | ᛌ short-twig sol
-    key <AC03> { [ U16D1, U16A7 ] };  // d  ᛑ | ᚧ eth
-    key <AC04> { [ U16A0, U16B8 ] };  // f  ᚠ | ᚸ gar
-    key <AC05> { [ U16B5, U16DC ] };  // g  ᚵ | ᛜ ingwaz, ng
-    key <AC06> { [ U16BC, U16BD ] };  // h  ᚼ | ᚽ short-twig hagall
-    key <AC07> { [ U16C3, U16C4 ] };  // j  ᛃ | ᛄ ger
-    key <AC08> { [ U16B4, U16B2 ] };  // k  ᚴ | ᚲ kauna
-    key <AC09> { [ U16DA, U16DB ] };  // l  ᛚ | ᛛ dotted-l
-    key <AC10> { [ U16AF, U16DF ] };  // ø  ᚯ | ᛟ othalan
-    key <AC11> { [ U16C5, U16AB ] };  // æ  ᛅ | ᚫ aesc
-    key <AB01> { [ U16CE, U16C9 ] };  // z  ᛎ | ᛉ algiz
-    key <AB02> { [ U16EA, U16E3 ] };  // x  ᛪ | ᛣ calc
-    key <AB03> { [ U16CD, U16B3 ] };  // c  ᛍ | ᚳ cen
-    key <AB04> { [ U16A1, U16B7 ] };  // v  ᚡ | ᚷ gebo
-    key <AB05> { [ U16D2, U16D3 ] };  // b  ᛒ | ᛓ short-twig bjarkan
-    key <AB06> { [ U16BF, U16BE ] };  // n  ᚿ | ᚾ long-branch naud
-    key <AB07> { [ U16D8, U16D9 ] };  // m  ᛘ | ᛙ short-twig madr
-
-    // Latin punctuation unshifted so ordinary sentences still work.
-    key <AB08> { [ comma, U16EB ] };  // , | ᛫ single punctuation
-    key <AB09> { [ period, U16EC ] };  // . | ᛬ multiple punctuation
-    key <AB10> { [ minus, U16ED ] };  // - | ᛭ cross punctuation
+    key <AD01> { [ U16E9, Q ] };  // q  ᛩ | Q  q — seinmiddelaldersk tillegg
+    key <AD02> { [ U16A5, W ] };  // w  ᚥ | W  w — seinmiddelaldersk tillegg
+    key <AD03> { [ U16C2, E ] };  // e  ᛂ | E  prikket íss
+    key <AD04> { [ U16B1, R ] };  // r  ᚱ | R  reið
+    key <AD05> { [ U16CF, T ] };  // t  ᛏ | T  týr
+    key <AD06> { [ U16A4, Y ] };  // y  ᚤ | Y  prikket úr
+    key <AD07> { [ U16A2, U ] };  // u  ᚢ | U  úr
+    key <AD08> { [ U16C1, I ] };  // i  ᛁ | I  íss
+    key <AD09> { [ U16AE, O ] };  // o  ᚮ | O  óss
+    key <AD10> { [ U16D4, P ] };  // p  ᛔ | P  prikket bjarkan
+    key <AD11> { [ U16AD, Aring ] };  // å  ᚭ | Å  å — oppdiktet, se README
+    key <AC01> { [ U16C6, A ] };  // a  ᛆ | A  ár
+    key <AC02> { [ U16CB, S ] };  // s  ᛋ | S  sól
+    key <AC03> { [ U16D1, D ] };  // d  ᛑ | D  prikket týr
+    key <AC04> { [ U16A0, F ] };  // f  ᚠ | F  fé
+    key <AC05> { [ U16B5, G ] };  // g  ᚵ | G  prikket kaun
+    key <AC06> { [ U16BC, H ] };  // h  ᚼ | H  hagall
+    key <AC07> { [ U16C3, J ] };  // j  ᛃ | J  j — konsonantisk íss
+    key <AC08> { [ U16B4, K ] };  // k  ᚴ | K  kaun
+    key <AC09> { [ U16DA, L ] };  // l  ᛚ | L  lǫgr
+    key <AC10> { [ U16AF, Oslash ] };  // ø  ᚯ | Ø  ør
+    key <AC11> { [ U16C5, AE ] };  // æ  ᛅ | Æ  ær
+    key <AB01> { [ U16CE, Z ] };  // z  ᛎ | Z  z — seinmiddelaldersk tillegg
+    key <AB02> { [ U16EA, X ] };  // x  ᛪ | X  x — seinmiddelaldersk tillegg
+    key <AB03> { [ U16CD, C ] };  // c  ᛍ | C  c — seinmiddelaldersk tillegg
+    key <AB04> { [ U16A1, V ] };  // v  ᚡ | V  prikket fé
+    key <AB05> { [ U16D2, B ] };  // b  ᛒ | B  bjarkan
+    key <AB06> { [ U16BF, N ] };  // n  ᚿ | N  nauð
+    key <AB07> { [ U16D8, M ] };  // m  ᛘ | M  maðr
+    key <AB08> { [ comma, U16EB ] };  // ,  , | ᛫  enkelt skilletegn
+    key <AB09> { [ period, U16EC ] };  // .  . | ᛬  dobbelt skilletegn
+    key <AB10> { [ minus, U16ED ] };  // -  - | ᛭  korsskilletegn
 };

@@ -57,9 +57,11 @@ def main():
     args = parser.parse_args()
 
     if args.table:
-        print("key\tbase\t\tshift")
-        for latin, base, shift, *_ in runes.KEYS:
-            print(f"{latin}\t{base} U+{ord(base):04X}\t{shift} U+{ord(shift):04X}")
+        print("key\trune\t\tname")
+        for latin, rune, _x, _m, _s, _v, name in runes.KEYS:
+            print(f"{latin}\t{rune} U+{ord(rune):04X}\t{name}")
+        for latin, _b, shift, *_rest, name in runes.PUNCT_KEYS:
+            print(f"{latin}+\t{shift} U+{ord(shift):04X}\t{name} (skift)")
         return
 
     if args.text:

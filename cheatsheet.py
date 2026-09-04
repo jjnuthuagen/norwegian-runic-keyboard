@@ -108,11 +108,17 @@ td.n{color:var(--muted)}
 
 def key_html(k):
     latin, base, shift, _xkb, _mac, _sc, _vk, _note = k
-    punct = " punct" if latin in ",.-" else ""
+    if latin in ",.-":
+        # Only these three keys keep a runic shift level, so only these
+        # need the corner marker explaining it.
+        return (
+            f'<div class="key punct"><span class="latin">{latin}</span>'
+            f'<span class="base">{base}</span>'
+            f'<span class="shift">{shift}</span></div>'
+        )
     return (
-        f'<div class="key{punct}"><span class="latin">{latin}</span>'
-        f'<span class="base">{base}</span>'
-        f'<span class="shift">{shift}</span></div>'
+        f'<div class="key"><span class="latin">{latin}</span>'
+        f'<span class="base">{base}</span></div>'
     )
 
 
@@ -124,14 +130,14 @@ def build(pdf=True):
 
     alphabet = "".join(runes.TABLE[c] for c in "abcdefghijklmnopqrstuvwxyzæøå")
 
-    variants = [k for k in runes.KEYS]
-    half = (len(variants) + 1) // 2
+    named = sorted(runes.KEYS, key=lambda k: "abcdefghijklmnopqrstuvwxyzæøå".index(k[0]))
+    half = (len(named) + 1) // 2
 
     def table(chunk):
         rows = "".join(
-            f'<tr><td class="k">{k[0]}</td><td class="r">{k[2]}</td>'
-            f'<td class="n">{k[7]}</td></tr>'
-            for k in chunk
+            f'<tr><td class="k">{latin}</td><td class="r">{rune}</td>'
+            f'<td class="n">{name}</td></tr>'
+            for latin, rune, _x, _m, _s, _v, name in chunk
         )
         return f"<table>{rows}</table>"
 
@@ -145,7 +151,9 @@ def build(pdf=True):
 <header>
   <h1>Norsk med middelalderruner</h1>
   <p class="lede">Hver norsk bokstav ligger på tasten du allerede bruker —
-  æ, ø og å inkludert. Skift gir runetegn og varianter fra yngre futhark.</p>
+  æ, ø og å inkludert. Ett system: middelalderruner, ingenting annet.
+  Skift gir vanlig latinsk bokstav, så navn og lenker kan skrives uten å
+  bytte oppsett.</p>
   <p class="rune-strip">{alphabet}</p>
 </header>
 
@@ -155,13 +163,14 @@ def build(pdf=True):
   <p class="legend">
     <span><b>A</b> bokstaven du trykker</span>
     <span><span style="font-family:'RunicSubset'">ᛆ</span> runen du får</span>
-    <span><span style="font-family:'RunicSubset'">ᚨ</span> med skift</span>
+    <span>Skift gir <b>A</b> — bortsett fra på , . og -, som gir
+      <span style="font-family:'RunicSubset'">᛫ ᛬ ᛭</span></span>
   </p>
 </section>
 
 <section>
-  <p class="eyebrow">Skiftnivå — varianter og skilletegn</p>
-  <div class="cols">{table(variants[:half])}{table(variants[half:])}</div>
+  <p class="eyebrow">Runenavn</p>
+  <div class="cols">{table(named[:half])}{table(named[half:])}</div>
 </section>
 
 <div class="note">

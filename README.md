@@ -29,9 +29,15 @@ is ᛏ dotted (t→d), ᛔ is ᛒ dotted (b→p), ᚡ is ᚠ dotted (f→v), ᛂ
 dotted (i→e). That is how medieval scribes clawed back the distinctions
 Younger Futhark's 16 runes had lost.
 
-**Shift** gives runic punctuation and Younger Futhark variant forms —
-ᚦ thorn on `T`, ᚧ eth on `D`, ᛜ ing on `G`, ᛦ yr on `R`, and the word
-dividers ᛫ ᛬ ᛭ on `,` `.` `-`. Run `./rune --table` for the full list.
+**One system, and only one.** Every rune here is medieval Norwegian.
+Nothing from Elder Futhark, nothing from the Anglo-Saxon futhorc — those
+are different traditions, separated from medieval Norway by centuries and
+a sea. The build refuses to run if one of their codepoints creeps in.
+
+**Shift is not a second alphabet.** Runes have no case, so shift gives the
+plain Latin capital — you can drop a name or a URL into runic text without
+leaving the layout. The only exceptions are `,` `.` `-`, which give the
+word dividers ᛫ ᛬ ᛭. Run `./rune --table` for every rune and its name.
 
 ## Also in here
 

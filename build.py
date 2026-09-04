@@ -18,6 +18,22 @@ def cp(ch):
     return f"{ord(ch):04x}"
 
 
+ASCII_KEYSYM = {",": "comma", ".": "period", "-": "minus"}
+
+
+def keysym(latin, ch):
+    """XKB keysym name for one output character. Runes go in as Unicode
+    codepoints; Latin output uses the named keysym, since XKB will not
+    accept U0041 where it expects A."""
+    if ord(ch) >= 0x16A0:
+        return f"U{cp(ch).upper()}"
+    if ch in ASCII_KEYSYM:
+        return ASCII_KEYSYM[ch]
+    if ch.isupper():
+        return runes.XKB_SHIFT_NAME.get(latin, ch)
+    return ch
+
+
 # --------------------------------------------------------------------------
 # Linux -- XKB symbols file
 # --------------------------------------------------------------------------
@@ -41,18 +57,10 @@ def build_linux():
         f'    name[Group1] = "{runes.LAYOUT_NAME}";',
         "",
     ]
-    for latin, base, shift, xkb, _mac, _sc, _vk, note in runes.KEYS:
+    for latin, base, shift, xkb, _mac, _sc, _vk, note in runes.ALL_KEYS:
         lines.append(
-            f"    key <{xkb}> {{ [ U{cp(base).upper()}, U{cp(shift).upper()} ] }};"
-            f"  // {latin}  {base} | {shift} {note}"
-        )
-    lines.append("")
-    lines.append("    // Latin punctuation unshifted so ordinary sentences still work.")
-    for latin, base, shift, xkb, _mac, _sc, _vk, note in runes.PUNCT_KEYS:
-        name = {",": "comma", ".": "period", "-": "minus"}[latin]
-        lines.append(
-            f"    key <{xkb}> {{ [ {name}, U{cp(shift).upper()} ] }};"
-            f"  // {latin} | {shift} {note}"
+            f"    key <{xkb}> {{ [ {keysym(latin, base)}, {keysym(latin, shift)} ] }};"
+            f"  // {latin}  {base} | {shift}  {note}"
         )
     lines.append("};")
     write("linux/runic", "\n".join(lines) + "\n")

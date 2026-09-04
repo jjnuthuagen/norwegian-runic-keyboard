@@ -14,38 +14,38 @@ LAYOUT		;an extra '@' at the end is a dead key
 
 //SC	VK_		Cap	0	1
 //--	----		----	----	----
-10	Q		0	16e9	16e2	// q  ᛩ ᛢ  cweorth
-11	W		0	16a5	16b9	// w  ᚥ ᚹ  wunjo
-12	E		0	16c2	16d6	// e  ᛂ ᛖ  ehwaz
-13	R		0	16b1	16e6	// r  ᚱ ᛦ  long-branch yr
-14	T		0	16cf	16a6	// t  ᛏ ᚦ  thorn
-15	Y		0	16a4	16a3	// y  ᚤ ᚣ  yr
-16	U		0	16a2	16f3	// u  ᚢ ᛳ  oo
-17	I		0	16c1	16c7	// i  ᛁ ᛇ  iwaz
-18	O		0	16ae	16ac	// o  ᚮ ᚬ  long-branch oss
-19	P		0	16d4	16c8	// p  ᛔ ᛈ  pertho
-1a	OEM_4		0	16ad	16aa	// å  ᚭ ᚪ  ac
-1e	A		0	16c6	16a8	// a  ᛆ ᚨ  ansuz
-1f	S		0	16cb	16cc	// s  ᛋ ᛌ  short-twig sol
-20	D		0	16d1	16a7	// d  ᛑ ᚧ  eth
-21	F		0	16a0	16b8	// f  ᚠ ᚸ  gar
-22	G		0	16b5	16dc	// g  ᚵ ᛜ  ingwaz, ng
-23	H		0	16bc	16bd	// h  ᚼ ᚽ  short-twig hagall
-24	J		0	16c3	16c4	// j  ᛃ ᛄ  ger
-25	K		0	16b4	16b2	// k  ᚴ ᚲ  kauna
-26	L		0	16da	16db	// l  ᛚ ᛛ  dotted-l
-27	OEM_1		0	16af	16df	// ø  ᚯ ᛟ  othalan
-28	OEM_7		0	16c5	16ab	// æ  ᛅ ᚫ  aesc
-2c	Z		0	16ce	16c9	// z  ᛎ ᛉ  algiz
-2d	X		0	16ea	16e3	// x  ᛪ ᛣ  calc
-2e	C		0	16cd	16b3	// c  ᛍ ᚳ  cen
-2f	V		0	16a1	16b7	// v  ᚡ ᚷ  gebo
-30	B		0	16d2	16d3	// b  ᛒ ᛓ  short-twig bjarkan
-31	N		0	16bf	16be	// n  ᚿ ᚾ  long-branch naud
-32	M		0	16d8	16d9	// m  ᛘ ᛙ  short-twig madr
-33	OEM_COMMA		0	002c	16eb	// ,  , ᛫  single punctuation
-34	OEM_PERIOD		0	002e	16ec	// .  . ᛬  multiple punctuation
-35	OEM_2		0	002d	16ed	// -  - ᛭  cross punctuation
+10	Q		0	16e9	0051	// q  ᛩ Q  q — seinmiddelaldersk tillegg
+11	W		0	16a5	0057	// w  ᚥ W  w — seinmiddelaldersk tillegg
+12	E		0	16c2	0045	// e  ᛂ E  prikket íss
+13	R		0	16b1	0052	// r  ᚱ R  reið
+14	T		0	16cf	0054	// t  ᛏ T  týr
+15	Y		0	16a4	0059	// y  ᚤ Y  prikket úr
+16	U		0	16a2	0055	// u  ᚢ U  úr
+17	I		0	16c1	0049	// i  ᛁ I  íss
+18	O		0	16ae	004f	// o  ᚮ O  óss
+19	P		0	16d4	0050	// p  ᛔ P  prikket bjarkan
+1a	OEM_4		0	16ad	00c5	// å  ᚭ Å  å — oppdiktet, se README
+1e	A		0	16c6	0041	// a  ᛆ A  ár
+1f	S		0	16cb	0053	// s  ᛋ S  sól
+20	D		0	16d1	0044	// d  ᛑ D  prikket týr
+21	F		0	16a0	0046	// f  ᚠ F  fé
+22	G		0	16b5	0047	// g  ᚵ G  prikket kaun
+23	H		0	16bc	0048	// h  ᚼ H  hagall
+24	J		0	16c3	004a	// j  ᛃ J  j — konsonantisk íss
+25	K		0	16b4	004b	// k  ᚴ K  kaun
+26	L		0	16da	004c	// l  ᛚ L  lǫgr
+27	OEM_1		0	16af	00d8	// ø  ᚯ Ø  ør
+28	OEM_7		0	16c5	00c6	// æ  ᛅ Æ  ær
+2c	Z		0	16ce	005a	// z  ᛎ Z  z — seinmiddelaldersk tillegg
+2d	X		0	16ea	0058	// x  ᛪ X  x — seinmiddelaldersk tillegg
+2e	C		0	16cd	0043	// c  ᛍ C  c — seinmiddelaldersk tillegg
+2f	V		0	16a1	0056	// v  ᚡ V  prikket fé
+30	B		0	16d2	0042	// b  ᛒ B  bjarkan
+31	N		0	16bf	004e	// n  ᚿ N  nauð
+32	M		0	16d8	004d	// m  ᛘ M  maðr
+33	OEM_COMMA		0	002c	16eb	// ,  , ᛫  enkelt skilletegn
+34	OEM_PERIOD		0	002e	16ec	// .  . ᛬  dobbelt skilletegn
+35	OEM_2		0	002d	16ed	// -  - ᛭  korsskilletegn
 39	SPACE		0	0020	0020	// space
 
 DESCRIPTIONS

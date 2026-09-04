@@ -21,67 +21,67 @@ global RunicMode := false
 
 #HotIf RunicMode
 sc010::SendText("ᛩ")        ; q -> ᛩ
-+sc010::SendText("ᛢ")       ; shift -> ᛢ cweorth
++sc010::SendText("Q")       ; shift -> Q q — seinmiddelaldersk tillegg
 sc011::SendText("ᚥ")        ; w -> ᚥ
-+sc011::SendText("ᚹ")       ; shift -> ᚹ wunjo
++sc011::SendText("W")       ; shift -> W w — seinmiddelaldersk tillegg
 sc012::SendText("ᛂ")        ; e -> ᛂ
-+sc012::SendText("ᛖ")       ; shift -> ᛖ ehwaz
++sc012::SendText("E")       ; shift -> E prikket íss
 sc013::SendText("ᚱ")        ; r -> ᚱ
-+sc013::SendText("ᛦ")       ; shift -> ᛦ long-branch yr
++sc013::SendText("R")       ; shift -> R reið
 sc014::SendText("ᛏ")        ; t -> ᛏ
-+sc014::SendText("ᚦ")       ; shift -> ᚦ thorn
++sc014::SendText("T")       ; shift -> T týr
 sc015::SendText("ᚤ")        ; y -> ᚤ
-+sc015::SendText("ᚣ")       ; shift -> ᚣ yr
++sc015::SendText("Y")       ; shift -> Y prikket úr
 sc016::SendText("ᚢ")        ; u -> ᚢ
-+sc016::SendText("ᛳ")       ; shift -> ᛳ oo
++sc016::SendText("U")       ; shift -> U úr
 sc017::SendText("ᛁ")        ; i -> ᛁ
-+sc017::SendText("ᛇ")       ; shift -> ᛇ iwaz
++sc017::SendText("I")       ; shift -> I íss
 sc018::SendText("ᚮ")        ; o -> ᚮ
-+sc018::SendText("ᚬ")       ; shift -> ᚬ long-branch oss
++sc018::SendText("O")       ; shift -> O óss
 sc019::SendText("ᛔ")        ; p -> ᛔ
-+sc019::SendText("ᛈ")       ; shift -> ᛈ pertho
++sc019::SendText("P")       ; shift -> P prikket bjarkan
 sc01a::SendText("ᚭ")        ; å -> ᚭ
-+sc01a::SendText("ᚪ")       ; shift -> ᚪ ac
++sc01a::SendText("Å")       ; shift -> Å å — oppdiktet, se README
 sc01e::SendText("ᛆ")        ; a -> ᛆ
-+sc01e::SendText("ᚨ")       ; shift -> ᚨ ansuz
++sc01e::SendText("A")       ; shift -> A ár
 sc01f::SendText("ᛋ")        ; s -> ᛋ
-+sc01f::SendText("ᛌ")       ; shift -> ᛌ short-twig sol
++sc01f::SendText("S")       ; shift -> S sól
 sc020::SendText("ᛑ")        ; d -> ᛑ
-+sc020::SendText("ᚧ")       ; shift -> ᚧ eth
++sc020::SendText("D")       ; shift -> D prikket týr
 sc021::SendText("ᚠ")        ; f -> ᚠ
-+sc021::SendText("ᚸ")       ; shift -> ᚸ gar
++sc021::SendText("F")       ; shift -> F fé
 sc022::SendText("ᚵ")        ; g -> ᚵ
-+sc022::SendText("ᛜ")       ; shift -> ᛜ ingwaz, ng
++sc022::SendText("G")       ; shift -> G prikket kaun
 sc023::SendText("ᚼ")        ; h -> ᚼ
-+sc023::SendText("ᚽ")       ; shift -> ᚽ short-twig hagall
++sc023::SendText("H")       ; shift -> H hagall
 sc024::SendText("ᛃ")        ; j -> ᛃ
-+sc024::SendText("ᛄ")       ; shift -> ᛄ ger
++sc024::SendText("J")       ; shift -> J j — konsonantisk íss
 sc025::SendText("ᚴ")        ; k -> ᚴ
-+sc025::SendText("ᚲ")       ; shift -> ᚲ kauna
++sc025::SendText("K")       ; shift -> K kaun
 sc026::SendText("ᛚ")        ; l -> ᛚ
-+sc026::SendText("ᛛ")       ; shift -> ᛛ dotted-l
++sc026::SendText("L")       ; shift -> L lǫgr
 sc027::SendText("ᚯ")        ; ø -> ᚯ
-+sc027::SendText("ᛟ")       ; shift -> ᛟ othalan
++sc027::SendText("Ø")       ; shift -> Ø ør
 sc028::SendText("ᛅ")        ; æ -> ᛅ
-+sc028::SendText("ᚫ")       ; shift -> ᚫ aesc
++sc028::SendText("Æ")       ; shift -> Æ ær
 sc02c::SendText("ᛎ")        ; z -> ᛎ
-+sc02c::SendText("ᛉ")       ; shift -> ᛉ algiz
++sc02c::SendText("Z")       ; shift -> Z z — seinmiddelaldersk tillegg
 sc02d::SendText("ᛪ")        ; x -> ᛪ
-+sc02d::SendText("ᛣ")       ; shift -> ᛣ calc
++sc02d::SendText("X")       ; shift -> X x — seinmiddelaldersk tillegg
 sc02e::SendText("ᛍ")        ; c -> ᛍ
-+sc02e::SendText("ᚳ")       ; shift -> ᚳ cen
++sc02e::SendText("C")       ; shift -> C c — seinmiddelaldersk tillegg
 sc02f::SendText("ᚡ")        ; v -> ᚡ
-+sc02f::SendText("ᚷ")       ; shift -> ᚷ gebo
++sc02f::SendText("V")       ; shift -> V prikket fé
 sc030::SendText("ᛒ")        ; b -> ᛒ
-+sc030::SendText("ᛓ")       ; shift -> ᛓ short-twig bjarkan
++sc030::SendText("B")       ; shift -> B bjarkan
 sc031::SendText("ᚿ")        ; n -> ᚿ
-+sc031::SendText("ᚾ")       ; shift -> ᚾ long-branch naud
++sc031::SendText("N")       ; shift -> N nauð
 sc032::SendText("ᛘ")        ; m -> ᛘ
-+sc032::SendText("ᛙ")       ; shift -> ᛙ short-twig madr
++sc032::SendText("M")       ; shift -> M maðr
 sc033::SendText(",")        ; , -> ,
-+sc033::SendText("᛫")       ; shift -> ᛫ single punctuation
++sc033::SendText("᛫")       ; shift -> ᛫ enkelt skilletegn
 sc034::SendText(".")        ; . -> .
-+sc034::SendText("᛬")       ; shift -> ᛬ multiple punctuation
++sc034::SendText("᛬")       ; shift -> ᛬ dobbelt skilletegn
 sc035::SendText("-")        ; - -> -
-+sc035::SendText("᛭")       ; shift -> ᛭ cross punctuation
++sc035::SendText("᛭")       ; shift -> ᛭ korsskilletegn
 #HotIf
