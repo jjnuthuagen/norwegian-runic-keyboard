@@ -4,8 +4,8 @@
   <title>Runa - norsk skrevet med middelalderruner</title>
   <style>
     .bg{fill:#121614}
-    /* stroke-width is in user units, inside the scaled group, so it is the
-       font's own 76 rather than a pre-scaled pixel value */
+    /* stroke-width is in user units, inside the scaled group -- the font's
+       own 76, not a pre-scaled pixel value that would scale a second time */
     .carve{fill:none;stroke:#E9ECE8;stroke-width:76;stroke-linejoin:round}
     .guide{fill:none;stroke:#84C39F;stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
     .dot{fill:#E9ECE8}
@@ -15,7 +15,7 @@
   </style>
   <rect class="bg" width="1200" height="360" rx="18"/>
   <text class="kicker" x="600.0" y="52" font-size="13" text-anchor="middle">MIDDELALDERRUNER FOR NORSK</text>
-  <g transform="translate(311.7,288.0) scale(0.24650,-0.24650)">
+  <g transform="translate(284.5,288.0) scale(0.24650,-0.24650)">
     <g transform="translate(0,0)">
       <path class="guide" d="M158.0 0.0 L158.0 714.0" stroke-dasharray="714.0" stroke-dashoffset="714.0" opacity="0">
         <animate attributeName="stroke-dashoffset" values="714.0;714.0;0;0"
@@ -34,57 +34,57 @@
           keyTimes="0;0.195;0.200;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path></g><g transform="translate(0,0)">
-      <path class="guide" d="M158.0 714.0 L393.0 714.0 L401.9 713.0 L410.4 710.0 L417.9 705.3 L424.3 698.9 L429.0 691.4 L432.0 682.9 L433.0 674.0 L433.0 0.0" stroke-dasharray="971.7" stroke-dashoffset="971.7" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="971.7;971.7;0;0"
+      <path class="guide" d="M158.0 714.0 L360.0 714.0 L404.9 708.9 L447.6 694.0 L485.9 669.9 L517.9 637.9 L542.0 599.6 L556.9 556.9 L562.0 512.0 L562.0 0.0" stroke-dasharray="1030.6" stroke-dashoffset="1030.6" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="1030.6;1030.6;0;0"
           keyTimes="0;0.080;0.200;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.075;0.080;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M158.0 714.0 L393.0 714.0 L401.9 713.0 L410.4 710.0 L417.9 705.3 L424.3 698.9 L429.0 691.4 L432.0 682.9 L433.0 674.0 L433.0 0.0" stroke-linecap="butt"
-        stroke-dasharray="971.7" stroke-dashoffset="971.7" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="971.7;971.7;0;0"
+      <path class="carve" d="M158.0 714.0 L360.0 714.0 L404.9 708.9 L447.6 694.0 L485.9 669.9 L517.9 637.9 L542.0 599.6 L556.9 556.9 L562.0 512.0 L562.0 0.0" stroke-linecap="butt"
+        stroke-dasharray="1030.6" stroke-dashoffset="1030.6" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="1030.6;1030.6;0;0"
           keyTimes="0;0.249;0.409;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"
           keyTimes="0;0.244;0.249;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path></g><g transform="translate(0,0)">
-      <path class="guide" d="M158.0 470.0 L433.0 470.0" stroke-dasharray="275.0" stroke-dashoffset="275.0" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="275.0;275.0;0;0"
+      <path class="guide" d="M158.0 470.0 L562.0 470.0" stroke-dasharray="404.0" stroke-dashoffset="404.0" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="404.0;404.0;0;0"
           keyTimes="0;0.120;0.240;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.115;0.120;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M158.0 470.0 L433.0 470.0" stroke-linecap="round"
-        stroke-dasharray="275.0" stroke-dashoffset="275.0" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="275.0;275.0;0;0"
+      <path class="carve" d="M158.0 470.0 L562.0 470.0" stroke-linecap="round"
+        stroke-dasharray="404.0" stroke-dashoffset="404.0" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="404.0;404.0;0;0"
           keyTimes="0;0.297;0.457;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"
           keyTimes="0;0.292;0.297;1"
           dur="9.0s" repeatCount="indefinite"/>
-      </path></g><g transform="translate(591.0,0)">
-      <path class="guide" d="M158.0 0.0 L158.0 484.0 L163.8 535.2 L180.8 583.8 L208.2 627.4 L244.6 663.8 L288.2 691.2 L336.8 708.2 L388.0 714.0 L439.2 708.2 L487.8 691.2 L531.4 663.8 L567.8 627.4 L595.2 583.8 L612.2 535.2 L618.0 484.0 L618.0 0.0" stroke-dasharray="1689.1" stroke-dashoffset="1689.1" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="1689.1;1689.1;0;0"
+      </path></g><g transform="translate(720.0,0)">
+      <path class="guide" d="M158.0 0.0 L158.0 432.0 L165.1 494.8 L185.9 554.4 L219.5 607.8 L264.2 652.5 L317.6 686.1 L377.2 706.9 L440.0 714.0 L502.8 706.9 L562.4 686.1 L615.8 652.5 L660.5 607.8 L694.1 554.4 L714.9 494.8 L722.0 432.0 L722.0 0.0" stroke-dasharray="1748.1" stroke-dashoffset="1748.1" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="1748.1;1748.1;0;0"
           keyTimes="0;0.160;0.280;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.155;0.160;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M158.0 0.0 L158.0 484.0 L163.8 535.2 L180.8 583.8 L208.2 627.4 L244.6 663.8 L288.2 691.2 L336.8 708.2 L388.0 714.0 L439.2 708.2 L487.8 691.2 L531.4 663.8 L567.8 627.4 L595.2 583.8 L612.2 535.2 L618.0 484.0 L618.0 0.0" stroke-linecap="butt"
-        stroke-dasharray="1689.1" stroke-dashoffset="1689.1" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="1689.1;1689.1;0;0"
+      <path class="carve" d="M158.0 0.0 L158.0 432.0 L165.1 494.8 L185.9 554.4 L219.5 607.8 L264.2 652.5 L317.6 686.1 L377.2 706.9 L440.0 714.0 L502.8 706.9 L562.4 686.1 L615.8 652.5 L660.5 607.8 L694.1 554.4 L714.9 494.8 L722.0 432.0 L722.0 0.0" stroke-linecap="butt"
+        stroke-dasharray="1748.1" stroke-dashoffset="1748.1" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="1748.1;1748.1;0;0"
           keyTimes="0;0.346;0.506;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"
           keyTimes="0;0.341;0.346;1"
           dur="9.0s" repeatCount="indefinite"/>
-      </path></g><g transform="translate(1367.0,0)">
+      </path></g><g transform="translate(1600.0,0)">
       <path class="guide" d="M158.0 0.0 L158.0 714.0" stroke-dasharray="714.0" stroke-dashoffset="714.0" opacity="0">
         <animate attributeName="stroke-dashoffset" values="714.0;714.0;0;0"
           keyTimes="0;0.200;0.320;1" dur="9.0s" repeatCount="indefinite"
@@ -101,25 +101,25 @@
         <animate attributeName="opacity" values="0;0;1;1"
           keyTimes="0;0.389;0.394;1"
           dur="9.0s" repeatCount="indefinite"/>
-      </path></g><g transform="translate(1367.0,0)">
-      <path class="guide" d="M158.0 430.0 L243.0 430.0 L261.9 427.9 L279.9 421.6 L296.0 411.5 L309.5 398.0 L319.6 381.9 L325.9 363.9 L328.0 345.0 L328.0 260.0" stroke-dasharray="303.2" stroke-dashoffset="303.2" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="303.2;303.2;0;0"
+      </path></g><g transform="translate(1600.0,0)">
+      <path class="guide" d="M158.0 430.0 L240.0 430.0 L258.2 427.9 L275.6 421.9 L291.1 412.1 L304.1 399.1 L313.9 383.6 L319.9 366.2 L322.0 348.0 L322.0 266.0" stroke-dasharray="292.5" stroke-dashoffset="292.5" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="292.5;292.5;0;0"
           keyTimes="0;0.240;0.360;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.235;0.240;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M158.0 430.0 L243.0 430.0 L261.9 427.9 L279.9 421.6 L296.0 411.5 L309.5 398.0 L319.6 381.9 L325.9 363.9 L328.0 345.0 L328.0 260.0" stroke-linecap="round"
-        stroke-dasharray="303.2" stroke-dashoffset="303.2" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="303.2;303.2;0;0"
+      <path class="carve" d="M158.0 430.0 L240.0 430.0 L258.2 427.9 L275.6 421.9 L291.1 412.1 L304.1 399.1 L313.9 383.6 L319.9 366.2 L322.0 348.0 L322.0 266.0" stroke-linecap="round"
+        stroke-dasharray="292.5" stroke-dashoffset="292.5" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="292.5;292.5;0;0"
           keyTimes="0;0.443;0.603;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"
           keyTimes="0;0.438;0.443;1"
           dur="9.0s" repeatCount="indefinite"/>
-      </path></g><g transform="translate(1853.0,0)">
-      <path class="guide" d="M328.0 0.0 L328.0 714.0" stroke-dasharray="714.0" stroke-dashoffset="714.0" opacity="0">
+      </path></g><g transform="translate(2080.0,0)">
+      <path class="guide" d="M322.0 0.0 L322.0 714.0" stroke-dasharray="714.0" stroke-dashoffset="714.0" opacity="0">
         <animate attributeName="stroke-dashoffset" values="714.0;714.0;0;0"
           keyTimes="0;0.280;0.400;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
@@ -127,7 +127,7 @@
           keyTimes="0;0.275;0.280;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M328.0 0.0 L328.0 714.0" stroke-linecap="butt"
+      <path class="carve" d="M322.0 0.0 L322.0 714.0" stroke-linecap="butt"
         stroke-dasharray="714.0" stroke-dashoffset="714.0" opacity="0">
         <animate attributeName="stroke-dashoffset" values="714.0;714.0;0;0"
           keyTimes="0;0.491;0.651;1" dur="9.0s" repeatCount="indefinite"
@@ -135,18 +135,18 @@
         <animate attributeName="opacity" values="0;0;1;1"
           keyTimes="0;0.486;0.491;1"
           dur="9.0s" repeatCount="indefinite"/>
-      </path></g><g transform="translate(1853.0,0)">
-      <path class="guide" d="M328.0 430.0 L243.0 430.0 L224.1 427.9 L206.1 421.6 L190.0 411.5 L176.5 398.0 L166.4 381.9 L160.1 363.9 L158.0 345.0 L158.0 260.0" stroke-dasharray="303.2" stroke-dashoffset="303.2" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="303.2;303.2;0;0"
+      </path></g><g transform="translate(2080.0,0)">
+      <path class="guide" d="M322.0 430.0 L240.0 430.0 L221.8 427.9 L204.4 421.9 L188.9 412.1 L175.9 399.1 L166.1 383.6 L160.1 366.2 L158.0 348.0 L158.0 266.0" stroke-dasharray="292.5" stroke-dashoffset="292.5" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="292.5;292.5;0;0"
           keyTimes="0;0.320;0.440;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.315;0.320;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M328.0 430.0 L243.0 430.0 L224.1 427.9 L206.1 421.6 L190.0 411.5 L176.5 398.0 L166.4 381.9 L160.1 363.9 L158.0 345.0 L158.0 260.0" stroke-linecap="round"
-        stroke-dasharray="303.2" stroke-dashoffset="303.2" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="303.2;303.2;0;0"
+      <path class="carve" d="M322.0 430.0 L240.0 430.0 L221.8 427.9 L204.4 421.9 L188.9 412.1 L175.9 399.1 L166.1 383.6 L160.1 366.2 L158.0 348.0 L158.0 266.0" stroke-linecap="round"
+        stroke-dasharray="292.5" stroke-dashoffset="292.5" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="292.5;292.5;0;0"
           keyTimes="0;0.540;0.700;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"

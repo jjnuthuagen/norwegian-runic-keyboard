@@ -54,93 +54,91 @@ RADIUS = 40        # default corner radius on the centreline. 0 = sharp
 #   A [p0,ctrl,p2]    smooth arc through a quadratic control point
 #   O x y r           dot
 #   D x y r           filled disc (the bowl of c)
-# Orthogonal construction: every bend is a right angle, softened only by
-# RADIUS. Runes are natively staves and diagonals -- carvers avoided
-# horizontals because they run along the wood grain and vanish -- so this
-# is a deliberately modern reading, not a historical one. Where forcing
-# right angles would collapse a rune into its Latin lookalike (b, r, s)
-# the shape is redrawn to stay distinct rather than left to converge.
+# --- the width module -------------------------------------------------
+# Every glyph's ink is one of three widths, and the reaches are derived
+# from them rather than chosen by eye: a branch springing from the stave
+# reaches W - WEIGHT, and a shape spanning both sides reaches
+# (W - WEIGHT)/2.
+#
+# i is the one exception. It is a bare stave, so its ink IS the stroke
+# width; nothing can widen it without making it a different letter.
+#
 # A corner is a full quarter circle when its radius equals half the
-# shorter adjacent segment: the arc then consumes half of each, leaving
-# equal straight tails. Side branches are built with equal-length
-# segments so that maximum lands exactly on a quarter circle.
-STUB = 170         # each leg of a side branch
-STUB_R = 85        # = STUB/2, so every side branch is a quarter circle
-GAP = 150          # distance between the two arms of f and v. For the gap
-                   # to stay even round the bend the outer radius must be
-                   # the inner plus GAP; that puts both arcs on one centre.
+# shorter adjacent segment, so side branches are built with equal legs to
+# land exactly there.
+NARROW, MEDIUM, WIDE = 240, 480, 640
+ONE_M, ONE_W = 404, 564              # reach from the stave, one side only
+SYM_M, SYM_W = 202, 282              # reach either side of centre
+STUB_N, STUB_R_N = 164, 82           # narrow side branch -> quarter circle
+STUB_M, STUB_R_M = 202, 101          # medium side branch
+GAP = 160                            # between the arms of f and v; also makes
+                                     # kaun's arm identical to fe's inner one
 
 GLYPHS = {
-    "a": [("S",), ("P", [(0, 430), (-STUB, 430, STUB_R), (-STUB, 430 - STUB)])],
-    # Bowls meet the stave top, middle and bottom, as bjarkan always has.
-    # It reads close to a squared B because the two letters share an
-    # ancestor; that is convergence, not an error.
-    "b": [("S",), ("P", [(0, 714), (330, 714, 161), (330, 392, 161), (0, 392)]),
-          ("P", [(0, 322), (330, 322, 161), (330, 0, 161), (0, 0)])],
-    "c": [("D", 0, 366, 100), ("V", 0, 430, CAP)],
-    "d": [("S",), ("P", [(-200, 514), (-200, CAP, 100), (200, CAP, 100), (200, 514)]),
-          ("O", DOT_X, 340, DOT_R)],
-    "e": [("S",), ("O", DOT_X, 370, DOT_R)],
-    # Both arms GAP apart on the straights, radii GAP apart at the bend,
-    # so the two arcs share a centre and the gap never varies. The outer
-    # corner is a full quarter circle; the inner cannot also be, because
-    # it must leave room for the outer one.
-    "f": [("S",), ("P", [(0, 300), (400, 300, 125), (400, 700)]),
-          ("P", [(0, 150), (550, 150, 275), (550, 700)])],
-    "g": [("S",), ("P", [(0, 300), (400, 300, 125), (400, 700)]),
-          ("O", 185, 530, DOT_R)],
-    "h": [("S",), ("P", [(-190, 250, 100), (190, 250, 100), (190, 490, 100),
-                         (-190, 490, 100), (-190, 250)])],
+    # --- narrow, ink 240 ---------------------------------------------
+    "a": [("S",), ("P", [(0, 430), (-STUB_N, 430, STUB_R_N), (-STUB_N, 266)])],
+    "c": [("D", 0, 366, 120), ("V", 0, 470, CAP)],
+    "e": [("S",), ("O", 150, 370, DOT_R)],
     "i": [("S",)],
-    # Two opposed hooks. Where they run alongside each other the arms are
-    # 170 apart -- the same spacing as everywhere else -- so the lines stay
-    # parallel instead of colliding.
-    "j": [("P", [(60, CAP), (-190, CAP, 125), (-190, 374, 125), (60, 374)]),
-          ("P", [(-60, 204), (190, 204, 125), (190, 544, 125), (-60, 544)])],
-    # kaun is fé with one arm, so it uses fé's inner arm unchanged.
-    "k": [("S",), ("P", [(0, 300), (400, 300, 125), (400, 700)])],
-    "l": [("S",), ("P", [(0, 640), (STUB, 640, STUB_R), (STUB, 640 - STUB)])],
-    "m": [("S",), ("P", [(-269, 700), (-269, 470, 115), (269, 470, 115), (269, 700)])],
-    "n": [("S",), ("P", [(0, 430), (STUB, 430, STUB_R), (STUB, 430 - STUB)])],
-    "o": [("S",), ("P", [(0, 520), (-STUB, 520, STUB_R), (-STUB, 350)]),
-          ("P", [(0, 290), (-STUB, 290, STUB_R), (-STUB, 120)])],
-    # Dots sit on the bowls' own arc centres, so each is optically centred
-    # in its bowl rather than eyeballed into place.
-    "p": [("S",), ("P", [(0, 714), (330, 714, 161), (330, 392, 161), (0, 392)]),
-          ("P", [(0, 322), (330, 322, 161), (330, 0, 161), (0, 0)]),
-          ("O", 169, 553, 50), ("O", 169, 161, 50)],
-    "q": [("S",), ("P", [(0, 714), (-262, 714), (-262, 228), (0, 228)])],
-    # Bowl closed at the top only, then a single leg dropping the full
-    # height -- keeps reið distinct from an orthogonal A or P.
-    "r": [("S",), ("P", [(0, 714), (275, 714), (275, 0)]),
-          ("P", [(0, 470), (275, 470)])],
-    "s": [("P", [(-184, CAP), (-184, 392), (184, 392), (184, 0)])],
-    "t": [("S",), ("P", [(-200, 514), (-200, CAP, 100), (200, CAP, 100), (200, 514)])],
-    # Radius = half the horizontal, so the two quarter circles meet at the
-    # top centre and the whole cap is one continuous semicircle.
-    "u": [("P", [(-230, 0), (-230, CAP, 230), (230, CAP, 230), (230, 0)])],
-    "v": [("S",), ("P", [(0, 300), (400, 300, 125), (400, 700)]),
-          ("P", [(0, 150), (550, 150, 275), (550, 700)]),
-          ("O", 165, 560, DOT_R)],
-    # The inner arch springs from the outer's own left leg, so it cannot be
-    # truly concentric with it; the even gap is held on the parallel
-    # verticals instead.
-    "w": [("P", [(-230, 0), (-230, CAP, 230), (230, CAP, 230), (230, 0)]),
-          ("P", [(-230, 330), (90, 330, 110), (90, 0)])],
-    "x": [("P", [(-184, CAP), (-184, 392), (184, 392), (184, 0)]),
-          ("L", -372, 600, 2, 600), ("L", -2, 120, 372, 120)],
-    "y": [("P", [(-230, 0), (-230, CAP, 230), (230, CAP, 230), (230, 0)]),
-          ("O", 0, 300, DOT_R)],
+    "l": [("S",), ("P", [(0, 660), (STUB_N, 660, STUB_R_N), (STUB_N, 496)])],
+    "n": [("S",), ("P", [(0, 430), (STUB_N, 430, STUB_R_N), (STUB_N, 266)])],
+    "o": [("S",), ("P", [(0, 520), (-STUB_N, 520, STUB_R_N), (-STUB_N, 356)]),
+          ("P", [(0, 290), (-STUB_N, 290, STUB_R_N), (-STUB_N, 126)])],
+    "å": [("S",), ("P", [(0, 520), (STUB_N, 520, STUB_R_N), (STUB_N, 356)]),
+          ("P", [(0, 290), (STUB_N, 290, STUB_R_N), (STUB_N, 126)])],
+
+    # --- medium, ink 480 ---------------------------------------------
+    # Bowl radius is half the bowl's height, so each outer edge is one
+    # continuous semicircle rather than two corners with a flat between.
+    "b": [("S",), ("P", [(0, 714), (ONE_M, 714, 161), (ONE_M, 392, 161), (0, 392)]),
+          ("P", [(0, 322), (ONE_M, 322, 161), (ONE_M, 0, 161), (0, 0)])],
+    "d": [("S",), ("P", [(-SYM_M, 514), (-SYM_M, CAP, 100), (SYM_M, CAP, 100),
+                         (SYM_M, 514)]),
+          ("O", DOT_X, 340, DOT_R)],
+    "g": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
+          ("O", 190, 540, DOT_R)],
+    "h": [("S",), ("P", [(-SYM_M, 250, 100), (SYM_M, 250, 100), (SYM_M, 490, 100),
+                         (-SYM_M, 490, 100), (-SYM_M, 250)])],
+    "j": [("P", [(60, CAP), (-SYM_M, CAP, 125), (-SYM_M, 374, 125), (60, 374)]),
+          ("P", [(-60, 204), (SYM_M, 204, 125), (SYM_M, 544, 125), (-60, 544)])],
+    "k": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)])],
+    "p": [("S",), ("P", [(0, 714), (ONE_M, 714, 161), (ONE_M, 392, 161), (0, 392)]),
+          ("P", [(0, 322), (ONE_M, 322, 161), (ONE_M, 0, 161), (0, 0)]),
+          ("O", 243, 553, 50), ("O", 243, 161, 50)],
+    # A square bowl, so one radius is half of both sides at once.
+    "q": [("S",), ("P", [(0, 714), (-ONE_M, 714, 202), (-ONE_M, 310, 202), (0, 310)])],
+    "r": [("S",), ("P", [(0, 714), (ONE_M, 714, 202), (ONE_M, 0)]),
+          ("P", [(0, 470), (ONE_M, 470)])],
+    "s": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)])],
+    "t": [("S",), ("P", [(-SYM_M, 514), (-SYM_M, CAP, 100), (SYM_M, CAP, 100),
+                         (SYM_M, 514)])],
     "z": [("V", 0, 300, CAP),
-          ("P", [(-196, 470), (-196, 300, 85), (196, 300, 85), (196, 470)])],
-    "æ": [("S",), ("P", [(0, 430), (-STUB, 430, STUB_R), (-STUB, 430 - STUB)]),
-          ("P", [(0, 430), (STUB, 430, STUB_R), (STUB, 430 + STUB)])],
-    "ø": [("S",), ("P", [(0, 520), (-STUB, 520, STUB_R), (-STUB, 350)]),
-          ("P", [(0, 290), (-STUB, 290, STUB_R), (-STUB, 120)]),
-          ("P", [(0, 520), (STUB, 520, STUB_R), (STUB, 350)]),
-          ("P", [(0, 290), (STUB, 290, STUB_R), (STUB, 120)])],
-    "å": [("S",), ("P", [(0, 520), (STUB, 520, STUB_R), (STUB, 350)]),
-          ("P", [(0, 290), (STUB, 290, STUB_R), (STUB, 120)])],
+          ("P", [(-SYM_M, 470), (-SYM_M, 300, 85), (SYM_M, 300, 85), (SYM_M, 470)])],
+    "æ": [("S",), ("P", [(0, 430), (-STUB_M, 430, STUB_R_M), (-STUB_M, 228)]),
+          ("P", [(0, 430), (STUB_M, 430, STUB_R_M), (STUB_M, 632)])],
+    "ø": [("S",), ("P", [(0, 520), (-STUB_M, 520, STUB_R_M), (-STUB_M, 318)]),
+          ("P", [(0, 290), (-STUB_M, 290, STUB_R_M), (-STUB_M, 88)]),
+          ("P", [(0, 520), (STUB_M, 520, STUB_R_M), (STUB_M, 318)]),
+          ("P", [(0, 290), (STUB_M, 290, STUB_R_M), (STUB_M, 88)])],
+
+    # --- wide, ink 640 -----------------------------------------------
+    # The arms are GAP apart on the straights and GAP apart in radius, so
+    # both arcs share a centre and the gap never varies.
+    "f": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
+          ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)])],
+    "m": [("S",), ("P", [(-SYM_W, 700), (-SYM_W, 470, 115), (SYM_W, 470, 115),
+                         (SYM_W, 700)])],
+    # Radius equals half the width, so the cap is a single semicircle.
+    "u": [("P", [(-SYM_W, 0), (-SYM_W, CAP, SYM_W), (SYM_W, CAP, SYM_W), (SYM_W, 0)])],
+    "v": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
+          ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)]),
+          ("O", 170, 545, DOT_R)],
+    "w": [("P", [(-SYM_W, 0), (-SYM_W, CAP, SYM_W), (SYM_W, CAP, SYM_W), (SYM_W, 0)]),
+          ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
+    "x": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)]),
+          ("L", -SYM_W, 600, 2, 600), ("L", -2, 120, SYM_W, 120)],
+    "y": [("P", [(-SYM_W, 0), (-SYM_W, CAP, SYM_W), (SYM_W, CAP, SYM_W), (SYM_W, 0)]),
+          ("O", 0, 300, DOT_R)],
 }
 
 PUNCT = {

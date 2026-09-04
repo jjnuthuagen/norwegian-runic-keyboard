@@ -58,6 +58,12 @@ semicircle; the bowls of `b` and `p` are one continuous arc. Free stroke
 ends are rounded, but ends landing on the baseline or cap height stay flat
 so the text line holds.
 
+Widths are modular. Every rune's ink is one of three values — **240, 480 or
+640 units**, giving advances of 480, 720 or 880 — and the reach of every
+branch, bowl and box is derived from that width rather than chosen by eye.
+`i` is the single exception: it is a bare stave, so its ink *is* the stroke
+width and nothing can widen it without making it a different letter.
+
 To install it, copy the TTF to `~/.local/share/fonts` (Linux) or open it and
 click Install (macOS, Windows).
 
