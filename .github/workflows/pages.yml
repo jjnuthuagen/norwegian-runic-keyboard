@@ -1,0 +1,46 @@
+name: Pages
+
+# Deploys the game and cheat sheet from the committed dist/ directory.
+# It does not run build.py: the cheat sheet PDF needs a browser and the
+# font subset needs Noto Sans Runic installed, neither of which a runner
+# has. dist/ is committed precisely so publishing stays this simple.
+#
+# Note: GitHub Pages does not serve private repositories on free plans.
+# This workflow only publishes once the repo is public.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp dist/web/index.html dist/web/game.html _site/
+          cp dist/cheatsheet/runic-cheatsheet.html _site/
+          cp dist/cheatsheet/runic-cheatsheet.pdf _site/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

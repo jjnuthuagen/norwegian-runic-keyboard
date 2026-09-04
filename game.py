@@ -263,7 +263,78 @@ refillPool(); nextWord(); setStats();
 """
 
 
+INDEX = r"""<!doctype html>
+<html lang="nb"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Norsk med middelalderruner</title>
+<style>
+__FONT__
+:root{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;--muted:#6B756F;
+      --rule:#CBCFC8;--accent:#2F6E4F}
+@media (prefers-color-scheme:dark){:root{--ground:#141816;--panel:#1B201D;
+      --ink:#E8EBE7;--muted:#94A099;--rule:#333A36;--accent:#7FBE9B}}
+:root[data-theme="dark"]{--ground:#141816;--panel:#1B201D;--ink:#E8EBE7;
+      --muted:#94A099;--rule:#333A36;--accent:#7FBE9B}
+:root[data-theme="light"]{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;
+      --muted:#6B756F;--rule:#CBCFC8;--accent:#2F6E4F}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(16px,5vw,56px);background:var(--ground);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Cantarell,sans-serif;line-height:1.55;
+  display:flex;justify-content:center}
+.wrap{max-width:620px;display:flex;flex-direction:column;gap:30px}
+h1{font-family:Georgia,"Iowan Old Style",Palatino,serif;font-weight:400;
+  font-size:clamp(28px,6vw,40px);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.strip{font-family:'RunicSubset',serif;font-size:clamp(20px,5vw,28px);
+  color:var(--accent);letter-spacing:.13em;margin:0;word-break:break-all}
+p{margin:0;max-width:60ch}
+.muted{color:var(--muted)}
+.cards{display:grid;gap:14px}
+a.card{display:flex;flex-direction:column;gap:4px;padding:20px 22px;
+  border:1px solid var(--rule);border-radius:10px;background:var(--panel);
+  text-decoration:none;color:inherit}
+a.card:hover{border-color:var(--accent)}
+a.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a.card b{font-size:17px}
+a.card span{color:var(--muted);font-size:14px}
+footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font-size:14px}
+footer a{color:var(--accent)}
+</style></head><body><div class="wrap">
+<header>
+  <h1>Norsk med middelalderruner</h1>
+  <p class="strip">__STRIP__</p>
+  <p class="muted">Et tastaturoppsett, en jukselapp og et spill. Hver norsk
+  bokstav ligger på tasten du allerede bruker — æ, ø og å inkludert.</p>
+</header>
+<div class="cards">
+  <a class="card" href="game.html"><b>Runespill</b>
+    <span>Ordet står i runer — skriv det på norsk. Fungerer på mobil.</span></a>
+  <a class="card" href="runic-cheatsheet.pdf"><b>Jukselapp (PDF)</b>
+    <span>Én A4-side. Bygget som et bilde av tastaturet.</span></a>
+  <a class="card" href="runic-cheatsheet.html"><b>Jukselapp (nettside)</b>
+    <span>Samme side i nettleseren.</span></a>
+</div>
+<footer>Middelalderruner, ca. 1100–1400. Strengt 1:1 med det norske
+alfabetet. <a href="__REPO__">Kildekode og tastaturoppsett på GitHub</a>.</footer>
+</div></body></html>
+"""
+
+REPO_URL = "https://github.com/jjnuthuagen/norwegian-runic-keyboard"
+
+
+def build_index():
+    strip = "".join(runes.TABLE[c] for c in "abcdefghijklmnopqrstuvwxyzæøå")
+    html = (INDEX
+            .replace("__FONT__", webfont.css())
+            .replace("__STRIP__", strip)
+            .replace("__REPO__", REPO_URL))
+    OUT.mkdir(parents=True, exist_ok=True)
+    page = OUT / "index.html"
+    page.write_text(html, encoding="utf-8")
+    print(f"  {page.relative_to(OUT.parent.parent)}  ({len(html)} bytes)")
+
+
 def build():
+    build_index()
     html = (PAGE
             .replace("__FONT__", webfont.css())
             .replace("__TABLE__", json.dumps(runes.TABLE, ensure_ascii=False))
