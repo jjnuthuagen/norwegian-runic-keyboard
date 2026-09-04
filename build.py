@@ -268,6 +268,13 @@ def main():
     build_macos()
     build_windows_klc()
     build_windows_ahk()
+
+    # Imported here so the layouts still build on a machine without the
+    # runic font installed -- only these two need to embed it.
+    import cheatsheet
+    import game
+    cheatsheet.build()
+    game.build()
     print("Done.")
 
 

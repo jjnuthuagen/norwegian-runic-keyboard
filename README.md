@@ -33,6 +33,18 @@ Younger Futhark's 16 runes had lost.
 ᚦ thorn on `T`, ᚧ eth on `D`, ᛜ ing on `G`, ᛦ yr on `R`, and the word
 dividers ᛫ ᛬ ᛭ on `,` `.` `-`. Run `./rune --table` for the full list.
 
+## Also in here
+
+- **[Cheat sheet](dist/cheatsheet/runic-cheatsheet.pdf)** — one printable A4
+  page, in Norwegian. Laid out as a picture of the keyboard, so you look a
+  rune up by finding the key your finger is already on.
+- **[Runespill](dist/web/game.html)** — a word appears in runes, you type it
+  back in Norwegian. Words get longer as you improve. One self-contained
+  HTML file; open it in any browser, including on a phone.
+
+Both embed a subsetted Noto Sans Runic (~6KB) so the runes render even on
+macOS and phones, which ship no runic font.
+
 ## Install
 
 ### Linux — no admin

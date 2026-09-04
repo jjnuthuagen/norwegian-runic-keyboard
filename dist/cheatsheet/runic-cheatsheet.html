@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="nb"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runetastatur — jukselapp</title>
+<style>@font-face{font-family:'RunicSubset';src:url(data:font/ttf;base64,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) format('truetype');font-display:swap;font-weight:400;font-style:normal}
+:root{
+  --ground:#F1F2EF; --panel:#FFFFFF; --ink:#191C1A; --muted:#6B756F;
+  --rule:#CBCFC8; --accent:#2F6E4F; --accent-soft:#E0EBE3;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ground:#141816; --panel:#1B201D; --ink:#E8EBE7; --muted:#94A099;
+        --rule:#333A36; --accent:#7FBE9B; --accent-soft:#20302A;}
+}
+:root[data-theme="dark"]{
+  --ground:#141816; --panel:#1B201D; --ink:#E8EBE7; --muted:#94A099;
+  --rule:#333A36; --accent:#7FBE9B; --accent-soft:#20302A;
+}
+:root[data-theme="light"]{
+  --ground:#F1F2EF; --panel:#FFFFFF; --ink:#191C1A; --muted:#6B756F;
+  --rule:#CBCFC8; --accent:#2F6E4F; --accent-soft:#E0EBE3;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; padding:14mm 12mm; background:var(--ground); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Cantarell,"Noto Sans",sans-serif;
+  font-size:10pt; line-height:1.45;
+}
+.sheet{max-width:190mm;margin:0 auto;display:flex;flex-direction:column;gap:7mm}
+h1{
+  font-family:Georgia,"Iowan Old Style",Palatino,"Book Antiqua",serif;
+  font-size:24pt; font-weight:400; margin:0; letter-spacing:-.01em;
+  text-wrap:balance;
+}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.rune-strip{
+  font-family:'RunicSubset',serif; font-size:19pt; color:var(--accent);
+  letter-spacing:.14em; margin:0; word-break:break-all;
+}
+.eyebrow{
+  font-size:7.5pt; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); margin:0 0 2mm;
+}
+/* keyboard ------------------------------------------------------------ */
+.board{display:flex;flex-direction:column;gap:2.4mm}
+.row{display:flex;gap:2.4mm}
+.row:nth-child(2){margin-left:5mm}
+.row:nth-child(3){margin-left:11mm}
+.key{
+  position:relative; width:15.2mm; height:15.2mm; flex:none;
+  background:var(--panel); border:1px solid var(--rule); border-radius:1.6mm;
+  display:flex; align-items:center; justify-content:center;
+}
+.key .base{
+  font-family:'RunicSubset',serif; font-size:17pt; line-height:1;
+  color:var(--ink);
+}
+.key .latin{
+  position:absolute; top:1mm; left:1.6mm; font-size:7.5pt; font-weight:600;
+  color:var(--accent); text-transform:uppercase;
+}
+.key .shift{
+  position:absolute; bottom:.8mm; right:1.6mm;
+  font-family:'RunicSubset',serif; font-size:9.5pt; color:var(--muted);
+}
+.key.punct .base{font-family:inherit;font-size:12pt;color:var(--muted)}
+.legend{display:flex;gap:6mm;flex-wrap:wrap;color:var(--muted);font-size:8.5pt}
+.legend b{color:var(--accent);font-weight:600}
+/* variants ------------------------------------------------------------ */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+table{border-collapse:collapse;width:100%;font-size:8.5pt}
+td{border-bottom:1px solid var(--rule);padding:1.1mm 0;vertical-align:baseline}
+td.r{font-family:'RunicSubset',serif;font-size:13pt;width:7mm;line-height:1}
+td.k{width:9mm;color:var(--accent);font-weight:600}
+td.n{color:var(--muted)}
+.note{
+  border-top:1px solid var(--rule); padding-top:3mm; color:var(--muted);
+  font-size:8.5pt; display:grid; grid-template-columns:1fr 1fr; gap:5mm;
+}
+.note p{margin:0}
+.note b{color:var(--ink);font-weight:600}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff;padding:12mm}
+  :root{--ground:#fff;--panel:#fff}
+  .key{border-color:#B9BEB7}
+}
+</style>
+</head><body><div class="sheet">
+
+<header>
+  <h1>Norsk med middelalderruner</h1>
+  <p class="lede">Hver norsk bokstav ligger på tasten du allerede bruker —
+  æ, ø og å inkludert. Skift gir runetegn og varianter fra yngre futhark.</p>
+  <p class="rune-strip">ᛆᛒᛍᛑᛂᚠᚵᚼᛁᛃᚴᛚᛘᚿᚮᛔᛩᚱᛋᛏᚢᚡᚥᛪᚤᛎᛅᚯᚭ</p>
+</header>
+
+<section>
+  <p class="eyebrow">Tastaturet</p>
+  <div class="board"><div class="row"><div class="key"><span class="latin">q</span><span class="base">ᛩ</span><span class="shift">ᛢ</span></div><div class="key"><span class="latin">w</span><span class="base">ᚥ</span><span class="shift">ᚹ</span></div><div class="key"><span class="latin">e</span><span class="base">ᛂ</span><span class="shift">ᛖ</span></div><div class="key"><span class="latin">r</span><span class="base">ᚱ</span><span class="shift">ᛦ</span></div><div class="key"><span class="latin">t</span><span class="base">ᛏ</span><span class="shift">ᚦ</span></div><div class="key"><span class="latin">y</span><span class="base">ᚤ</span><span class="shift">ᚣ</span></div><div class="key"><span class="latin">u</span><span class="base">ᚢ</span><span class="shift">ᛳ</span></div><div class="key"><span class="latin">i</span><span class="base">ᛁ</span><span class="shift">ᛇ</span></div><div class="key"><span class="latin">o</span><span class="base">ᚮ</span><span class="shift">ᚬ</span></div><div class="key"><span class="latin">p</span><span class="base">ᛔ</span><span class="shift">ᛈ</span></div><div class="key"><span class="latin">å</span><span class="base">ᚭ</span><span class="shift">ᚪ</span></div></div>
+<div class="row"><div class="key"><span class="latin">a</span><span class="base">ᛆ</span><span class="shift">ᚨ</span></div><div class="key"><span class="latin">s</span><span class="base">ᛋ</span><span class="shift">ᛌ</span></div><div class="key"><span class="latin">d</span><span class="base">ᛑ</span><span class="shift">ᚧ</span></div><div class="key"><span class="latin">f</span><span class="base">ᚠ</span><span class="shift">ᚸ</span></div><div class="key"><span class="latin">g</span><span class="base">ᚵ</span><span class="shift">ᛜ</span></div><div class="key"><span class="latin">h</span><span class="base">ᚼ</span><span class="shift">ᚽ</span></div><div class="key"><span class="latin">j</span><span class="base">ᛃ</span><span class="shift">ᛄ</span></div><div class="key"><span class="latin">k</span><span class="base">ᚴ</span><span class="shift">ᚲ</span></div><div class="key"><span class="latin">l</span><span class="base">ᛚ</span><span class="shift">ᛛ</span></div><div class="key"><span class="latin">ø</span><span class="base">ᚯ</span><span class="shift">ᛟ</span></div><div class="key"><span class="latin">æ</span><span class="base">ᛅ</span><span class="shift">ᚫ</span></div></div>
+<div class="row"><div class="key"><span class="latin">z</span><span class="base">ᛎ</span><span class="shift">ᛉ</span></div><div class="key"><span class="latin">x</span><span class="base">ᛪ</span><span class="shift">ᛣ</span></div><div class="key"><span class="latin">c</span><span class="base">ᛍ</span><span class="shift">ᚳ</span></div><div class="key"><span class="latin">v</span><span class="base">ᚡ</span><span class="shift">ᚷ</span></div><div class="key"><span class="latin">b</span><span class="base">ᛒ</span><span class="shift">ᛓ</span></div><div class="key"><span class="latin">n</span><span class="base">ᚿ</span><span class="shift">ᚾ</span></div><div class="key"><span class="latin">m</span><span class="base">ᛘ</span><span class="shift">ᛙ</span></div><div class="key punct"><span class="latin">,</span><span class="base">,</span><span class="shift">᛫</span></div><div class="key punct"><span class="latin">.</span><span class="base">.</span><span class="shift">᛬</span></div><div class="key punct"><span class="latin">-</span><span class="base">-</span><span class="shift">᛭</span></div></div></div>
+  <p class="legend">
+    <span><b>A</b> bokstaven du trykker</span>
+    <span><span style="font-family:'RunicSubset'">ᛆ</span> runen du får</span>
+    <span><span style="font-family:'RunicSubset'">ᚨ</span> med skift</span>
+  </p>
+</section>
+
+<section>
+  <p class="eyebrow">Skiftnivå — varianter og skilletegn</p>
+  <div class="cols"><table><tr><td class="k">q</td><td class="r">ᛢ</td><td class="n">cweorth</td></tr><tr><td class="k">w</td><td class="r">ᚹ</td><td class="n">wunjo</td></tr><tr><td class="k">e</td><td class="r">ᛖ</td><td class="n">ehwaz</td></tr><tr><td class="k">r</td><td class="r">ᛦ</td><td class="n">long-branch yr</td></tr><tr><td class="k">t</td><td class="r">ᚦ</td><td class="n">thorn</td></tr><tr><td class="k">y</td><td class="r">ᚣ</td><td class="n">yr</td></tr><tr><td class="k">u</td><td class="r">ᛳ</td><td class="n">oo</td></tr><tr><td class="k">i</td><td class="r">ᛇ</td><td class="n">iwaz</td></tr><tr><td class="k">o</td><td class="r">ᚬ</td><td class="n">long-branch oss</td></tr><tr><td class="k">p</td><td class="r">ᛈ</td><td class="n">pertho</td></tr><tr><td class="k">å</td><td class="r">ᚪ</td><td class="n">ac</td></tr><tr><td class="k">a</td><td class="r">ᚨ</td><td class="n">ansuz</td></tr><tr><td class="k">s</td><td class="r">ᛌ</td><td class="n">short-twig sol</td></tr><tr><td class="k">d</td><td class="r">ᚧ</td><td class="n">eth</td></tr><tr><td class="k">f</td><td class="r">ᚸ</td><td class="n">gar</td></tr></table><table><tr><td class="k">g</td><td class="r">ᛜ</td><td class="n">ingwaz, ng</td></tr><tr><td class="k">h</td><td class="r">ᚽ</td><td class="n">short-twig hagall</td></tr><tr><td class="k">j</td><td class="r">ᛄ</td><td class="n">ger</td></tr><tr><td class="k">k</td><td class="r">ᚲ</td><td class="n">kauna</td></tr><tr><td class="k">l</td><td class="r">ᛛ</td><td class="n">dotted-l</td></tr><tr><td class="k">ø</td><td class="r">ᛟ</td><td class="n">othalan</td></tr><tr><td class="k">æ</td><td class="r">ᚫ</td><td class="n">aesc</td></tr><tr><td class="k">z</td><td class="r">ᛉ</td><td class="n">algiz</td></tr><tr><td class="k">x</td><td class="r">ᛣ</td><td class="n">calc</td></tr><tr><td class="k">c</td><td class="r">ᚳ</td><td class="n">cen</td></tr><tr><td class="k">v</td><td class="r">ᚷ</td><td class="n">gebo</td></tr><tr><td class="k">b</td><td class="r">ᛓ</td><td class="n">short-twig bjarkan</td></tr><tr><td class="k">n</td><td class="r">ᚾ</td><td class="n">long-branch naud</td></tr><tr><td class="k">m</td><td class="r">ᛙ</td><td class="n">short-twig madr</td></tr></table></div>
+</section>
+
+<div class="note">
+  <p><b>Prikkede runer</b> er middelalderens nyvinning: ᚵ er ᚴ med prikk
+  (k→g), ᛑ er ᛏ med prikk (t→d), ᛔ er ᛒ (b→p), ᚡ er ᚠ (f→v), ᛂ er ᛁ (i→e).
+  Slik fikk skriverne tilbake skillene de 16 runene i yngre futhark hadde
+  mistet.</p>
+  <p><b>Å er oppdiktet.</b> Bokstaven fantes ikke før rettskrivningen av
+  1917 — den kom av lang a, som skriverne skrev med o-runen. Her ligger den
+  på ᚭ. Alle andre plasser i tabellen er belagt i faktiske innskrifter.
+  Middelalderruner var aldri standardisert.</p>
+</div>
+
+</div></body></html>

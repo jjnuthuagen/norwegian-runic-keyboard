@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="nb"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runespill — les norsk med middelalderruner</title>
+<style>
+@font-face{font-family:'RunicSubset';src:url(data:font/ttf;base64,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) format('truetype');font-display:swap;font-weight:400;font-style:normal}
+:root{
+  --ground:#F1F2EF; --panel:#FFFFFF; --ink:#191C1A; --muted:#6B756F;
+  --rule:#CBCFC8; --accent:#2F6E4F; --accent-soft:#E0EBE3;
+  --bad:#9B3B2E; --bad-soft:#F2E0DC;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ground:#141816;--panel:#1B201D;--ink:#E8EBE7;--muted:#94A099;
+        --rule:#333A36;--accent:#7FBE9B;--accent-soft:#20302A;
+        --bad:#E08A7A;--bad-soft:#3A2420;}
+}
+:root[data-theme="dark"]{
+  --ground:#141816;--panel:#1B201D;--ink:#E8EBE7;--muted:#94A099;
+  --rule:#333A36;--accent:#7FBE9B;--accent-soft:#20302A;
+  --bad:#E08A7A;--bad-soft:#3A2420;
+}
+:root[data-theme="light"]{
+  --ground:#F1F2EF;--panel:#FFFFFF;--ink:#191C1A;--muted:#6B756F;
+  --rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3;
+  --bad:#9B3B2E;--bad-soft:#F2E0DC;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:clamp(16px,4vw,40px);background:var(--ground);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Cantarell,"Noto Sans",sans-serif;
+  line-height:1.5;display:flex;justify-content:center;
+}
+.wrap{width:100%;max-width:640px;display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-direction:column;gap:6px}
+h1{
+  font-family:Georgia,"Iowan Old Style",Palatino,serif;font-weight:400;
+  font-size:clamp(24px,5vw,32px);margin:0;letter-spacing:-.01em;text-wrap:balance;
+}
+.lede{margin:0;color:var(--muted);max-width:58ch}
+.eyebrow{
+  font-size:11px;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--muted);margin:0;
+}
+/* board ------------------------------------------------------------- */
+.card{
+  background:var(--panel);border:1px solid var(--rule);border-radius:10px;
+  padding:clamp(20px,5vw,32px);display:flex;flex-direction:column;gap:20px;
+}
+.word{
+  font-family:'RunicSubset',serif;font-size:clamp(38px,11vw,64px);
+  line-height:1.25;letter-spacing:.1em;text-align:center;color:var(--ink);
+  word-break:break-word;min-height:1.25em;
+}
+.word.shake{animation:shake .32s}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}
+  75%{transform:translateX(6px)}
+}
+form{display:flex;gap:10px;flex-wrap:wrap}
+input[type=text]{
+  flex:1 1 200px;min-width:0;font:inherit;font-size:18px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:8px;background:var(--ground);
+  color:var(--ink);
+}
+input[type=text]:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button{
+  font:inherit;font-weight:600;padding:12px 20px;border-radius:8px;
+  border:1px solid transparent;background:var(--accent);color:var(--panel);
+  cursor:pointer;
+}
+button.ghost{background:transparent;border-color:var(--rule);color:var(--muted)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.feedback{min-height:64px;display:flex;flex-direction:column;gap:8px}
+.pairs{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.pair{display:flex;flex-direction:column;align-items:center;min-width:26px}
+.pair .r{font-family:'RunicSubset',serif;font-size:26px;line-height:1.1}
+.pair .l{font-size:13px;font-weight:600;color:var(--muted)}
+.pair.hit .r,.pair.hit .l{color:var(--accent)}
+.pair.miss .r,.pair.miss .l{color:var(--bad)}
+.msg{text-align:center;font-weight:600}
+.msg.good{color:var(--accent)}
+.msg.bad{color:var(--bad)}
+/* stats -------------------------------------------------------------- */
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{
+  flex:1 1 0;min-width:90px;background:var(--panel);border:1px solid var(--rule);
+  border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;
+}
+.stat b{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+/* key ---------------------------------------------------------------- */
+details{border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+summary{padding:14px 18px;cursor:pointer;font-weight:600}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.key{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));
+  gap:8px;padding:0 18px 18px;
+}
+.key div{
+  border:1px solid var(--rule);border-radius:6px;padding:6px;text-align:center;
+}
+.key .r{font-family:'RunicSubset',serif;font-size:22px;line-height:1.2}
+.key .l{font-size:12px;color:var(--accent);font-weight:600;text-transform:uppercase}
+footer{color:var(--muted);font-size:13px}
+footer a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head><body>
+<div class="wrap">
+  <header>
+    <h1>Kan du lese runer?</h1>
+    <p class="lede">Ordet står i middelalderruner. Skriv det på norsk.
+      Ordene blir lengre jo bedre du gjør det.</p>
+  </header>
+
+  <div class="card">
+    <div class="word" id="word" aria-live="polite"></div>
+    <form id="form" autocomplete="off">
+      <input type="text" id="answer" placeholder="skriv ordet her"
+             autocomplete="off" autocorrect="off" autocapitalize="off"
+             spellcheck="false" aria-label="Ditt svar">
+      <button type="submit">Sjekk</button>
+      <button type="button" class="ghost" id="skip">Hopp over</button>
+    </form>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="s-score">0</b><span>Riktige</span></div>
+    <div class="stat"><b id="s-streak">0</b><span>På rad</span></div>
+    <div class="stat"><b id="s-best">0</b><span>Beste</span></div>
+    <div class="stat"><b id="s-level">1</b><span>Nivå</span></div>
+  </div>
+
+  <details>
+    <summary>Runealfabetet</summary>
+    <div class="key" id="key"></div>
+  </details>
+
+  <footer>Middelalderruner, ca. 1100–1400. Strengt 1:1 med det norske
+  alfabetet, så det kan leses begge veier.</footer>
+</div>
+
+<script>
+const TABLE = {"q": "ᛩ", "w": "ᚥ", "e": "ᛂ", "r": "ᚱ", "t": "ᛏ", "y": "ᚤ", "u": "ᚢ", "i": "ᛁ", "o": "ᚮ", "p": "ᛔ", "å": "ᚭ", "a": "ᛆ", "s": "ᛋ", "d": "ᛑ", "f": "ᚠ", "g": "ᚵ", "h": "ᚼ", "j": "ᛃ", "k": "ᚴ", "l": "ᛚ", "ø": "ᚯ", "æ": "ᛅ", "z": "ᛎ", "x": "ᛪ", "c": "ᛍ", "v": "ᚡ", "b": "ᛒ", "n": "ᚿ", "m": "ᛘ"};
+const WORDS = {"1": ["arm", "ben", "bok", "bror", "båt", "dag", "elg", "far", "fisk", "fot", "god", "gull", "hei", "hest", "hund", "hus", "hånd", "ild", "is", "katt", "ku", "mor", "natt", "navn", "ny", "ord", "ost", "regn", "rev", "ring", "sang", "sau", "snø", "sol", "stor", "sønn", "takk", "tre", "vind", "øy", "øye"], "2": ["barn", "bjørn", "blomst", "brød", "fjell", "fjord", "fugl", "gammel", "gate", "hjerte", "hode", "jord", "kald", "konge", "kvinne", "laks", "land", "liten", "luft", "mann", "melk", "munn", "måne", "rune", "seil", "skip", "skog", "stav", "stein", "sverd", "ulv", "vann", "varm", "venn"], "3": ["bibliotek", "dronning", "drømmen", "fjellet", "havet", "historie", "høst", "kjærlighet", "kunnskap", "lyset", "minnet", "mørket", "nordmann", "skjold", "skogen", "sommer", "sommeren", "språket", "vennskap", "vinter", "vinteren"]};
+
+const $ = id => document.getElementById(id);
+const toRunes = w => [...w].map(c => TABLE[c] || c).join("");
+
+let level = 1, score = 0, streak = 0, best = 0, current = "", pool = [];
+
+function refillPool(){
+  const words = WORDS[level] || WORDS[3];
+  pool = words.slice();
+  for (let i = pool.length - 1; i > 0; i--){          // Fisher-Yates, so a
+    const j = Math.floor(Math.random() * (i + 1));    // session does not
+    [pool[i], pool[j]] = [pool[j], pool[i]];          // repeat words
+  }
+}
+
+function nextWord(){
+  if (!pool.length) refillPool();
+  current = pool.pop();
+  $("word").textContent = toRunes(current);
+  $("answer").value = "";
+  $("answer").focus();
+}
+
+function renderPairs(word, typed){
+  const pairs = [...word].map((ch, i) => {
+    const ok = (typed[i] || "").toLowerCase() === ch;
+    return `<div class="pair ${ok ? "hit" : "miss"}">
+      <span class="r">${TABLE[ch] || ch}</span><span class="l">${ch}</span></div>`;
+  }).join("");
+  return `<div class="pairs">${pairs}</div>`;
+}
+
+function setStats(){
+  $("s-score").textContent = score;
+  $("s-streak").textContent = streak;
+  $("s-best").textContent = best;
+  $("s-level").textContent = level;
+}
+
+function check(e){
+  e.preventDefault();
+  const typed = $("answer").value.trim().toLowerCase();
+  if (!typed) return;
+  const fb = $("feedback");
+
+  if (typed === current){
+    score++; streak++; best = Math.max(best, streak);
+    // Three in a row promotes; the jump in word length is the reward.
+    if (streak && streak % 3 === 0 && level < 3){ level++; refillPool(); }
+    fb.innerHTML = `<p class="msg good">Riktig — ${current}</p>`;
+    setStats();
+    setTimeout(nextWord, 550);
+  } else {
+    streak = 0;
+    if (level > 1) { level--; refillPool(); }
+    fb.innerHTML = renderPairs(current, typed) +
+      `<p class="msg bad">Ordet var «${current}»</p>`;
+    $("word").classList.remove("shake");
+    void $("word").offsetWidth;               // restart the animation
+    $("word").classList.add("shake");
+    setStats();
+    setTimeout(nextWord, 2200);
+  }
+}
+
+$("form").addEventListener("submit", check);
+$("skip").addEventListener("click", () => {
+  streak = 0;
+  $("feedback").innerHTML = renderPairs(current, "") +
+    `<p class="msg bad">Ordet var «${current}»</p>`;
+  setStats();
+  setTimeout(nextWord, 1800);
+});
+
+$("key").innerHTML = Object.entries(TABLE).map(([l, r]) =>
+  `<div><div class="r">${r}</div><div class="l">${l}</div></div>`).join("");
+
+refillPool(); nextWord(); setStats();
+</script>
+</body></html>
