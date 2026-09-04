@@ -37,6 +37,8 @@ jobs:
           cp dist/web/index.html dist/web/game.html _site/
           cp dist/cheatsheet/runic-cheatsheet.html _site/
           cp dist/cheatsheet/runic-cheatsheet.pdf _site/
+          cp dist/web/runa.html dist/web/glyphredigerer.html _site/
+          mkdir -p _site/font && cp dist/font/Runa-Regular.ttf dist/font/LICENSE.md _site/font/
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runa — norsk skrevet med runer</title>
+</head>
+<body>
+
+<style>
+@font-face{font-family:'Runa';src:url(data:font/ttf;base64,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) format('truetype');font-display:swap}
+:root{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;--muted:#6B756F;
+ --rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3}
+@media (prefers-color-scheme:dark){:root{--ground:#121614;--panel:#191E1B;
+ --ink:#E9ECE8;--muted:#95A19A;--rule:#2E3733;--accent:#84C39F;--accent-soft:#1E2E27}}
+:root[data-theme="dark"]{--ground:#121614;--panel:#191E1B;--ink:#E9ECE8;
+ --muted:#95A19A;--rule:#2E3733;--accent:#84C39F;--accent-soft:#1E2E27}
+:root[data-theme="light"]{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;
+ --muted:#6B756F;--rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(16px,4vw,44px);background:var(--ground);color:var(--ink);
+ font-family:system-ui,-apple-system,"Segoe UI",Cantarell,sans-serif;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:34px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);
+ margin:0;font-weight:600}
+h1{font-family:Georgia,"Iowan Old Style",Palatino,serif;font-weight:400;margin:0;
+ font-size:clamp(30px,6.5vw,52px);letter-spacing:-.015em;text-wrap:balance;line-height:1.1}
+.lede{margin:0;color:var(--muted);max-width:56ch;font-size:clamp(15px,2.2vw,17px)}
+.stage{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+ padding:clamp(18px,4vw,36px);overflow:hidden}
+svg{width:100%;height:auto;display:block;overflow:visible}
+.carve{fill:none;stroke:var(--ink);stroke-linecap:butt;stroke-linejoin:round}
+.dot{fill:var(--ink)}
+.latin{margin:14px 0 0;color:var(--muted);font-size:14px;letter-spacing:.02em;
+ opacity:0;transition:opacity .6s ease}
+.latin.on{opacity:1}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+button{font:inherit;font-size:14px;font-weight:600;padding:9px 16px;border-radius:8px;
+ border:1px solid var(--rule);background:var(--panel);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);color:var(--ground);border-color:transparent}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=text]{flex:1 1 240px;min-width:0;font:inherit;font-size:15px;padding:9px 12px;
+ border:1px solid var(--rule);border-radius:8px;background:var(--ground);color:var(--ink)}
+input[type=text]:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:11px;padding:18px 20px}
+.card h3{margin:0 0 5px;font-size:15px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .r{font-family:'Runa',serif;font-size:30px;color:var(--accent);line-height:1;
+ display:block;margin-bottom:9px}
+footer{border-top:1px solid var(--rule);padding-top:18px;color:var(--muted);font-size:13px}
+footer a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.carve{stroke-dasharray:none!important;
+ stroke-dashoffset:0!important}.dot{opacity:1!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Runa · middelalderruner for norsk</p>
+  <h1>Skriv norsk slik det ble skrevet i Bergen i 1350.</h1>
+  <p class="lede">Ett tastaturoppsett, én skrifttype, hele alfabetet — æ, ø og å
+  inkludert. Hver bokstav ligger på tasten du allerede bruker.</p>
+</header>
+
+<div class="stage">
+  <svg id="stage" aria-label="Norsk tekst skrevet med runer"></svg>
+  <p class="latin" id="latin"></p>
+  <div class="bar">
+    <input type="text" id="src" value="norsk med runer" autocomplete="off"
+      autocapitalize="off" spellcheck="false" aria-label="Skriv noe å skjære">
+    <button class="primary" id="go">Skjær</button>
+    <button id="again">Spill av igjen</button>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card"><span class="r">ᛆᛒᛍ</span><h3>Ett system</h3>
+    <p>Bare middelalderruner. Ingenting fra eldre futhark eller angelsaksisk —
+    andre tradisjoner, andre århundrer.</p></div>
+  <div class="card"><span class="r">ᛅᚯᚭ</span><h3>Æ, ø og å</h3>
+    <p>Alle 29 bokstavene, én til én. Det kan leses begge veier.</p></div>
+  <div class="card"><span class="r">ᚴᛅᚱᛚᛁᚵ</span><h3>Overalt</h3>
+    <p>Oppsett for Linux, macOS og Windows. Bytt med en tast, skriv i hvilken
+    som helst app.</p></div>
+</div>
+
+<footer>Runa er generert, ikke tegnet: skriften bygges av samme skjelett som
+tastaturoppsettet. Middelalderruner, ca. 1100–1400 — belagt i de rundt 670
+runeinnskriftene fra Bryggen i Bergen.</footer>
+</div>
+
+<script>
+const A = {"g": {"ᛆ": {"s": ["M328.0 0.0 L328.0 714.0", "M328.0 430.0 L243.0 430.0 L224.1 427.9 L206.1 421.6 L190.0 411.5 L176.5 398.0 L166.4 381.9 L160.1 363.9 L158.0 345.0 L158.0 260.0"], "o": [], "w": 486}, "ᛒ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 714.0 L418.0 714.0 L426.9 713.0 L435.4 710.0 L442.9 705.3 L449.3 698.9 L454.0 691.4 L457.0 682.9 L458.0 674.0 L458.0 432.0 L457.0 423.1 L454.0 414.6 L449.3 407.1 L442.9 400.7 L435.4 396.0 L426.9 393.0 L418.0 392.0 L158.0 392.0", "M158.0 322.0 L418.0 322.0 L426.9 321.0 L435.4 318.0 L442.9 313.3 L449.3 306.9 L454.0 299.4 L457.0 290.9 L458.0 282.0 L458.0 40.0 L457.0 31.1 L454.0 22.6 L449.3 15.1 L442.9 8.7 L435.4 4.0 L426.9 1.0 L418.0 0.0 L158.0 0.0"], "o": [], "w": 616}, "ᛍ": {"s": ["M220.0 430.0 L220.0 714.0"], "o": [[220.0, 366, 100]], "w": 440}, "ᛑ": {"s": ["M358.0 0.0 L358.0 714.0", "M158.0 514.0 L158.0 614.0 L160.5 636.3 L167.9 657.4 L179.8 676.3 L195.7 692.2 L214.6 704.1 L235.7 711.5 L258.0 714.0 L458.0 714.0 L480.3 711.5 L501.4 704.1 L520.3 692.2 L536.2 676.3 L548.1 657.4 L555.5 636.3 L558.0 614.0 L558.0 514.0"], "o": [[466.0, 340, 52]], "w": 716}, "ᛂ": {"s": ["M158.0 0.0 L158.0 714.0"], "o": [[266.0, 370, 52]], "w": 438}, "ᚠ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 300.0 L433.0 300.0 L460.8 303.1 L487.2 312.4 L510.9 327.3 L530.7 347.1 L545.6 370.8 L554.9 397.2 L558.0 425.0 L558.0 700.0", "M158.0 150.0 L433.0 150.0 L494.2 156.9 L552.3 177.2 L604.5 210.0 L648.0 253.5 L680.8 305.7 L701.1 363.8 L708.0 425.0 L708.0 700.0"], "o": [], "w": 866}, "ᚵ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 300.0 L433.0 300.0 L460.8 303.1 L487.2 312.4 L510.9 327.3 L530.7 347.1 L545.6 370.8 L554.9 397.2 L558.0 425.0 L558.0 700.0"], "o": [[343.0, 530, 52]], "w": 716}, "ᚼ": {"s": ["M348.0 0.0 L348.0 714.0", "M158.0 250.0 L438.0 250.0 L460.3 252.5 L481.4 259.9 L500.3 271.8 L516.2 287.7 L528.1 306.6 L535.5 327.7 L538.0 350.0 L538.0 390.0 L535.5 412.3 L528.1 433.4 L516.2 452.3 L500.3 468.2 L481.4 480.1 L460.3 487.5 L438.0 490.0 L258.0 490.0 L235.7 487.5 L214.6 480.1 L195.7 468.2 L179.8 452.3 L167.9 433.4 L160.5 412.3 L158.0 390.0 L158.0 250.0"], "o": [], "w": 696}, "ᛁ": {"s": ["M158.0 0.0 L158.0 714.0"], "o": [], "w": 316}, "ᛃ": {"s": ["M368.0 714.0 L198.0 714.0 L189.1 713.0 L180.6 710.0 L173.1 705.3 L166.7 698.9 L162.0 691.4 L159.0 682.9 L158.0 674.0 L158.0 510.0 L159.0 501.1 L162.0 492.6 L166.7 485.1 L173.1 478.7 L180.6 474.0 L189.1 471.0 L198.0 470.0 L368.0 470.0", "M328.0 244.0 L498.0 244.0 L506.9 245.0 L515.4 248.0 L522.9 252.7 L529.3 259.1 L534.0 266.6 L537.0 275.1 L538.0 284.0 L538.0 460.0 L537.0 468.9 L534.0 477.4 L529.3 484.9 L522.9 491.3 L515.4 496.0 L506.9 499.0 L498.0 500.0 L328.0 500.0"], "o": [], "w": 696}, "ᚴ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 300.0 L433.0 300.0 L460.8 303.1 L487.2 312.4 L510.9 327.3 L530.7 347.1 L545.6 370.8 L554.9 397.2 L558.0 425.0 L558.0 700.0"], "o": [], "w": 716}, "ᛚ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 640.0 L243.0 640.0 L261.9 637.9 L279.9 631.6 L296.0 621.5 L309.5 608.0 L319.6 591.9 L325.9 573.9 L328.0 555.0 L328.0 470.0"], "o": [], "w": 486}, "ᛘ": {"s": ["M427.0 0.0 L427.0 714.0", "M158.0 700.0 L158.0 585.0 L160.9 559.4 L169.4 535.1 L183.1 513.3 L201.3 495.1 L223.1 481.4 L247.4 472.9 L273.0 470.0 L581.0 470.0 L606.6 472.9 L630.9 481.4 L652.7 495.1 L670.9 513.3 L684.6 535.1 L693.1 559.4 L696.0 585.0 L696.0 700.0"], "o": [], "w": 854}, "ᚿ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 430.0 L243.0 430.0 L261.9 427.9 L279.9 421.6 L296.0 411.5 L309.5 398.0 L319.6 381.9 L325.9 363.9 L328.0 345.0 L328.0 260.0"], "o": [], "w": 486}, "ᚮ": {"s": ["M328.0 0.0 L328.0 714.0", "M328.0 520.0 L243.0 520.0 L224.1 517.9 L206.1 511.6 L190.0 501.5 L176.5 488.0 L166.4 471.9 L160.1 453.9 L158.0 435.0 L158.0 350.0", "M328.0 290.0 L243.0 290.0 L224.1 287.9 L206.1 281.6 L190.0 271.5 L176.5 258.0 L166.4 241.9 L160.1 223.9 L158.0 205.0 L158.0 120.0"], "o": [], "w": 486}, "ᛔ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 714.0 L418.0 714.0 L426.9 713.0 L435.4 710.0 L442.9 705.3 L449.3 698.9 L454.0 691.4 L457.0 682.9 L458.0 674.0 L458.0 432.0 L457.0 423.1 L454.0 414.6 L449.3 407.1 L442.9 400.7 L435.4 396.0 L426.9 393.0 L418.0 392.0 L158.0 392.0", "M158.0 322.0 L418.0 322.0 L426.9 321.0 L435.4 318.0 L442.9 313.3 L449.3 306.9 L454.0 299.4 L457.0 290.9 L458.0 282.0 L458.0 40.0 L457.0 31.1 L454.0 22.6 L449.3 15.1 L442.9 8.7 L435.4 4.0 L426.9 1.0 L418.0 0.0 L158.0 0.0"], "o": [[308.0, 545, 46], [308.0, 175, 46]], "w": 616}, "ᛩ": {"s": ["M420.0 0.0 L420.0 714.0", "M420.0 714.0 L198.0 714.0 L189.1 713.0 L180.6 710.0 L173.1 705.3 L166.7 698.9 L162.0 691.4 L159.0 682.9 L158.0 674.0 L158.0 268.0 L159.0 259.1 L162.0 250.6 L166.7 243.1 L173.1 236.7 L180.6 232.0 L189.1 229.0 L198.0 228.0 L420.0 228.0"], "o": [], "w": 578}, "ᚱ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 714.0 L393.0 714.0 L401.9 713.0 L410.4 710.0 L417.9 705.3 L424.3 698.9 L429.0 691.4 L432.0 682.9 L433.0 674.0 L433.0 0.0", "M158.0 470.0 L433.0 470.0"], "o": [], "w": 591}, "ᛋ": {"s": ["M158.0 714.0 L158.0 432.0 L159.0 423.1 L162.0 414.6 L166.7 407.1 L173.1 400.7 L180.6 396.0 L189.1 393.0 L198.0 392.0 L486.0 392.0 L494.9 391.0 L503.4 388.0 L510.9 383.3 L517.3 376.9 L522.0 369.4 L525.0 360.9 L526.0 352.0 L526.0 0.0"], "o": [], "w": 684}, "ᛏ": {"s": ["M358.0 0.0 L358.0 714.0", "M158.0 514.0 L158.0 614.0 L160.5 636.3 L167.9 657.4 L179.8 676.3 L195.7 692.2 L214.6 704.1 L235.7 711.5 L258.0 714.0 L458.0 714.0 L480.3 711.5 L501.4 704.1 L520.3 692.2 L536.2 676.3 L548.1 657.4 L555.5 636.3 L558.0 614.0 L558.0 514.0"], "o": [], "w": 716}, "ᚢ": {"s": ["M158.0 0.0 L158.0 484.0 L163.8 535.2 L180.8 583.8 L208.2 627.4 L244.6 663.8 L288.2 691.2 L336.8 708.2 L388.0 714.0 L439.2 708.2 L487.8 691.2 L531.4 663.8 L567.8 627.4 L595.2 583.8 L612.2 535.2 L618.0 484.0 L618.0 0.0"], "o": [], "w": 776}, "ᚡ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 300.0 L433.0 300.0 L460.8 303.1 L487.2 312.4 L510.9 327.3 L530.7 347.1 L545.6 370.8 L554.9 397.2 L558.0 425.0 L558.0 700.0", "M158.0 150.0 L433.0 150.0 L494.2 156.9 L552.3 177.2 L604.5 210.0 L648.0 253.5 L680.8 305.7 L701.1 363.8 L708.0 425.0 L708.0 700.0"], "o": [[323.0, 560, 52]], "w": 866}, "ᚥ": {"s": ["M158.0 0.0 L158.0 484.0 L163.8 535.2 L180.8 583.8 L208.2 627.4 L244.6 663.8 L288.2 691.2 L336.8 708.2 L388.0 714.0 L439.2 708.2 L487.8 691.2 L531.4 663.8 L567.8 627.4 L595.2 583.8 L612.2 535.2 L618.0 484.0 L618.0 0.0", "M158.0 330.0 L368.0 330.0 L392.5 327.2 L415.7 319.1 L436.6 306.0 L454.0 288.6 L467.1 267.7 L475.2 244.5 L478.0 220.0 L478.0 0.0"], "o": [], "w": 776}, "ᛪ": {"s": ["M308.0 714.0 L308.0 432.0 L309.0 423.1 L312.0 414.6 L316.7 407.1 L323.1 400.7 L330.6 396.0 L339.1 393.0 L348.0 392.0 L636.0 392.0 L644.9 391.0 L653.4 388.0 L660.9 383.3 L667.3 376.9 L672.0 369.4 L675.0 360.9 L676.0 352.0 L676.0 0.0", "M120.0 600.0 L494.0 600.0", "M490.0 120.0 L864.0 120.0"], "o": [], "w": 984}, "ᚤ": {"s": ["M158.0 0.0 L158.0 484.0 L163.8 535.2 L180.8 583.8 L208.2 627.4 L244.6 663.8 L288.2 691.2 L336.8 708.2 L388.0 714.0 L439.2 708.2 L487.8 691.2 L531.4 663.8 L567.8 627.4 L595.2 583.8 L612.2 535.2 L618.0 484.0 L618.0 0.0"], "o": [[388.0, 300, 52]], "w": 776}, "ᛎ": {"s": ["M354.0 300.0 L354.0 714.0", "M158.0 470.0 L158.0 385.0 L160.1 366.1 L166.4 348.1 L176.5 332.0 L190.0 318.5 L206.1 308.4 L224.1 302.1 L243.0 300.0 L465.0 300.0 L483.9 302.1 L501.9 308.4 L518.0 318.5 L531.5 332.0 L541.6 348.1 L547.9 366.1 L550.0 385.0 L550.0 470.0"], "o": [], "w": 708}, "ᛅ": {"s": ["M328.0 0.0 L328.0 714.0", "M328.0 430.0 L243.0 430.0 L224.1 427.9 L206.1 421.6 L190.0 411.5 L176.5 398.0 L166.4 381.9 L160.1 363.9 L158.0 345.0 L158.0 260.0", "M328.0 430.0 L413.0 430.0 L431.9 432.1 L449.9 438.4 L466.0 448.5 L479.5 462.0 L489.6 478.1 L495.9 496.1 L498.0 515.0 L498.0 600.0"], "o": [], "w": 656}, "ᚯ": {"s": ["M328.0 0.0 L328.0 714.0", "M328.0 520.0 L243.0 520.0 L224.1 517.9 L206.1 511.6 L190.0 501.5 L176.5 488.0 L166.4 471.9 L160.1 453.9 L158.0 435.0 L158.0 350.0", "M328.0 290.0 L243.0 290.0 L224.1 287.9 L206.1 281.6 L190.0 271.5 L176.5 258.0 L166.4 241.9 L160.1 223.9 L158.0 205.0 L158.0 120.0", "M328.0 520.0 L413.0 520.0 L431.9 517.9 L449.9 511.6 L466.0 501.5 L479.5 488.0 L489.6 471.9 L495.9 453.9 L498.0 435.0 L498.0 350.0", "M328.0 290.0 L413.0 290.0 L431.9 287.9 L449.9 281.6 L466.0 271.5 L479.5 258.0 L489.6 241.9 L495.9 223.9 L498.0 205.0 L498.0 120.0"], "o": [], "w": 656}, "ᚭ": {"s": ["M158.0 0.0 L158.0 714.0", "M158.0 520.0 L243.0 520.0 L261.9 517.9 L279.9 511.6 L296.0 501.5 L309.5 488.0 L319.6 471.9 L325.9 453.9 L328.0 435.0 L328.0 350.0", "M158.0 290.0 L243.0 290.0 L261.9 287.9 L279.9 281.6 L296.0 271.5 L309.5 258.0 L319.6 241.9 L325.9 223.9 L328.0 205.0 L328.0 120.0"], "o": [], "w": 486}, "᛫": {"s": [], "o": [[166.0, 357, 46]], "w": 332}, "᛬": {"s": [], "o": [[166.0, 214, 46], [166.0, 500, 46]], "w": 332}, "᛭": {"s": ["M310.0 100.0 L310.0 614.0", "M120.0 357.0 L500.0 357.0"], "o": [], "w": 620}}, "t": {"q": "ᛩ", "w": "ᚥ", "e": "ᛂ", "r": "ᚱ", "t": "ᛏ", "y": "ᚤ", "u": "ᚢ", "i": "ᛁ", "o": "ᚮ", "p": "ᛔ", "å": "ᚭ", "a": "ᛆ", "s": "ᛋ", "d": "ᛑ", "f": "ᚠ", "g": "ᚵ", "h": "ᚼ", "j": "ᛃ", "k": "ᚴ", "l": "ᛚ", "ø": "ᚯ", "æ": "ᛅ", "z": "ᛎ", "x": "ᛪ", "c": "ᛍ", "v": "ᚡ", "b": "ᛒ", "n": "ᚿ", "m": "ᛘ"}, "cap": 714, "w": 76, "space": 360};
+const SVGNS="http://www.w3.org/2000/svg";
+const $=id=>document.getElementById(id);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function toRunes(s){
+  return [...s.toLowerCase()].map(c => c===" " ? " " : (A.t[c]||null));
+}
+
+function layout(chars){
+  // Place glyphs left to right on the font's own advance widths.
+  const items=[]; let x=0;
+  for(const ch of chars){
+    if(ch===" "){ x += A.space; continue }
+    const g=A.g[ch]; if(!g) continue;
+    items.push({g, x}); x += g.w;
+  }
+  return {items, width:x};
+}
+
+let timers=[];
+function play(text){
+  timers.forEach(clearTimeout); timers=[];
+  const chars=toRunes(text).filter(c=>c!==null);
+  const {items,width}=layout(chars);
+  const svg=$("stage");
+  svg.textContent="";
+  const pad=60;
+  svg.setAttribute("viewBox", `${-pad} ${-pad} ${width+pad*2} ${A.cap+pad*2}`);
+  const g=document.createElementNS(SVGNS,"g");
+  g.setAttribute("transform",`translate(0,${A.cap}) scale(1,-1)`);
+  svg.appendChild(g);
+
+  const strokes=[];
+  items.forEach(it=>{
+    const gg=document.createElementNS(SVGNS,"g");
+    gg.setAttribute("transform",`translate(${it.x},0)`);
+    it.g.s.forEach(d=>{
+      const p=document.createElementNS(SVGNS,"path");
+      p.setAttribute("d",d); p.setAttribute("class","carve");
+      p.setAttribute("stroke-width",A.w);
+      gg.appendChild(p); strokes.push({el:p,type:"line"});
+    });
+    it.g.o.forEach(([cx,cy,r])=>{
+      const c=document.createElementNS(SVGNS,"circle");
+      c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r);
+      c.setAttribute("class","dot");
+      gg.appendChild(c); strokes.push({el:c,type:"dot"});
+    });
+    g.appendChild(gg);
+  });
+
+  $("latin").textContent = text;
+  $("latin").classList.remove("on");
+
+  if(reduce){ $("latin").classList.add("on"); return }
+
+  let t=120;
+  strokes.forEach(s=>{
+    if(s.type==="line"){
+      const len=s.el.getTotalLength();
+      s.el.style.strokeDasharray=len;
+      s.el.style.strokeDashoffset=len;
+      // Longer strokes take longer, so the pace feels like a hand carving.
+      const dur=Math.max(150, Math.min(520, len*0.9));
+      timers.push(setTimeout(()=>{
+        s.el.style.transition=`stroke-dashoffset ${dur}ms cubic-bezier(.4,.05,.2,1)`;
+        s.el.style.strokeDashoffset=0;
+      }, t));
+      t += dur*0.55;
+    } else {
+      s.el.style.opacity=0;
+      s.el.style.transformOrigin=`${s.el.getAttribute("cx")}px ${s.el.getAttribute("cy")}px`;
+      s.el.style.transform="scale(0)";
+      timers.push(setTimeout(()=>{
+        s.el.style.transition="opacity 180ms ease, transform 260ms cubic-bezier(.2,1.4,.4,1)";
+        s.el.style.opacity=1; s.el.style.transform="scale(1)";
+      }, t));
+      t += 120;
+    }
+  });
+  timers.push(setTimeout(()=>$("latin").classList.add("on"), t+220));
+}
+
+$("go").onclick=()=>play($("src").value.trim()||"norsk med runer");
+$("again").onclick=()=>play($("src").value.trim()||"norsk med runer");
+$("src").addEventListener("keydown",e=>{ if(e.key==="Enter") $("go").click() });
+play("norsk med runer");
+</script>
+
+</body>
+</html>

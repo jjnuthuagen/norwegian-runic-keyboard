@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runa — glyffredigerer</title>
+</head>
+<body>
+
+<style>
+@font-face{font-family:'RunaEmbed';src:url(data:font/ttf;base64,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) format('truetype');font-display:swap}
+:root{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;--muted:#6B756F;
+ --rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3;--sel:#C2571F}
+@media (prefers-color-scheme:dark){:root{--ground:#141816;--panel:#1B201D;
+ --ink:#E8EBE7;--muted:#94A099;--rule:#333A36;--accent:#7FBE9B;
+ --accent-soft:#20302A;--sel:#E8974F}}
+:root[data-theme="dark"]{--ground:#141816;--panel:#1B201D;--ink:#E8EBE7;
+ --muted:#94A099;--rule:#333A36;--accent:#7FBE9B;--accent-soft:#20302A;--sel:#E8974F}
+:root[data-theme="light"]{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;
+ --muted:#6B756F;--rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3;--sel:#C2571F}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(12px,3vw,28px);background:var(--ground);color:var(--ink);
+ font-family:system-ui,-apple-system,"Segoe UI",Cantarell,sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(21px,4vw,28px);margin:0}
+.lede{margin:0;color:var(--muted);max-width:70ch;font-size:14px}
+.picker{display:flex;flex-wrap:wrap;gap:5px}
+.picker button{width:42px;height:44px;border:1px solid var(--rule);border-radius:7px;
+ background:var(--panel);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:1px;font:inherit;padding:0}
+.picker button .gr{font-size:19px;line-height:1;font-family:'RunaEmbed',serif}
+.picker button .gl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.picker button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.picker button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px}
+@media(max-width:860px){.main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px}
+svg{width:100%;height:auto;display:block;touch-action:none}
+.side{display:flex;flex-direction:column;gap:14px}
+h2{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 8px}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number]{width:100%;font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--rule);
+ border-radius:6px;background:var(--ground);color:var(--ink)}
+.row{display:flex;gap:8px}.row>div{flex:1}
+.val{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+button.act{font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:7px;
+ border:1px solid var(--rule);background:var(--panel);color:var(--ink);cursor:pointer}
+button.act.primary{background:var(--accent);color:var(--panel);border-color:transparent}
+button.act:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+textarea{width:100%;height:150px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;
+ border:1px solid var(--rule);border-radius:7px;padding:9px;background:var(--ground);
+ color:var(--ink);resize:vertical}
+.hint{font-size:12px;color:var(--muted);margin:0}
+.sel{color:var(--sel);font-weight:600}
+.toggles{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+.toggles label{display:flex;gap:6px;align-items:center;margin:0;color:var(--ink);cursor:pointer}
+.preview{font-size:13px;color:var(--muted)}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Runa — glyffredigerer</h1>
+  <p class="lede">Dra punktene for å endre formen. Omrisset regnes ut på nytt
+  med samme geometri som <code>runefont.py</code>: hjørnene avrundes på
+  senterlinjen, så strekene forskyves. Klikk et punkt for å skrive inn
+  eksakte tall. Velg et hjørne for å gi det sin egen radius — den kan maksimalt bli halve nabosegmentet, og panelet sier fra når du er der — hjørner med egen radius får en stiplet ring. Nederst får du Python-koden tilbake.</p>
+</header>
+
+<div class="picker" id="picker"></div>
+
+<div class="main">
+  <div class="card">
+    <svg id="stage" viewBox="-520 -120 1220 1000" role="img" aria-label="Glyffredigering"></svg>
+  </div>
+
+  <div class="side">
+    <div class="card">
+      <h2>Valgt</h2>
+      <p class="hint" id="selinfo">Ingen — klikk et punkt.</p>
+      <div class="row" style="margin-top:8px">
+        <div><label for="px">x</label><input type="number" id="px" step="5" disabled></div>
+        <div><label for="py">y</label><input type="number" id="py" step="5" disabled></div>
+      </div>
+      <div id="rblock" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)">
+        <label style="display:flex;gap:6px;align-items:center;color:var(--ink);font-size:13px;cursor:pointer;margin:0">
+          <input type="checkbox" id="ownr" disabled> Egen radius i dette hjørnet
+        </label>
+        <input type="range" id="pr" min="0" max="400" step="5" disabled style="margin-top:8px">
+        <p class="hint" id="prv" style="margin-top:2px">Bruker global radius.</p>
+      </div>
+      <p class="hint" style="margin-top:10px">Piltaster flytter 5, med Shift 25.</p>
+    </div>
+
+    <div class="card">
+      <h2>Innstillinger</h2>
+      <label for="w">Strektykkelse — <span class="val" id="wv"></span></label>
+      <input type="range" id="w" min="30" max="140" step="2">
+      <label for="r" style="margin-top:10px">Hjørneradius — <span class="val" id="rv"></span></label>
+      <input type="range" id="r" min="0" max="400" step="5">
+      <div class="toggles" style="margin-top:12px">
+        <label><input type="checkbox" id="ortho" checked> Lås til 90°</label>
+        <label><input type="checkbox" id="snap" checked> Snap til 5</label>
+        <label><input type="checkbox" id="skel" checked> Vis skjelett</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Forhåndsvisning</h2>
+      <svg id="mini" viewBox="-520 -120 1220 1000" style="height:90px;width:auto"></svg>
+      <p class="preview" id="minicap"></p>
+    </div>
+
+    <div class="card">
+      <h2>Handlinger</h2>
+      <div class="acts">
+        <button class="act" id="reset">Tilbakestill runen</button>
+        <button class="act primary" id="copy">Kopier Python</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Skjelettet som Python — lim inn i runefont.py</h2>
+  <textarea id="out" readonly spellcheck="false"></textarea>
+</div>
+</div>
+
+<script>
+const DATA = {"glyphs": {"a": [["S"], ["P", [[0, 430], [-170, 430, 85], [-170, 260]]]], "b": [["S"], ["P", [[0, 714], [300, 714], [300, 392], [0, 392]]], ["P", [[0, 322], [300, 322], [300, 0], [0, 0]]]], "c": [["D", 0, 366, 100], ["V", 0, 430, 714]], "d": [["S"], ["P", [[-200, 514], [-200, 714, 100], [200, 714, 100], [200, 514]]], ["O", 108, 340, 52]], "e": [["S"], ["O", 108, 370, 52]], "f": [["S"], ["P", [[0, 300], [400, 300, 125], [400, 700]]], ["P", [[0, 150], [550, 150, 275], [550, 700]]]], "g": [["S"], ["P", [[0, 300], [400, 300, 125], [400, 700]]], ["O", 185, 530, 52]], "h": [["S"], ["P", [[-190, 250, 100], [190, 250, 100], [190, 490, 100], [-190, 490, 100], [-190, 250]]]], "i": [["S"]], "j": [["P", [[20, 714], [-190, 714], [-190, 470], [20, 470]]], ["P", [[-20, 244], [190, 244], [190, 500], [-20, 500]]]], "k": [["S"], ["P", [[0, 300], [400, 300, 125], [400, 700]]]], "l": [["S"], ["P", [[0, 640], [170, 640, 85], [170, 470]]]], "m": [["S"], ["P", [[-269, 700], [-269, 470, 115], [269, 470, 115], [269, 700]]]], "n": [["S"], ["P", [[0, 430], [170, 430, 85], [170, 260]]]], "o": [["S"], ["P", [[0, 520], [-170, 520, 85], [-170, 350]]], ["P", [[0, 290], [-170, 290, 85], [-170, 120]]]], "p": [["S"], ["P", [[0, 714], [300, 714], [300, 392], [0, 392]]], ["P", [[0, 322], [300, 322], [300, 0], [0, 0]]], ["O", 150, 545, 46], ["O", 150, 175, 46]], "q": [["S"], ["P", [[0, 714], [-262, 714], [-262, 228], [0, 228]]]], "r": [["S"], ["P", [[0, 714], [275, 714], [275, 0]]], ["P", [[0, 470], [275, 470]]]], "s": [["P", [[-184, 714], [-184, 392], [184, 392], [184, 0]]]], "t": [["S"], ["P", [[-200, 514], [-200, 714, 100], [200, 714, 100], [200, 514]]]], "u": [["P", [[-230, 0], [-230, 714, 230], [230, 714, 230], [230, 0]]]], "v": [["S"], ["P", [[0, 300], [400, 300, 125], [400, 700]]], ["P", [[0, 150], [550, 150, 275], [550, 700]]], ["O", 165, 560, 52]], "w": [["P", [[-230, 0], [-230, 714, 230], [230, 714, 230], [230, 0]]], ["P", [[-230, 330], [90, 330, 110], [90, 0]]]], "x": [["P", [[-184, 714], [-184, 392], [184, 392], [184, 0]]], ["L", -372, 600, 2, 600], ["L", -2, 120, 372, 120]], "y": [["P", [[-230, 0], [-230, 714, 230], [230, 714, 230], [230, 0]]], ["O", 0, 300, 52]], "z": [["V", 0, 300, 714], ["P", [[-196, 470], [-196, 300, 85], [196, 300, 85], [196, 470]]]], "æ": [["S"], ["P", [[0, 430], [-170, 430, 85], [-170, 260]]], ["P", [[0, 430], [170, 430, 85], [170, 600]]]], "ø": [["S"], ["P", [[0, 520], [-170, 520, 85], [-170, 350]]], ["P", [[0, 290], [-170, 290, 85], [-170, 120]]], ["P", [[0, 520], [170, 520, 85], [170, 350]]], ["P", [[0, 290], [170, 290, 85], [170, 120]]]], "å": [["S"], ["P", [[0, 520], [170, 520, 85], [170, 350]]], ["P", [[0, 290], [170, 290, 85], [170, 120]]]]}, "runes": {"q": "ᛩ", "w": "ᚥ", "e": "ᛂ", "r": "ᚱ", "t": "ᛏ", "y": "ᚤ", "u": "ᚢ", "i": "ᛁ", "o": "ᚮ", "p": "ᛔ", "å": "ᚭ", "a": "ᛆ", "s": "ᛋ", "d": "ᛑ", "f": "ᚠ", "g": "ᚵ", "h": "ᚼ", "j": "ᛃ", "k": "ᚴ", "l": "ᛚ", "ø": "ᚯ", "æ": "ᛅ", "z": "ᛎ", "x": "ᛪ", "c": "ᛍ", "v": "ᚡ", "b": "ᛒ", "n": "ᚿ", "m": "ᛘ"}, "params": {"WEIGHT": 76, "RADIUS": 40, "CAP": 714, "SIDE": 120, "DOT_R": 52, "MITER": 3.4}, "order": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å"]};
+const P = DATA.params;
+const state = {
+  glyphs: JSON.parse(JSON.stringify(DATA.glyphs)),
+  cur: "a", sel: null,
+  weight: P.WEIGHT, radius: P.RADIUS,
+};
+const $ = id => document.getElementById(id);
+const SVGNS = "http://www.w3.org/2000/svg";
+
+/* ---- geometry: a direct port of runefont.py ---------------------- */
+function hypot(x,y){return Math.sqrt(x*x+y*y)}
+
+function fillet(pts, radius){
+  if(pts.length<3) return pts;
+  const out=[pts[0]];
+  for(let i=1;i<pts.length-1;i++){
+    const p=pts[i], a=pts[i-1], b=pts[i+1];
+    const here = p.length>2 ? p[2] : radius;
+    if(here<=0){ out.push(p); continue }
+    let ux=a[0]-p[0], uy=a[1]-p[1], vx=b[0]-p[0], vy=b[1]-p[1];
+    const lu=hypot(ux,uy)||1, lv=hypot(vx,vy)||1;
+    ux/=lu; uy/=lu; vx/=lv; vy/=lv;
+    const ang=Math.acos(Math.max(-1,Math.min(1,ux*vx+uy*vy)));
+    if(ang<1e-3 || Math.abs(Math.PI-ang)<1e-3){ out.push(p); continue }
+    const d=Math.min(here/Math.tan(ang/2), lu*0.5, lv*0.5);
+    const r=d*Math.tan(ang/2);
+    const t1=[p[0]+ux*d, p[1]+uy*d];
+    let bx=ux+vx, by=uy+vy; const lb=hypot(bx,by)||1; bx/=lb; by/=lb;
+    const c=[p[0]+bx*(r/Math.sin(ang/2)), p[1]+by*(r/Math.sin(ang/2))];
+    const t2=[p[0]+vx*d, p[1]+vy*d];
+    const a1=Math.atan2(t1[1]-c[1], t1[0]-c[0]);
+    const a2=Math.atan2(t2[1]-c[1], t2[0]-c[0]);
+    let sweep=((a2-a1+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;
+    const steps=Math.max(3, Math.round(Math.abs(sweep)/0.22));
+    for(let k=0;k<=steps;k++)
+      out.push([c[0]+r*Math.cos(a1+sweep*k/steps), c[1]+r*Math.sin(a1+sweep*k/steps)]);
+  }
+  out.push(pts[pts.length-1]);
+  return out;
+}
+function dedupe(pts){
+  const o=[pts[0]];
+  for(const p of pts.slice(1)) if(hypot(p[0]-o[o.length-1][0], p[1]-o[o.length-1][1])>1e-6) o.push(p);
+  return o;
+}
+function offsetPath(points, weight, radius){
+  let pts=dedupe(fillet(dedupe(points), radius));
+  if(pts.length<2) return [];
+  const h=weight/2;
+  const norms=[];
+  for(let i=0;i<pts.length-1;i++){
+    const dx=pts[i+1][0]-pts[i][0], dy=pts[i+1][1]-pts[i][1];
+    const l=hypot(dx,dy)||1; norms.push([-dy/l, dx/l]);
+  }
+  const side=s=>{
+    const o=[[pts[0][0]+s*norms[0][0]*h, pts[0][1]+s*norms[0][1]*h]];
+    for(let i=1;i<pts.length-1;i++){
+      const n1=norms[i-1], n2=norms[i];
+      let mx=n1[0]+n2[0], my=n1[1]+n2[1];
+      const m=hypot(mx,my);
+      if(m<1e-9){
+        o.push([pts[i][0]+s*n1[0]*h, pts[i][1]+s*n1[1]*h]);
+        o.push([pts[i][0]+s*n2[0]*h, pts[i][1]+s*n2[1]*h]); continue;
+      }
+      mx/=m; my/=m;
+      const scale=1/Math.max(mx*n1[0]+my*n1[1], 1e-6);
+      if(scale>P.MITER){
+        o.push([pts[i][0]+s*n1[0]*h, pts[i][1]+s*n1[1]*h]);
+        o.push([pts[i][0]+s*n2[0]*h, pts[i][1]+s*n2[1]*h]);
+      } else {
+        o.push([pts[i][0]+s*mx*h*scale, pts[i][1]+s*my*h*scale]);
+      }
+    }
+    const L=norms.length-1;
+    o.push([pts[pts.length-1][0]+s*norms[L][0]*h, pts[pts.length-1][1]+s*norms[L][1]*h]);
+    return o;
+  };
+  return side(1).concat(side(-1).reverse());
+}
+function circle(cx,cy,r,n){
+  n=n||36; const o=[];
+  for(let i=0;i<n;i++) o.push([cx+r*Math.cos(2*Math.PI*i/n), cy+r*Math.sin(2*Math.PI*i/n)]);
+  return o;
+}
+/* Each element -> {pts:[...] editable centreline} or {dot:...} */
+function elementPath(e){
+  const k=e[0];
+  if(k==="S") return [[0,0],[0,P.CAP]];
+  if(k==="V") return [[e[1],e[2]],[e[1],e[3]]];
+  if(k==="L") return [[e[1],e[2]],[e[3],e[4]]];
+  if(k==="P") return e[1].map(p=>p.length>2?[p[0],p[1],p[2]]:[p[0],p[1]]);
+  if(k==="A") return e[1].map(p=>[p[0],p[1]]);
+  return null;
+}
+function contoursFor(els, weight, radius){
+  const out=[];
+  for(const e of els){
+    const k=e[0];
+    if(k==="O"||k==="D") out.push(circle(e[1],e[2],e[3], k==="D"?48:36));
+    else { const p=elementPath(e); if(p) out.push(offsetPath(p, weight, radius)); }
+  }
+  return out;
+}
+const toPath = cs => cs.map(c=>"M"+c.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join("L")+"Z").join(" ");
+
+/* ---- rendering ---------------------------------------------------- */
+function el(tag, attrs){
+  const n=document.createElementNS(SVGNS, tag);
+  for(const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+function draw(){
+  const els = state.glyphs[state.cur];
+  const stage = $("stage");
+  stage.textContent = "";
+  const g = el("g", {transform:"translate(0,760) scale(1,-1)"});
+
+  // guides
+  [[0,"stave"],[P.CAP,"cap"]].forEach(()=>{});
+  g.appendChild(el("line",{x1:-520,y1:0,x2:700,y2:0,stroke:"var(--rule)","stroke-width":3}));
+  g.appendChild(el("line",{x1:-520,y1:P.CAP,x2:700,y2:P.CAP,stroke:"var(--rule)",
+    "stroke-width":3,"stroke-dasharray":"12 10"}));
+
+  const cs = contoursFor(els, state.weight, state.radius);
+  g.appendChild(el("path",{d:toPath(cs), fill:"var(--ink)", "fill-rule":"nonzero"}));
+
+  if($("skel").checked){
+    els.forEach((e,ei)=>{
+      const pts = elementPath(e);
+      if(pts){
+        g.appendChild(el("polyline",{points:pts.map(p=>p.join(",")).join(" "),
+          fill:"none", stroke:"var(--accent)","stroke-width":5,
+          "stroke-dasharray":"14 10","opacity":.9}));
+        pts.forEach((p,pi)=>{
+          const isSel = state.sel && state.sel.e===ei && state.sel.p===pi;
+          if(p.length>2){
+            const capped = state.sel && state.sel.e===ei && state.sel.p===pi
+                           && p[2] > maxRadiusAt();
+            const ring = el("circle",{cx:p[0], cy:p[1], r:32, fill:"none",
+              stroke:"var(--sel)", "stroke-width":5});
+            if(!capped) ring.setAttribute("stroke-dasharray","9 7");
+            g.appendChild(ring);
+          }
+          const c = el("circle",{cx:p[0], cy:p[1], r:isSel?26:19,
+            fill:isSel?"var(--sel)":"var(--panel)", stroke:isSel?"var(--sel)":"var(--accent)",
+            "stroke-width":6, "data-e":ei, "data-p":pi, style:"cursor:grab"});
+          if(e[0]==="S") c.setAttribute("opacity",".35");
+          g.appendChild(c);
+        });
+      } else {
+        const isSel = state.sel && state.sel.e===ei && state.sel.p===0;
+        g.appendChild(el("circle",{cx:e[1], cy:e[2], r:e[3]+14, fill:"none",
+          stroke:isSel?"var(--sel)":"var(--accent)","stroke-width":6,
+          "stroke-dasharray":"12 8","data-e":ei,"data-p":0, style:"cursor:grab"}));
+      }
+    });
+  }
+  stage.appendChild(g);
+
+  const mg = el("g",{transform:"translate(0,760) scale(1,-1)"});
+  mg.appendChild(el("path",{d:toPath(cs), fill:"var(--ink)","fill-rule":"nonzero"}));
+  $("mini").textContent=""; $("mini").appendChild(mg);
+  $("minicap").textContent = `«${state.cur}» — ${els.length} element${els.length===1?"":"er"}, `
+    + `${cs.length} kontur${cs.length===1?"":"er"}`;
+
+  $("out").value = toPython(state.cur, els);
+}
+
+function toPython(name, els){
+  const fmt = v => Number.isInteger(v)? v : Math.round(v);
+  const parts = els.map(e=>{
+    if(e[0]==="P"||e[0]==="A")
+      return `("${e[0]}", [${e[1].map(p=>p.length>2?`(${fmt(p[0])}, ${fmt(p[1])}, ${fmt(p[2])})`:`(${fmt(p[0])}, ${fmt(p[1])})`).join(", ")}])`;
+    if(e[0]==="S") return `("S",)`;
+    return `("${e[0]}", ${e.slice(1).map(fmt).join(", ")})`;
+  });
+  return `    "${name}": [${parts.join(",\n           ")}],`;
+}
+
+/* ---- interaction --------------------------------------------------- */
+let drag=null;
+function svgPoint(evt){
+  const svg=$("stage"), pt=svg.createSVGPoint();
+  pt.x=evt.clientX; pt.y=evt.clientY;
+  const m=svg.getScreenCTM().inverse();
+  const q=pt.matrixTransform(m);
+  return [q.x, 760-q.y];           // undo the flip
+}
+$("stage").addEventListener("pointerdown", e=>{
+  const t=e.target;
+  if(t.dataset && t.dataset.e!==undefined){
+    state.sel={e:+t.dataset.e, p:+t.dataset.p};
+    drag={...state.sel};
+    t.setPointerCapture(e.pointerId);
+    syncInputs(); draw();
+  }
+});
+$("stage").addEventListener("pointermove", e=>{
+  if(!drag) return;
+  let [x,y]=svgPoint(e);
+  const els=state.glyphs[state.cur], el0=els[drag.e];
+  if($("snap").checked){ x=Math.round(x/5)*5; y=Math.round(y/5)*5 }
+  const path=elementPath(el0);
+  if(path && $("ortho").checked){
+    // keep the segments either side of this point axis-aligned
+    const prev=path[drag.p-1], next=path[drag.p+1];
+    const ref=prev||next;
+    if(ref){
+      if(Math.abs(x-ref[0]) < Math.abs(y-ref[1])) x=ref[0]; else y=ref[1];
+    }
+  }
+  setPoint(drag.e, drag.p, x, y);
+  syncInputs(); draw();
+});
+addEventListener("pointerup", ()=>{drag=null});
+
+function setPoint(ei,pi,x,y){
+  const e=state.glyphs[state.cur][ei];
+  if(e[0]==="P"||e[0]==="A"){ const o=e[1][pi]; e[1][pi]= o.length>2?[x,y,o[2]]:[x,y]; }
+  else if(e[0]==="L"){ if(pi===0){e[1]=x;e[2]=y}else{e[3]=x;e[4]=y} }
+  else if(e[0]==="V"){ e[1]=x; if(pi===0)e[2]=y; else e[3]=y; }
+  else if(e[0]==="O"||e[0]==="D"){ e[1]=x; e[2]=y; }
+  else if(e[0]==="S"){ /* the stave is fixed at x=0, full height */ }
+}
+function getPoint(ei,pi){
+  const e=state.glyphs[state.cur][ei];
+  if(e[0]==="P"||e[0]==="A") return e[1][pi];
+  if(e[0]==="L") return pi===0?[e[1],e[2]]:[e[3],e[4]];
+  if(e[0]==="V") return [e[1], pi===0?e[2]:e[3]];
+  if(e[0]==="O"||e[0]==="D") return [e[1],e[2]];
+  return [0, pi===0?0:P.CAP];
+}
+function syncInputs(){
+  if(!state.sel){ $("px").disabled=$("py").disabled=true; $("px").value=$("py").value="";
+    $("selinfo").textContent="Ingen — klikk et punkt."; syncRadius(); return }
+  const [x,y]=getPoint(state.sel.e, state.sel.p);
+  $("px").disabled=$("py").disabled=false;
+  $("px").value=Math.round(x); $("py").value=Math.round(y);
+  const kind=state.glyphs[state.cur][state.sel.e][0];
+  $("selinfo").innerHTML=`Element <span class="sel">${state.sel.e+1}</span> `
+    +`(${kind}), punkt <span class="sel">${state.sel.p+1}</span>`;
+  syncRadius();
+}
+function isCorner(){
+  if(!state.sel) return false;
+  const e=state.glyphs[state.cur][state.sel.e];
+  if(e[0]!=="P") return false;
+  return state.sel.p>0 && state.sel.p<e[1].length-1;   // ends have no corner
+}
+function cornerRadius(){
+  const e=state.glyphs[state.cur][state.sel.e];
+  const pt=e[1][state.sel.p];
+  return pt.length>2 ? pt[2] : null;
+}
+function setCornerRadius(v){
+  const e=state.glyphs[state.cur][state.sel.e];
+  const pt=e[1][state.sel.p];
+  e[1][state.sel.p] = (v===null) ? [pt[0],pt[1]] : [pt[0],pt[1],v];
+}
+function maxRadiusAt(){
+  // A corner can consume at most half of each adjacent segment; past that
+  // the shape cannot round further no matter what you ask for.
+  const e=state.glyphs[state.cur][state.sel.e];
+  const pts=e[1], i=state.sel.p;
+  const a=pts[i-1], p0=pts[i], b=pts[i+1];
+  let ux=a[0]-p0[0], uy=a[1]-p0[1], vx=b[0]-p0[0], vy=b[1]-p0[1];
+  const lu=Math.hypot(ux,uy)||1, lv=Math.hypot(vx,vy)||1;
+  ux/=lu; uy/=lu; vx/=lv; vy/=lv;
+  const ang=Math.acos(Math.max(-1,Math.min(1,ux*vx+uy*vy)));
+  if(ang<1e-3 || Math.abs(Math.PI-ang)<1e-3) return 0;
+  return Math.round(Math.min(lu,lv)*0.5*Math.tan(ang/2));
+}
+function radiusNote(asked){
+  const cap=maxRadiusAt();
+  if(asked<=cap) return `Radius ${asked} i dette hjørnet. Maks her: ${cap}.`;
+  return `Ba om ${asked}, men hjørnet er helt avrundet på ${cap} — `
+       + `halve nabosegmentet. Gjør segmentet lengre for å runde mer.`;
+}
+function syncRadius(){
+  const on=isCorner();
+  $("ownr").disabled=!on;
+  if(!on){
+    $("ownr").checked=false; $("pr").disabled=true;
+    $("prv").textContent = state.sel ? "Dette punktet er en ende, ikke et hjørne."
+                                     : "Bruker global radius.";
+    return;
+  }
+  const r=cornerRadius();
+  $("ownr").checked = r!==null;
+  $("pr").disabled = r===null;
+  $("pr").value = r===null ? state.radius : r;
+  $("prv").textContent = r===null
+    ? `Bruker global radius (${state.radius}). Maks her: ${maxRadiusAt()}.`
+    : radiusNote(r);
+}
+$("ownr").addEventListener("change", ()=>{
+  if(!isCorner()) return;
+  setCornerRadius($("ownr").checked ? state.radius : null);
+  syncRadius(); draw();
+});
+$("pr").addEventListener("input", ()=>{
+  if(!isCorner() || !$("ownr").checked) return;
+  setCornerRadius(+$("pr").value);
+  syncRadius(); draw();
+});
+
+["px","py"].forEach(id=>$(id).addEventListener("input", ()=>{
+  if(!state.sel) return;
+  setPoint(state.sel.e, state.sel.p, +$("px").value, +$("py").value); draw();
+}));
+addEventListener("keydown", e=>{
+  if(!state.sel || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  const step=e.shiftKey?25:5;
+  const d={ArrowLeft:[-step,0],ArrowRight:[step,0],ArrowUp:[0,step],ArrowDown:[0,-step]}[e.key];
+  if(!d) return;
+  e.preventDefault();
+  const [x,y]=getPoint(state.sel.e,state.sel.p);
+  setPoint(state.sel.e,state.sel.p,x+d[0],y+d[1]); syncInputs(); draw();
+});
+
+function buildPicker(){
+  const p=$("picker"); p.textContent="";
+  DATA.order.forEach(c=>{
+    const b=document.createElement("button");
+    b.setAttribute("aria-pressed", c===state.cur);
+    b.innerHTML=`<span class="gr">${DATA.runes[c]}</span><span class="gl">${c}</span>`;
+    b.onclick=()=>{ state.cur=c; state.sel=null; buildPicker(); syncInputs(); draw() };
+    p.appendChild(b);
+  });
+}
+$("w").addEventListener("input", e=>{state.weight=+e.target.value; $("wv").textContent=e.target.value; draw()});
+$("r").addEventListener("input", e=>{state.radius=+e.target.value; $("rv").textContent=e.target.value; draw()});
+$("skel").addEventListener("change", draw);
+$("reset").onclick=()=>{ state.glyphs[state.cur]=JSON.parse(JSON.stringify(DATA.glyphs[state.cur]));
+  state.sel=null; syncInputs(); draw() };
+$("copy").onclick=async()=>{
+  try{ await navigator.clipboard.writeText($("out").value); $("copy").textContent="Kopiert"; }
+  catch(err){ $("out").select(); $("copy").textContent="Merket — kopier selv"; }
+  setTimeout(()=>$("copy").textContent="Kopier Python", 1400);
+};
+$("w").value=state.weight; $("wv").textContent=state.weight;
+$("r").value=state.radius; $("rv").textContent=state.radius;
+buildPicker(); syncInputs(); draw();
+</script>
+
+</body>
+</html>
