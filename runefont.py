@@ -34,6 +34,8 @@ DOT_R = 52         # radius of the dot on dotted runes
 DOT_X = 108        # how far the dot sits from the stave centre
 SEGMENTS = 20      # sampling resolution for curved strokes
 MITER_LIMIT = 3.4  # beyond this a sharp corner bevels instead of spiking
+CAP_TOL = 30       # how close to the baseline or cap height still counts as
+                   # "landing on the line", and so stays flat-ended
 RADIUS = 40        # default corner radius on the centreline. 0 = sharp
                    # mitre; small = a hard corner; large = a soft sweep.
                    # Any single point may override it as (x, y, r).
@@ -90,8 +92,11 @@ GLYPHS = {
     "h": [("S",), ("P", [(-190, 250, 100), (190, 250, 100), (190, 490, 100),
                          (-190, 490, 100), (-190, 250)])],
     "i": [("S",)],
-    "j": [("P", [(20, CAP), (-190, CAP), (-190, 470), (20, 470)]),
-          ("P", [(-20, 244), (190, 244), (190, 500), (-20, 500)])],
+    # Two opposed hooks. Where they run alongside each other the arms are
+    # 170 apart -- the same spacing as everywhere else -- so the lines stay
+    # parallel instead of colliding.
+    "j": [("P", [(60, CAP), (-190, CAP, 125), (-190, 374, 125), (60, 374)]),
+          ("P", [(-60, 204), (190, 204, 125), (190, 544, 125), (-60, 544)])],
     # kaun is fé with one arm, so it uses fé's inner arm unchanged.
     "k": [("S",), ("P", [(0, 300), (400, 300, 125), (400, 700)])],
     "l": [("S",), ("P", [(0, 640), (STUB, 640, STUB_R), (STUB, 640 - STUB)])],
@@ -240,9 +245,29 @@ def _dedupe(pts):
     return out
 
 
+def _free_end(pt, closed):
+    """A terminal is free -- and so gets a round cap -- unless it lands on
+    the baseline or the cap height, where a rounded end would break the
+    line the text sits on. Closed shapes never get caps at all."""
+    if closed:
+        return False
+    y = pt[1]
+    return not (abs(y) <= CAP_TOL or abs(y - CAP) <= CAP_TOL)
+
+
+def _semicircle(centre, normal, h, steps=12):
+    """Half circle from centre+normal*h round to centre-normal*h, bulging
+    away from the stroke -- a round cap."""
+    a0 = math.atan2(normal[1], normal[0])
+    return [(centre[0] + h * math.cos(a0 - math.pi * k / steps),
+             centre[1] + h * math.sin(a0 - math.pi * k / steps))
+            for k in range(1, steps)]
+
+
 def _offset_path(points, weight, radius=None):
     """Offset a centreline to a closed outline, mitring at corners so the
-    shape stays connected. Flat caps at the two ends."""
+    shape stays connected. Ends are flat on the baseline and cap height,
+    and rounded where the stroke sticks out on its own."""
     pts = _dedupe(_fillet(_dedupe(points), RADIUS if radius is None else radius))
     if len(pts) < 2:
         return []
@@ -283,7 +308,111 @@ def _offset_path(points, weight, radius=None):
                     pts[-1][1] + sign * normals[-1][1] * h))
         return out
 
-    return side(1) + side(-1)[::-1]
+    h_ = h
+    closed = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
+    left, right = side(1), side(-1)
+    out = list(left)
+    if _free_end(pts[-1], closed):
+        out += _semicircle(pts[-1], normals[-1], h_)
+    out += right[::-1]
+    if _free_end(pts[0], closed):
+        out += _semicircle(pts[0], (-normals[0][0], -normals[0][1]), h_)
+    return out
+
+
+def _fillet_closed(pts, radius):
+    """Fillet a closed loop, treating the seam as a corner like any other."""
+    n = len(pts)
+    out = []
+    for i in range(n):
+        p, a, b = pts[i], pts[(i - 1) % n], pts[(i + 1) % n]
+        here = p[2] if len(p) > 2 else radius
+        ux, uy = a[0] - p[0], a[1] - p[1]
+        vx, vy = b[0] - p[0], b[1] - p[1]
+        lu = math.hypot(ux, uy) or 1.0
+        lv = math.hypot(vx, vy) or 1.0
+        ux, uy, vx, vy = ux / lu, uy / lu, vx / lv, vy / lv
+        ang = math.acos(max(-1.0, min(1.0, ux * vx + uy * vy)))
+        if here <= 0 or ang < 1e-3 or abs(math.pi - ang) < 1e-3:
+            out.append((p[0], p[1]))
+            continue
+        d = min(here / math.tan(ang / 2), lu * 0.5, lv * 0.5)
+        r = d * math.tan(ang / 2)
+        t1 = (p[0] + ux * d, p[1] + uy * d)
+        t2 = (p[0] + vx * d, p[1] + vy * d)
+        bx, by = ux + vx, uy + vy
+        lb = math.hypot(bx, by) or 1.0
+        centre = (p[0] + bx / lb * (r / math.sin(ang / 2)),
+                  p[1] + by / lb * (r / math.sin(ang / 2)))
+        a1 = math.atan2(t1[1] - centre[1], t1[0] - centre[0])
+        a2 = math.atan2(t2[1] - centre[1], t2[0] - centre[0])
+        sweep = (a2 - a1 + math.pi) % (2 * math.pi) - math.pi
+        steps = max(3, int(abs(sweep) / 0.22))
+        out += [(centre[0] + r * math.cos(a1 + sweep * k / steps),
+                 centre[1] + r * math.sin(a1 + sweep * k / steps))
+                for k in range(steps + 1)]
+    return out
+
+
+def _offset_closed(points, weight, radius):
+    """Offset a closed centreline into a ring: an outer contour and a
+    reversed inner one. Every vertex is mitred, including the seam, so
+    the loop has no join in it."""
+    corners = _dedupe(points)
+    # Drop the repeated closing point before filleting, or the seam becomes
+    # a degenerate zero-length corner and skews the offset.
+    if len(corners) > 1 and math.hypot(corners[0][0] - corners[-1][0],
+                                       corners[0][1] - corners[-1][1]) < 1e-6:
+        corners = corners[:-1]
+    pts = _dedupe(_fillet_closed(corners, radius))
+    if len(pts) > 1 and math.hypot(pts[0][0] - pts[-1][0],
+                                   pts[0][1] - pts[-1][1]) < 1e-6:
+        pts = pts[:-1]
+    n = len(pts)
+    if n < 3:
+        return []
+    h = weight / 2.0
+    norms = []
+    for i in range(n):
+        dx = pts[(i + 1) % n][0] - pts[i][0]
+        dy = pts[(i + 1) % n][1] - pts[i][1]
+        length = math.hypot(dx, dy) or 1.0
+        norms.append((-dy / length, dx / length))
+
+    def side(sign):
+        out = []
+        for i in range(n):
+            n1, n2 = norms[(i - 1) % n], norms[i]
+            mx, my = n1[0] + n2[0], n1[1] + n2[1]
+            m = math.hypot(mx, my)
+            if m < 1e-9:
+                out.append((pts[i][0] + sign * n1[0] * h,
+                            pts[i][1] + sign * n1[1] * h))
+                out.append((pts[i][0] + sign * n2[0] * h,
+                            pts[i][1] + sign * n2[1] * h))
+                continue
+            mx, my = mx / m, my / m
+            scale = 1.0 / max(mx * n1[0] + my * n1[1], 1e-6)
+            if scale > MITER_LIMIT:
+                out.append((pts[i][0] + sign * n1[0] * h,
+                            pts[i][1] + sign * n1[1] * h))
+                out.append((pts[i][0] + sign * n2[0] * h,
+                            pts[i][1] + sign * n2[1] * h))
+            else:
+                out.append((pts[i][0] + sign * mx * h * scale,
+                            pts[i][1] + sign * my * h * scale))
+        return out
+
+    # Which side is outside depends on the loop's winding, so decide by
+    # area rather than assuming a sign.
+    a, b = side(1), side(-1)
+
+    def area(poly):
+        return abs(0.5 * sum(poly[i][0] * poly[(i + 1) % len(poly)][1]
+                             - poly[(i + 1) % len(poly)][0] * poly[i][1]
+                             for i in range(len(poly))))
+
+    return [a, b] if area(a) > area(b) else [b, a]
 
 
 def _circle(cx, cy, r, n=36):
@@ -299,35 +428,50 @@ def _clockwise(poly):
 
 
 def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
-    """Turn one glyph's skeleton into a list of closed contours."""
+    """Turn one glyph's skeleton into a list of closed contours.
+
+    Winding is fixed as each contour is added: solids one way, holes the
+    other. Do not normalise afterwards -- a blanket pass would turn the
+    holes back into solids."""
     r = RADIUS if radius is None else radius
     out = []
+
+    def add(poly, hole=False):
+        if len(poly) > 2:
+            out.append(_clockwise(poly)[::-1] if hole else _clockwise(poly))
     for e in elements:
         kind = e[0]
         if kind == "S":
-            out.append(_offset_path([(0, 0), (0, CAP)], weight, r))
+            add(_offset_path([(0, 0), (0, CAP)], weight, r))
         elif kind == "V":
             _, x, y0, y1 = e
-            out.append(_offset_path([(x, y0), (x, y1)], weight, r))
+            add(_offset_path([(x, y0), (x, y1)], weight, r))
         elif kind == "L":
             _, x0, y0, x1, y1 = e
-            out.append(_offset_path([(x0, y0), (x1, y1)], weight, r))
+            add(_offset_path([(x0, y0), (x1, y1)], weight, r))
         elif kind == "C":
             x0, y0, x1, y1 = e[1:5]
             sign = e[5] if len(e) > 5 else 1
-            out.append(_offset_path(_bow(x0, y0, x1, y1, curve * sign), weight, r))
+            add(_offset_path(_bow(x0, y0, x1, y1, curve * sign), weight, r))
         elif kind == "P":
-            out.append(_offset_path(_expand(e[1], curve), weight, r))
+            pts = _expand(e[1], curve)
+            if math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6:
+                ring = _offset_closed(pts, weight, r)
+                if ring:
+                    add(ring[0])
+                    add(ring[1], hole=True)
+                continue
+            add(_offset_path(pts, weight, r))
         elif kind == "A":
             p0, c, p2 = e[1]
-            out.append(_offset_path(_quad(p0, c, p2), weight, r))
+            add(_offset_path(_quad(p0, c, p2), weight, r))
         elif kind == "O":
             _, x, y, r = e
-            out.append(_circle(x, y, r))
+            add(_circle(x, y, r))
         elif kind == "D":
             _, x, y, r = e
-            out.append(_circle(x, y, r, n=48))
-    return [_clockwise(c) for c in out if len(c) > 2]
+            add(_circle(x, y, r, n=48))
+    return out
 
 
 # --- font assembly ---------------------------------------------------
