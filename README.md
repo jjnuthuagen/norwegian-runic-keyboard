@@ -1,7 +1,9 @@
+![Runa — norsk skrevet med middelalderruner](dist/banner.svg)
+
 # Norwegian Runic Keyboard
 
 Type modern Norwegian in medieval runes — as a real keyboard layout, on
-Linux, macOS and Windows.
+Linux, macOS and Windows, in a typeface built for it.
 
 ```
 det er ikke lett å skrive norsk med runer
@@ -38,6 +40,29 @@ a sea. The build refuses to run if one of their codepoints creeps in.
 plain Latin capital — you can drop a name or a URL into runic text without
 leaving the layout. The only exceptions are `,` `.` `-`, which give the
 word dividers ᛫ ᛬ ᛭. Run `./rune --table` for every rune and its name.
+
+## Runa, the typeface
+
+**[Download Runa-Regular.ttf](dist/font/Runa-Regular.ttf)** · SIL Open Font
+License 1.1 · 33 glyphs, ~6 KB
+
+Runa is generated rather than drawn. `runefont.py` builds it from the same
+skeletons the keyboard layouts use, so the font and the layout cannot drift
+apart. Change a skeleton, run `python3 runefont.py`, and the typeface
+follows.
+
+The construction is orthogonal: every bend is a right angle softened by a
+corner radius. Side branches sit at their geometric maximum, which makes
+each a true quarter circle; `u`, `w` and `y` are capped by a single
+semicircle; the bowls of `b` and `p` are one continuous arc. Free stroke
+ends are rounded, but ends landing on the baseline or cap height stay flat
+so the text line holds.
+
+To install it, copy the TTF to `~/.local/share/fonts` (Linux) or open it and
+click Install (macOS, Windows).
+
+**[Glyph editor](dist/web/glyphredigerer.html)** — drag the skeletons, set
+per-corner radii, and export the Python straight back into `runefont.py`.
 
 ## Also in here
 
