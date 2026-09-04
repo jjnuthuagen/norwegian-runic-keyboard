@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Flip the COSMIC keyboard layout between Norwegian and medieval runic.
+#
+# XKB can only bind modifier-only combos (grp:ctrl_shift_toggle and
+# friends) for group switching, and those fire on the bare modifiers --
+# which would hijack every Ctrl+Shift+<key> in the focused app. So the
+# toggle is done here instead and bound to a real chord through COSMIC's
+# own shortcut system.
+
+set -euo pipefail
+
+CONF="$HOME/.config/cosmic/com.system76.CosmicComp/v1/xkb_config"
+NORMAL="no"
+RUNIC="runic"
+
+[ -f "$CONF" ] || { echo "no xkb_config at $CONF" >&2; exit 1; }
+
+current=$(grep -oP 'layout:\s*"\K[^"]*' "$CONF")
+
+if [ "$current" = "$RUNIC" ]; then
+    target="$NORMAL"; label="Norsk"
+else
+    target="$RUNIC"; label="ᚱᚢᚿᛂᚱ"
+fi
+
+# Write via a temp file in the same directory so the replace is atomic and
+# cosmic-comp never observes a half-written config.
+tmp=$(mktemp "$CONF.XXXXXX")
+trap 'rm -f "$tmp"' EXIT
+sed "s/layout: \"$current\"/layout: \"$target\"/" "$CONF" > "$tmp"
+mv "$tmp" "$CONF"
+trap - EXIT
+
+command -v notify-send >/dev/null && \
+    notify-send -t 1200 -a rune "Keyboard: $label" || true

@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Transliterate modern Norwegian to medieval runes, and back."""
+
+import argparse
+import os
+import shutil
+import subprocess
+import sys
+
+# Works when invoked through a symlink in ~/.local/bin, where sys.path[0]
+# would otherwise be the symlink's directory rather than the project.
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+import runes  # noqa: E402
+
+
+def to_runes(text, divider=runes.DIVIDER):
+    """Norwegian -> runes. Word gaps become the divider; anything unmapped
+    (digits, Latin punctuation) passes through untouched."""
+    words = [
+        "".join(runes.TABLE.get(ch.lower(), ch) for ch in word)
+        for word in text.split(" ")
+    ]
+    return f" {divider} ".join(words)
+
+
+def to_latin(text):
+    """Runes -> Norwegian. Any divider form collapses back to one space."""
+    out = [
+        " " if ch in runes.PUNCTUATION else runes.REVERSE.get(ch, ch)
+        for ch in text
+    ]
+    return " ".join("".join(out).split())
+
+
+def copy_to_clipboard(text):
+    for tool in (["wl-copy"], ["xclip", "-selection", "clipboard"], ["pbcopy"]):
+        if shutil.which(tool[0]):
+            subprocess.run(tool, input=text, text=True, check=True)
+            return
+    sys.exit("rune: no clipboard tool found (wl-copy, xclip or pbcopy)")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog="rune",
+        description="Transliterate Norwegian to medieval runes, and back.",
+        epilog='examples:\n  rune "god dag"\n  rune -r "ᚵᚮᛑ"\n  echo hei | rune -c',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("text", nargs="*", help="text to convert; reads stdin if omitted")
+    parser.add_argument("-r", "--reverse", action="store_true", help="runes -> Norwegian")
+    parser.add_argument("-c", "--copy", action="store_true", help="also copy the result")
+    parser.add_argument("-n", "--no-divider", action="store_true",
+                        help="separate words with a space instead of ᛬")
+    parser.add_argument("-t", "--table", action="store_true",
+                        help="print the mapping table and exit")
+    args = parser.parse_args()
+
+    if args.table:
+        print("key\tbase\t\tshift")
+        for latin, base, shift, *_ in runes.KEYS:
+            print(f"{latin}\t{base} U+{ord(base):04X}\t{shift} U+{ord(shift):04X}")
+        return
+
+    if args.text:
+        text = " ".join(args.text)
+    elif not sys.stdin.isatty():
+        text = sys.stdin.read().rstrip("\n")
+    else:
+        parser.error("no text given (pass arguments or pipe stdin)")
+
+    result = to_latin(text) if args.reverse else to_runes(
+        text, divider=" " if args.no_divider else runes.DIVIDER)
+
+    print(result)
+    if args.copy:
+        copy_to_clipboard(result)
+
+
+if __name__ == "__main__":
+    main()
