@@ -75,8 +75,8 @@ GLYPHS = {
     # Bowls meet the stave top, middle and bottom, as bjarkan always has.
     # It reads close to a squared B because the two letters share an
     # ancestor; that is convergence, not an error.
-    "b": [("S",), ("P", [(0, 714), (300, 714), (300, 392), (0, 392)]),
-          ("P", [(0, 322), (300, 322), (300, 0), (0, 0)])],
+    "b": [("S",), ("P", [(0, 714), (330, 714, 161), (330, 392, 161), (0, 392)]),
+          ("P", [(0, 322), (330, 322, 161), (330, 0, 161), (0, 0)])],
     "c": [("D", 0, 366, 100), ("V", 0, 430, CAP)],
     "d": [("S",), ("P", [(-200, 514), (-200, CAP, 100), (200, CAP, 100), (200, 514)]),
           ("O", DOT_X, 340, DOT_R)],
@@ -104,9 +104,11 @@ GLYPHS = {
     "n": [("S",), ("P", [(0, 430), (STUB, 430, STUB_R), (STUB, 430 - STUB)])],
     "o": [("S",), ("P", [(0, 520), (-STUB, 520, STUB_R), (-STUB, 350)]),
           ("P", [(0, 290), (-STUB, 290, STUB_R), (-STUB, 120)])],
-    "p": [("S",), ("P", [(0, 714), (300, 714), (300, 392), (0, 392)]),
-          ("P", [(0, 322), (300, 322), (300, 0), (0, 0)]),
-          ("O", 150, 545, 46), ("O", 150, 175, 46)],
+    # Dots sit on the bowls' own arc centres, so each is optically centred
+    # in its bowl rather than eyeballed into place.
+    "p": [("S",), ("P", [(0, 714), (330, 714, 161), (330, 392, 161), (0, 392)]),
+          ("P", [(0, 322), (330, 322, 161), (330, 0, 161), (0, 0)]),
+          ("O", 169, 553, 50), ("O", 169, 161, 50)],
     "q": [("S",), ("P", [(0, 714), (-262, 714), (-262, 228), (0, 228)])],
     # Bowl closed at the top only, then a single leg dropping the full
     # height -- keeps reið distinct from an orthogonal A or P.
