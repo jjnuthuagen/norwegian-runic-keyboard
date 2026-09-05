@@ -34,17 +34,17 @@
           keyTimes="0;0.195;0.200;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path></g><g transform="translate(0,0)">
-      <path class="guide" d="M158.0 714.0 L360.0 714.0 L404.9 708.9 L447.6 694.0 L485.9 669.9 L517.9 637.9 L542.0 599.6 L556.9 556.9 L562.0 512.0 L562.0 0.0" stroke-dasharray="1030.6" stroke-dashoffset="1030.6" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="1030.6;1030.6;0;0"
+      <path class="guide" d="M158.0 676.0 L360.0 676.0 L404.9 670.9 L447.6 656.0 L485.9 631.9 L517.9 599.9 L542.0 561.6 L556.9 518.9 L562.0 474.0 L562.0 0.0" stroke-dasharray="992.6" stroke-dashoffset="992.6" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="992.6;992.6;0;0"
           keyTimes="0;0.080;0.200;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.075;0.080;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M158.0 714.0 L360.0 714.0 L404.9 708.9 L447.6 694.0 L485.9 669.9 L517.9 637.9 L542.0 599.6 L556.9 556.9 L562.0 512.0 L562.0 0.0" stroke-linecap="butt"
-        stroke-dasharray="1030.6" stroke-dashoffset="1030.6" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="1030.6;1030.6;0;0"
+      <path class="carve" d="M158.0 676.0 L360.0 676.0 L404.9 670.9 L447.6 656.0 L485.9 631.9 L517.9 599.9 L542.0 561.6 L556.9 518.9 L562.0 474.0 L562.0 0.0" stroke-linecap="butt"
+        stroke-dasharray="992.6" stroke-dashoffset="992.6" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="992.6;992.6;0;0"
           keyTimes="0;0.249;0.409;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"
@@ -68,17 +68,17 @@
           keyTimes="0;0.292;0.297;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path></g><g transform="translate(720.0,0)">
-      <path class="guide" d="M158.0 0.0 L158.0 432.0 L165.1 494.8 L185.9 554.4 L219.5 607.8 L264.2 652.5 L317.6 686.1 L377.2 706.9 L440.0 714.0 L502.8 706.9 L562.4 686.1 L615.8 652.5 L660.5 607.8 L694.1 554.4 L714.9 494.8 L722.0 432.0 L722.0 0.0" stroke-dasharray="1748.1" stroke-dashoffset="1748.1" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="1748.1;1748.1;0;0"
+      <path class="guide" d="M158.0 0.0 L158.0 406.0 L165.1 468.8 L185.9 528.4 L219.5 581.8 L264.2 626.5 L317.6 660.1 L377.2 680.9 L440.0 688.0 L502.8 680.9 L562.4 660.1 L615.8 626.5 L660.5 581.8 L694.1 528.4 L714.9 468.8 L722.0 406.0 L722.0 0.0" stroke-dasharray="1696.1" stroke-dashoffset="1696.1" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="1696.1;1696.1;0;0"
           keyTimes="0;0.160;0.280;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.25 .1 .25 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1;0;0"
           keyTimes="0;0.155;0.160;0.74;0.82;1"
           dur="9.0s" repeatCount="indefinite"/>
       </path>
-      <path class="carve" d="M158.0 0.0 L158.0 432.0 L165.1 494.8 L185.9 554.4 L219.5 607.8 L264.2 652.5 L317.6 686.1 L377.2 706.9 L440.0 714.0 L502.8 706.9 L562.4 686.1 L615.8 652.5 L660.5 607.8 L694.1 554.4 L714.9 494.8 L722.0 432.0 L722.0 0.0" stroke-linecap="butt"
-        stroke-dasharray="1748.1" stroke-dashoffset="1748.1" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="1748.1;1748.1;0;0"
+      <path class="carve" d="M158.0 0.0 L158.0 406.0 L165.1 468.8 L185.9 528.4 L219.5 581.8 L264.2 626.5 L317.6 660.1 L377.2 680.9 L440.0 688.0 L502.8 680.9 L562.4 660.1 L615.8 626.5 L660.5 581.8 L694.1 528.4 L714.9 468.8 L722.0 406.0 L722.0 0.0" stroke-linecap="butt"
+        stroke-dasharray="1696.1" stroke-dashoffset="1696.1" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="1696.1;1696.1;0;0"
           keyTimes="0;0.346;0.506;1" dur="9.0s" repeatCount="indefinite"
           calcMode="spline" keySplines="0 0 1 1;.4 .05 .2 1;0 0 1 1"/>
         <animate attributeName="opacity" values="0;0;1;1"

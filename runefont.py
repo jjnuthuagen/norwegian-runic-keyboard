@@ -66,6 +66,17 @@ RADIUS = 40        # default corner radius on the centreline. 0 = sharp
 # A corner is a full quarter circle when its radius equals half the
 # shorter adjacent segment, so side branches are built with equal legs to
 # land exactly there.
+# A flat stroke that defines the top or bottom of a glyph is positioned by
+# its OUTER edge, not its centreline: a horizontal centred on the cap would
+# put half the stroke above it and leave a step where it meets the stave.
+# Curves are the exception -- u, w and y overshoot on purpose, or round
+# shapes read short next to flat ones.
+FLAT_TOP, FLAT_BOTTOM = CAP - WEIGHT // 2, WEIGHT // 2
+OVERSHOOT = 12                       # ~1.7% of cap height
+ARCH = CAP + OVERSHOOT - WEIGHT // 2  # centreline apex of u, w and y, so
+                                      # their ink clears the flat tops by
+                                      # OVERSHOOT rather than half a stroke
+
 NARROW, MEDIUM, WIDE = 240, 480, 640
 ONE_M, ONE_W = 404, 564              # reach from the stave, one side only
 SYM_M, SYM_W = 202, 282              # reach either side of centre
@@ -90,28 +101,28 @@ GLYPHS = {
     # --- medium, ink 480 ---------------------------------------------
     # Bowl radius is half the bowl's height, so each outer edge is one
     # continuous semicircle rather than two corners with a flat between.
-    "b": [("S",), ("P", [(0, 714), (ONE_M, 714, 161), (ONE_M, 392, 161), (0, 392)]),
-          ("P", [(0, 322), (ONE_M, 322, 161), (ONE_M, 0, 161), (0, 0)])],
-    "d": [("S",), ("P", [(-SYM_M, 514), (-SYM_M, CAP, 100), (SYM_M, CAP, 100),
-                         (SYM_M, 514)]),
+    "b": [("S",), ("P", [(0, 676), (ONE_M, 676, 142), (ONE_M, 392, 142), (0, 392)]),
+          ("P", [(0, 322), (ONE_M, 322, 142), (ONE_M, 38, 142), (0, 38)])],
+    "d": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, 676, 100), (SYM_M, 676, 100),
+                         (SYM_M, 476)]),
           ("O", DOT_X, 340, DOT_R)],
     "g": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
           ("O", 190, 540, DOT_R)],
     "h": [("S",), ("P", [(-SYM_M, 250, 100), (SYM_M, 250, 100), (SYM_M, 490, 100),
                          (-SYM_M, 490, 100), (-SYM_M, 250)])],
-    "j": [("P", [(60, CAP), (-SYM_M, CAP, 125), (-SYM_M, 374, 125), (60, 374)]),
-          ("P", [(-60, 204), (SYM_M, 204, 125), (SYM_M, 544, 125), (-60, 544)])],
+    "j": [("P", [(60, 676), (-SYM_M, 676, 125), (-SYM_M, 336, 125), (60, 336)]),
+          ("P", [(-60, 166), (SYM_M, 166, 125), (SYM_M, 506, 125), (-60, 506)])],
     "k": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)])],
-    "p": [("S",), ("P", [(0, 714), (ONE_M, 714, 161), (ONE_M, 392, 161), (0, 392)]),
-          ("P", [(0, 322), (ONE_M, 322, 161), (ONE_M, 0, 161), (0, 0)]),
-          ("O", 243, 553, 50), ("O", 243, 161, 50)],
+    "p": [("S",), ("P", [(0, 676), (ONE_M, 676, 142), (ONE_M, 392, 142), (0, 392)]),
+          ("P", [(0, 322), (ONE_M, 322, 142), (ONE_M, 38, 142), (0, 38)]),
+          ("O", 262, 534, 50), ("O", 262, 180, 50)],
     # A square bowl, so one radius is half of both sides at once.
-    "q": [("S",), ("P", [(0, 714), (-ONE_M, 714, 202), (-ONE_M, 310, 202), (0, 310)])],
-    "r": [("S",), ("P", [(0, 714), (ONE_M, 714, 202), (ONE_M, 0)]),
+    "q": [("S",), ("P", [(0, 676), (-ONE_M, 676, 183), (-ONE_M, 310, 183), (0, 310)])],
+    "r": [("S",), ("P", [(0, 676), (ONE_M, 676, 202), (ONE_M, 0)]),
           ("P", [(0, 470), (ONE_M, 470)])],
     "s": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)])],
-    "t": [("S",), ("P", [(-SYM_M, 514), (-SYM_M, CAP, 100), (SYM_M, CAP, 100),
-                         (SYM_M, 514)])],
+    "t": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, 676, 100), (SYM_M, 676, 100),
+                         (SYM_M, 476)])],
     "z": [("V", 0, 300, CAP),
           ("P", [(-SYM_M, 470), (-SYM_M, 300, 85), (SYM_M, 300, 85), (SYM_M, 470)])],
     "æ": [("S",), ("P", [(0, 430), (-STUB_M, 430, STUB_R_M), (-STUB_M, 228)]),
@@ -129,15 +140,15 @@ GLYPHS = {
     "m": [("S",), ("P", [(-SYM_W, 700), (-SYM_W, 470, 115), (SYM_W, 470, 115),
                          (SYM_W, 700)])],
     # Radius equals half the width, so the cap is a single semicircle.
-    "u": [("P", [(-SYM_W, 0), (-SYM_W, CAP, SYM_W), (SYM_W, CAP, SYM_W), (SYM_W, 0)])],
+    "u": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)])],
     "v": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
           ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)]),
           ("O", 170, 545, DOT_R)],
-    "w": [("P", [(-SYM_W, 0), (-SYM_W, CAP, SYM_W), (SYM_W, CAP, SYM_W), (SYM_W, 0)]),
+    "w": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
     "x": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)]),
           ("L", -SYM_W, 600, 2, 600), ("L", -2, 120, SYM_W, 120)],
-    "y": [("P", [(-SYM_W, 0), (-SYM_W, CAP, SYM_W), (SYM_W, CAP, SYM_W), (SYM_W, 0)]),
+    "y": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)]),
           ("O", 0, 300, DOT_R)],
 }
 
