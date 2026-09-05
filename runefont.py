@@ -782,6 +782,50 @@ def _near_other(pt, lines, dots, weight):
     return False
 
 
+def _clip_halfplane(poly, nx, ny, c):
+    """Sutherland-Hodgman against one half-plane: keep nx*x+ny*y >= c."""
+    out = []
+    n = len(poly)
+    for i in range(n):
+        a, b = poly[i], poly[(i + 1) % n]
+        da = nx * a[0] + ny * a[1] - c
+        db = nx * b[0] + ny * b[1] - c
+        if da >= 0:
+            out.append(a)
+        if (da < 0) != (db < 0):
+            t = da / (da - db)
+            out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+    return out
+
+
+def _end_plane(end, toward, lines, dots, weight):
+    """The slice for a detached end: a plane PARALLEL to the neighbour's
+    face, offset by the gap -- so a diagonal meeting a stave is cut with
+    a vertical face, as if wedged in and pulled straight back."""
+    lim = weight * 0.75
+    for poly in lines:
+        for i in range(len(poly) - 1):
+            ax, ay = poly[i][0], poly[i][1]
+            bx, by = poly[i + 1][0], poly[i + 1][1]
+            dx, dy = bx - ax, by - ay
+            L = math.hypot(dx, dy) or 1e-9
+            t = max(0.0, min(1.0, ((end[0] - ax) * dx + (end[1] - ay) * dy) / (L * L)))
+            qx, qy = ax + dx * t, ay + dy * t
+            if math.hypot(end[0] - qx, end[1] - qy) > lim:
+                continue
+            nx, ny = -dy / L, dx / L
+            side = nx * toward[0] + ny * toward[1] - (nx * ax + ny * ay)
+            sgn = 1.0 if side >= 0 else -1.0
+            nx, ny = nx * sgn, ny * sgn
+            return (nx, ny, nx * ax + ny * ay + weight / 2 + DETACH)
+    for cx, cy, r in dots:
+        if math.hypot(end[0] - cx, end[1] - cy) <= r + lim:
+            sgn = 1.0 if toward[1] >= cy else -1.0
+            edge = r * 0.92 if DOT_SHAPE == "square" else r
+            return (0.0, sgn, sgn * cy + edge + DETACH)
+    return None
+
+
 def _trim_from_others(pts, lines, dots, weight):
     """Stamp-style DETACH: shorten any end that lands on ANY other
     element -- stave, post, arch leg, disc -- not just the centre stave.
@@ -862,16 +906,35 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             vpts = [(x, y0), (x, y1)]
             if DETACH:
                 _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                planes = [pl for pl in (
+                    _end_plane(vpts[0], vpts[1], _ln, _dt, weight),
+                    _end_plane(vpts[-1], vpts[-2], _ln, _dt, weight),
+                ) if pl]
                 vpts = _trim_from_others(vpts, _ln, _dt, weight)
+                poly = _offset_path(vpts, weight, r)
+                for pl in planes:
+                    if len(poly) > 2:
+                        poly = _clip_halfplane(poly, *pl)
+                add(poly)
+                continue
             add(_offset_path(vpts, weight, r))
         elif kind == "L":
             _, x0, y0, x1, y1 = e
             pts = [(x0, y0), (x1, y1)]
             if DETACH:
                 _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                planes = [pl for pl in (
+                    _end_plane(pts[0], pts[1], _ln, _dt, weight),
+                    _end_plane(pts[-1], pts[-2], _ln, _dt, weight),
+                ) if pl]
                 pts = _trim_from_others(pts, _ln, _dt, weight)
-            else:
-                pts = _extend_into_stave(pts, weight)
+                poly = _offset_path(pts, weight, r)
+                for pl in planes:
+                    if len(poly) > 2:
+                        poly = _clip_halfplane(poly, *pl)
+                add(poly)
+                continue
+            pts = _extend_into_stave(pts, weight)
             add(_offset_path(pts, weight, r))
         elif kind == "C":
             x0, y0, x1, y1 = e[1:5]
@@ -881,16 +944,23 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             pts = _expand(e[1], curve)
             closed_p = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
             if DETACH and not closed_p:
-                # Fillet FIRST, then trim: trimming the raw skeleton eats
-                # the run-up a corner needs, and the fillet then clamps to
-                # a mangled micro-bend. Trimming the finished centreline
-                # keeps the corner's shape and takes the gap out of the
-                # straight (or, on the shortest stubs, cleanly out of the
-                # arc itself).
+                # Fillet FIRST, then trim (a raw-skeleton trim eats the
+                # run-up a corner needs). Then slice: each detached end is
+                # clipped by a plane PARALLEL to its neighbour's face, so
+                # a diagonal against the stave gets a clean vertical seam
+                # instead of an awkward angled wedge.
                 _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                planes = [pl for pl in (
+                    _end_plane((pts[0][0], pts[0][1]), (pts[1][0], pts[1][1]), _ln, _dt, weight),
+                    _end_plane((pts[-1][0], pts[-1][1]), (pts[-2][0], pts[-2][1]), _ln, _dt, weight),
+                ) if pl]
                 pts = _dedupe(_fillet(_dedupe(pts), r))
                 pts = _trim_from_others(pts, _ln, _dt, weight)
-                add(_offset_path(pts, weight, 0))
+                poly = _offset_path(pts, weight, 0)
+                for pl in planes:
+                    if len(poly) > 2:
+                        poly = _clip_halfplane(poly, *pl)
+                add(poly)
                 continue
             if not closed_p:
                 pts = _extend_into_stave(pts, weight)
