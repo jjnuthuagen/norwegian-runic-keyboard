@@ -170,6 +170,7 @@ GLYPHS = {
 # The runic word dividers keep their solid dots -- that is how they were
 # cut. Latin punctuation is drawn as a ring instead, so a full stop reads
 # as a stroke like everything else in the face rather than a filled blob.
+HOOK_R = 85          # the hook's corner radius, shared with j
 RING_R = 62          # centreline radius of the punctuation ring
 RING_Y = RING_R + WEIGHT // 2      # sits the ring on the baseline
 
@@ -179,10 +180,13 @@ PUNCT = {
     "᛭": [("V", 0, 100, 614), ("L", -190, 357, 190, 357)],
     ".": [("R", 0, RING_Y, RING_R)],
     "!": [("R", 0, RING_Y, RING_R), ("V", 0, RING_Y + RING_R + 130, CAP)],
+    # Built from the parts the alphabet already uses: a HOOK, like j's, with
+    # a stem down to the ring. Every segment is at least twice HOOK_R long,
+    # so no corner is clamped and all four match.
     "?": [("R", 0, RING_Y, RING_R),
-          ("P", [(-110, 520), (-110, CAP - WEIGHT // 2, 110),
-                 (110, CAP - WEIGHT // 2, 110), (110, 470), (0, 470),
-                 (0, RING_Y + RING_R + 130)])],
+          ("P", [(-170, 440), (-170, CAP - WEIGHT // 2, HOOK_R),
+                 (170, CAP - WEIGHT // 2, HOOK_R), (170, 470, HOOK_R),
+                 (0, 470, HOOK_R), (0, 300)])],
 }
 
 
