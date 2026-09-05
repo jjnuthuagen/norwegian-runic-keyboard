@@ -65,6 +65,17 @@ STRESS_ANGLE = 0
 # SLANT shears the whole glyph for an italic, in degrees clockwise.
 SLANT = 0
 
+# --- digital styling --------------------------------------------------
+# DOT_SHAPE:    "round" or "square" -- squares also apply to c's disc and
+#               the connected punctuation mark.
+# CORNER_STYLE: "round" fillets corners with arcs; "chamfer" cuts them
+#               with a straight 45-degree facet -- the triangle element
+#               of the digital style. RADIUS sets the cut size either way.
+# END_CAPS:     "round" or "flat" for free stroke ends.
+DOT_SHAPE = "round"
+CORNER_STYLE = "round"
+END_CAPS = "round"
+
 # Which skeleton set the font is built from:
 #   "neweuropean"  the orthogonal construction: every bend a right angle,
 #                  arms curved, h a closed box, d and t bracketed
@@ -194,6 +205,9 @@ _BP_RB = round((_BP_BI - _BP_BOT) / 2)
 # A dot has to fit the bowl it sits in, and BP_SPACE can make that bowl
 # small, so its radius is capped by the space available rather than fixed.
 _P_DOT = max(24, min(DOT_R, min(_BP_RT, _BP_RB) - WEIGHT // 2 - DOT_CLEAR))
+# The dot in g and v's crook has ARM_R of room; heavy weights eat into it,
+# so the dot gives way rather than merging with the arm.
+_G_DOT = max(24, min(DOT_R, ARM_R - WEIGHT // 2 - DOT_CLEAR))
 
 STUB_N, STUB_R_N = 164, 82           # narrow side branch -> quarter circle
 STUB_M, STUB_R_M = 202, 101          # medium side branch
@@ -228,7 +242,7 @@ GLYPHS = {
           ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
     # On the arm's own arc centre, so it stays in the crook at any reach.
     "g": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
-          ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
+          ("O", ONE_M - ARM_R, 300 + ARM_R, _G_DOT)],
     # Two brackets facing opposite ways, joined in the middle: a side post
     # either side of the stave with one crossbar bridging all three. It is
     # the elder hagall ᚺ made orthogonal -- H is what the rune always was --
@@ -279,7 +293,7 @@ GLYPHS = {
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)])],
     "v": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
           ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)]),
-          ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
+          ("O", ONE_M - ARM_R, 300 + ARM_R, _G_DOT)],
     "w": [("V", -SYM_W, 0, CAP),
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
@@ -329,7 +343,7 @@ GLYPHS_TRADITIONAL = {
     "d": [("S",), ("L", 0, 700, -201, 588), ("O", 108, 340, DOT_R)],
     "e": [("S",), ("O", 150, 370, DOT_R)],
     "f": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708)],
-    "g": [("S",), ("L", 0, 316, 366, 708), ("O", 178, 560, DOT_R)],
+    "g": [("S",), ("L", 0, 316, 366, 708), ("O", 140, 640, DOT_R)],
     "h": [("S",), ("L", -195, 219, 197, 482), ("L", -195, 482, 197, 219)],
     "i": [("S",)],
     "j": [("P", [(10, 714), (-95, 590), (10, 462)]),
@@ -348,7 +362,7 @@ GLYPHS_TRADITIONAL = {
     "u": [("V", -204, 0, CAP),
           ("P", [(-204, 676), (204, 676, 130), (204, 0)])],
     "v": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708),
-          ("O", 150, 640, DOT_R)],
+          ("O", 150, 180, DOT_R)],
     "w": [("V", -240, 0, CAP),
           ("P", [(-240, 676), (170, 676, 130), (170, 0)]),
           ("P", [(-240, 381), (20, 250, 110), (20, 0)])],
@@ -567,10 +581,10 @@ def _offset_path(points, weight, radius=None):
     out = list(left)
     # Ends buried in the stave column stay flat: a round cap on a buried
     # end would bulge out the stave's far side.
-    if _free_end(pts[-1], closed) and abs(pts[-1][0]) > weight * 0.55:
+    if END_CAPS == "round" and _free_end(pts[-1], closed) and abs(pts[-1][0]) > weight * 0.55:
         out += _semicircle(pts[-1], normals[-1], h_)
     out += right[::-1]
-    if _free_end(pts[0], closed) and abs(pts[0][0]) > weight * 0.55:
+    if END_CAPS == "round" and _free_end(pts[0], closed) and abs(pts[0][0]) > weight * 0.55:
         out += _semicircle(pts[0], (-normals[0][0], -normals[0][1]), h_)
     return out
 
@@ -785,18 +799,27 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
         elif kind == "A":
             p0, c, p2 = e[1]
             add(_offset_path(_quad(p0, c, p2), weight, r))
-        elif kind == "O":
-            _, x, y, r = e
-            add(_circle(x, y, r))
-        elif kind == "D":
-            _, x, y, r = e
-            add(_circle(x, y, r, n=48))
+        elif kind in ("O", "D"):
+            _, x, y, rr = e
+            if DOT_SHAPE == "square":
+                side = rr * 0.92
+                sq = [(x - side, y - side), (x + side, y - side),
+                      (x + side, y + side), (x - side, y + side)]
+                if CORNER_STYLE == "round" and RADIUS > 0:
+                    sq = _fillet_closed([(a, b, min(24, rr // 2)) for a, b in sq], 0)
+                add(sq)
+            else:
+                add(_circle(x, y, rr, n=48 if kind == "D" else 36))
         elif kind == "R":
             _, x, y, r = e
             ring = _offset_closed(_circle(x, y, r, n=48), weight, 0)
             if ring:
                 add(ring[0])
                 add(ring[1], hole=True)
+    # THE RULER: lay a straightedge on the cap height and shave anything
+    # above it -- an angled arm cap, an arc's bulge, whatever pokes out.
+    out = [[(q[0], min(q[1], CAP)) for q in c] for c in out]
+
     if SERIF:
         # A serif only goes on a FREE end. If another stroke's centreline
         # runs through the serif's footprint -- t and d's bracket over the
