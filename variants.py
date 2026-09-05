@@ -45,12 +45,16 @@ VARIANTS = [
     (23, "Tradisjonell antikva",  {"SKELETON": "traditional", "SERIF": True,
                                    "SERIF_STYLE": "bracketed", "CONTRAST": 0.55,
                                    "WEIGHT": 88}),
+    (24, "Hybrid",                {"SKELETON": "hybrid"}),
+    (25, "Hybrid antikva",        {"SKELETON": "hybrid", "SERIF": True,
+                                   "SERIF_STYLE": "bracketed", "CONTRAST": 0.55,
+                                   "WEIGHT": 88}),
 ]
 
 # Families that also ship bold and italic companions, built from the same
 # config with the weight raised or the glyph sheared.
 STYLED = {1: "bi", 2: "bi", 3: "i", 10: "b", 17: "bi", 18: "bi", 19: "bi",
-          20: "bi", 21: "bi", 23: "bi"}
+          20: "bi", 21: "bi", 23: "bi", 24: "bi", 25: "bi"}
 
 
 def build_styled(outdir="dist/variants"):

@@ -71,6 +71,8 @@ SLANT = 0
 #   "traditional"  the diagonal skeletons derived from Noto Sans Runic:
 #                  arms straight, h an X, d a single left arm, r a bowl
 #                  with a leg -- the shapes as the tradition draws them
+#   "hybrid"       traditional arms and crosses, ny-europeisk curves:
+#                  bowls, arches and hooks are round, arms stay straight
 SKELETON = "neweuropean"
 
 # A flat that is flush with the baseline or cap is placed by its OUTER
@@ -344,8 +346,19 @@ GLYPHS_TRADITIONAL = {
     "å": [("S",), ("L", 0, 427, 195, 339), ("L", 0, 266, 195, 178)],
 }
 
+# Hybrid: traditional wherever the part is an arm, stub or cross;
+# ny-europeisk wherever it is a bowl, arch or hook. r keeps its
+# traditional bowl-and-leg shape but the bowl's vertices are rounded.
+GLYPHS_HYBRID = dict(GLYPHS_TRADITIONAL)
+for _k in ("b", "p", "q", "u", "w", "y", "j"):
+    GLYPHS_HYBRID[_k] = GLYPHS[_k]
+GLYPHS_HYBRID["r"] = [("S",), ("P", [(0, 714), (275, 535, 120), (0, 345, 120),
+                                     (300, 0)])]
+
 if SKELETON == "traditional":
     GLYPHS = GLYPHS_TRADITIONAL
+elif SKELETON == "hybrid":
+    GLYPHS = GLYPHS_HYBRID
 
 PUNCT = {
     "᛫": [("O", 0, 357, 46)],
