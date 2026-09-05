@@ -52,13 +52,15 @@ VARIANTS = [
     (26, "Digital skarp",         {"DOT_SHAPE": "square", "CORNER_STYLE": "chamfer",
                                    "RADIUS": 80, "END_CAPS": "flat", "WEIGHT": 82}),
     (27, "Digital rund",          {"DOT_SHAPE": "square", "RADIUS": 60}),
+    (28, "Stempel",               {"DETACH": 55, "RADIUS": 0, "END_CAPS": "flat",
+                                   "DOT_SHAPE": "square", "WEIGHT": 92}),
 ]
 
 # Families that also ship bold and italic companions, built from the same
 # config with the weight raised or the glyph sheared.
 STYLED = {1: "bi", 2: "bi", 3: "i", 10: "b", 17: "bi", 18: "bi", 19: "bi",
           20: "bi", 21: "bi", 23: "bi", 24: "bi", 25: "bi",
-          26: "b", 27: "b"}
+          26: "b", 27: "b", 28: "b"}
 
 
 def build_styled(outdir="dist/variants"):

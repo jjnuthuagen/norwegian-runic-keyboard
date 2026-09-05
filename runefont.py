@@ -726,6 +726,70 @@ def _trim_from_stave(pts, weight):
     return out
 
 
+def _element_centrelines(elements, curve, skip=None):
+    """Raw centrelines (and dots as (x, y, r) triples) of every element
+    except `skip` -- the geometry a trimmed or buried end must respect."""
+    lines, dots = [], []
+    for o in elements:
+        if o is skip:
+            continue
+        k = o[0]
+        if k == "S":
+            lines.append([(0, 0), (0, CAP)])
+        elif k == "V":
+            lines.append([(o[1], o[2]), (o[1], o[3])])
+        elif k == "L":
+            lines.append([(o[1], o[2]), (o[3], o[4])])
+        elif k == "P":
+            lines.append(_expand(o[1], curve))
+        elif k == "A":
+            lines.append(_quad(*o[1]))
+        elif k in ("O", "D"):
+            dots.append((o[1], o[2], o[3]))
+    return lines, dots
+
+
+def _near_other(pt, lines, dots, weight):
+    lim = weight * 0.75
+    for poly in lines:
+        for i in range(len(poly) - 1):
+            ax, ay = poly[i][0], poly[i][1]      # points may carry a radius
+            bx, by = poly[i + 1][0], poly[i + 1][1]
+            dx, dy = bx - ax, by - ay
+            L2 = dx * dx + dy * dy or 1e-9
+            t = max(0.0, min(1.0, ((pt[0] - ax) * dx + (pt[1] - ay) * dy) / L2))
+            if math.hypot(pt[0] - (ax + dx * t), pt[1] - (ay + dy * t)) <= lim:
+                return True
+    for cx, cy, r in dots:
+        if math.hypot(pt[0] - cx, pt[1] - cy) <= r + lim:
+            return True
+    return False
+
+
+def _trim_from_others(pts, lines, dots, weight):
+    """Stamp-style DETACH: shorten any end that lands on ANY other
+    element -- stave, post, arch leg, disc -- not just the centre stave."""
+    cut = weight + DETACH
+
+    def trim(seq):
+        acc = 0.0
+        for i in range(len(seq) - 1):
+            seg = math.hypot(seq[i + 1][0] - seq[i][0], seq[i + 1][1] - seq[i][1])
+            if acc + seg >= cut:
+                t = (cut - acc) / (seg or 1.0)
+                return [(seq[i][0] + (seq[i + 1][0] - seq[i][0]) * t,
+                         seq[i][1] + (seq[i + 1][1] - seq[i][1]) * t)] + list(seq[i + 1:])
+            acc += seg
+        return list(seq)
+
+    out = list(pts)
+    if _near_other(out[0], lines, dots, weight):
+        out = trim(out)
+    if _near_other(out[-1], lines, dots, weight):
+        out = trim(out[::-1])[::-1]
+    return out
+
+
 def _extend_into_stave(pts, weight):
     """A limb whose end sits exactly on the stave centreline gets a butt
     cap cut perpendicular to its own direction -- against the stave's
@@ -774,12 +838,17 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             add(_offset_path([(0, 0), (0, CAP)], weight, r))
         elif kind == "V":
             _, x, y0, y1 = e
-            add(_offset_path([(x, y0), (x, y1)], weight, r))
+            vpts = [(x, y0), (x, y1)]
+            if DETACH:
+                _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                vpts = _trim_from_others(vpts, _ln, _dt, weight)
+            add(_offset_path(vpts, weight, r))
         elif kind == "L":
             _, x0, y0, x1, y1 = e
             pts = [(x0, y0), (x1, y1)]
             if DETACH:
-                pts = _trim_from_stave(pts, weight)
+                _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                pts = _trim_from_others(pts, _ln, _dt, weight)
             else:
                 pts = _extend_into_stave(pts, weight)
             add(_offset_path(pts, weight, r))
@@ -791,7 +860,8 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             pts = _expand(e[1], curve)
             closed_p = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
             if DETACH and not closed_p:
-                pts = _trim_from_stave(pts, weight)
+                _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                pts = _trim_from_others(pts, _ln, _dt, weight)
             elif not closed_p:
                 pts = _extend_into_stave(pts, weight)
             if closed_p:
