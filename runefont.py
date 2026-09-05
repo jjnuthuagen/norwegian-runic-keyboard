@@ -222,14 +222,19 @@ GLYPHS = {
                  (0, _BP_TI)]),
           ("P", [(0, _BP_BI), (ONE_M, _BP_BI, _BP_RB), (ONE_M, _BP_BOT, _BP_RB),
                  (0, _BP_BOT)])],
-    "d": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, H_TOP, 100), (SYM_M, H_TOP, 100),
-                         (SYM_M, 476)]),
+    # An arm on the LEFT plus the dot -- d is never a bracket. The mirror
+    # of kaun's arm.
+    "d": [("S",), ("P", [(0, 300), (-ONE_M, 300, ARM_R), (-ONE_M, 700)]),
           ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
     # On the arm's own arc centre, so it stays in the crook at any reach.
     "g": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
           ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
-    "h": [("S",), ("P", [(-SYM_M, 250, 100), (SYM_M, 250, 100), (SYM_M, 490, 100),
-                         (-SYM_M, 490, 100), (-SYM_M, 250)])],
+    # Two brackets facing opposite ways, joined in the middle: a side post
+    # either side of the stave with one crossbar bridging all three. It is
+    # the elder hagall ᚺ made orthogonal -- H is what the rune always was --
+    # and it replaces the closed box, which rounded into a circle.
+    "h": [("S",), ("V", -SYM_M, 270, 470), ("V", SYM_M, 270, 470),
+          ("L", -SYM_M, 370, SYM_M, 370)],
     "j": [("P", [(60, _J[3]), (-SYM_M, _J[3], 125), (-SYM_M, _J[1], 125), (60, _J[1])]),
           ("P", [(-60, _J[0]), (SYM_M, _J[0], 125), (SYM_M, _J[2], 125), (-60, _J[2])])],
     "k": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)])],
@@ -265,16 +270,20 @@ GLYPHS = {
           ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)])],
     "m": [("S",), ("P", [(-SYM_W, 700), (-SYM_W, 470, 115), (SYM_W, 470, 115),
                          (SYM_W, 700)])],
-    # Radius equals half the width, so the cap is a single semicircle.
-    "u": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)])],
+    # The left side IS a stave -- full height, straight, never half of a
+    # bend. Only the top-right corner bends, rounded off moderately.
+    "u": [("V", -SYM_W, 0, CAP),
+          ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)])],
     "v": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
           ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)]),
           ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
-    "w": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)]),
+    "w": [("V", -SYM_W, 0, CAP),
+          ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
     "x": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)]),
           ("L", -SYM_W, 600, 2, 600), ("L", -2, 120, SYM_W, 120)],
-    "y": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)]),
+    "y": [("V", -SYM_W, 0, CAP),
+          ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)]),
           ("O", 0, 300, DOT_R)],
 }
 
@@ -333,14 +342,17 @@ GLYPHS_TRADITIONAL = {
     "r": [("S",), ("P", [(0, 714), (275, 535), (0, 345), (300, 0)])],
     "s": [("P", [(-184, CAP), (-184, 268), (184, 479), (184, 0)])],
     "t": [("S",), ("L", 0, 700, -201, 588), ("L", 0, 700, 195, 585)],
-    "u": [("P", [(-204, 0), (-204, CAP, 204), (204, CAP, 204), (204, 0)])],
+    "u": [("V", -204, 0, CAP),
+          ("P", [(-204, 676), (204, 676, 130), (204, 0)])],
     "v": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708),
           ("O", 150, 640, DOT_R)],
-    "w": [("P", [(-240, 0), (-240, CAP, 205), (170, CAP, 205), (170, 0)]),
+    "w": [("V", -240, 0, CAP),
+          ("P", [(-240, 676), (170, 676, 130), (170, 0)]),
           ("P", [(-240, 381), (20, 250, 110), (20, 0)])],
     "x": [("P", [(-184, CAP), (-184, 268), (184, 479), (184, 0)]),
           ("L", -372, 600, 2, 600), ("L", -2, 120, 372, 120)],
-    "y": [("P", [(-204, 0), (-204, CAP, 204), (204, CAP, 204), (204, 0)]),
+    "y": [("V", -204, 0, CAP),
+          ("P", [(-204, 676), (204, 676, 130), (204, 0)]),
           ("O", -6, 338, DOT_R)],
     "z": [("V", 0, 300, CAP), ("L", 0, 330, -196, 401), ("L", 0, 330, 204, 397)],
     "æ": [("S",), ("L", 0, 346, -201, 263), ("L", 0, 392, 204, 478)],
