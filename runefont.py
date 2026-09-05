@@ -855,6 +855,32 @@ def _trim_from_others(pts, lines, dots, weight):
     return out
 
 
+def _extend_to_lines(pts, weight):
+    """THE ROOF AND THE FLOOR: a free end heading for the cap or the
+    baseline is extended through it and left for the clamps to slice
+    flat -- so a diagonal arm stands squarely on the line instead of
+    balancing on the point of an angled cut."""
+    near = weight * 1.2
+    out = list(pts)
+
+    def push(end, prev):
+        dx, dy = end[0] - prev[0], end[1] - prev[1]
+        L = math.hypot(dx, dy) or 1e-9
+        ux, uy = dx / L, dy / L
+        if uy > 0.15 and end[1] >= CAP - near:
+            t = (CAP + weight - end[1]) / uy
+            return (end[0] + ux * t, end[1] + uy * t)
+        if uy < -0.15 and end[1] <= near:
+            t = (-weight - end[1]) / uy
+            return (end[0] + ux * t, end[1] + uy * t)
+        return end
+
+    if len(out) > 1:
+        out[0] = push((out[0][0], out[0][1]), (out[1][0], out[1][1]))
+        out[-1] = push((out[-1][0], out[-1][1]), (out[-2][0], out[-2][1]))
+    return out
+
+
 def _extend_into_stave(pts, weight):
     """A limb whose end sits exactly on the stave centreline gets a butt
     cap cut perpendicular to its own direction -- against the stave's
@@ -920,7 +946,7 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             add(_offset_path(vpts, weight, r))
         elif kind == "L":
             _, x0, y0, x1, y1 = e
-            pts = [(x0, y0), (x1, y1)]
+            pts = _extend_to_lines([(x0, y0), (x1, y1)], weight)
             if DETACH:
                 _ln, _dt = _element_centrelines(elements, curve, skip=e)
                 planes = [pl for pl in (
@@ -943,6 +969,8 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
         elif kind == "P":
             pts = _expand(e[1], curve)
             closed_p = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
+            if not closed_p:
+                pts = _extend_to_lines(pts, weight)
             if DETACH and not closed_p:
                 # Fillet FIRST, then trim (a raw-skeleton trim eats the
                 # run-up a corner needs). Then slice: each detached end is
@@ -973,7 +1001,7 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             add(_offset_path(pts, weight, r))
         elif kind == "A":
             p0, c, p2 = e[1]
-            add(_offset_path(_quad(p0, c, p2), weight, r))
+            add(_offset_path(_extend_to_lines(_quad(p0, c, p2), weight), weight, r))
         elif kind in ("O", "D"):
             _, x, y, rr = e
             if DOT_SHAPE == "square":
@@ -991,9 +1019,9 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             if ring:
                 add(ring[0])
                 add(ring[1], hole=True)
-    # THE RULER: lay a straightedge on the cap height and shave anything
-    # above it -- an angled arm cap, an arc's bulge, whatever pokes out.
-    out = [[(q[0], min(q[1], CAP)) for q in c] for c in out]
+    # THE RULER AND THE FLOOR: a straightedge on the cap height and
+    # another on the baseline; anything past either is shaved flat.
+    out = [[(q[0], min(max(q[1], 0.0), CAP)) for q in c] for c in out]
 
     if SERIF:
         # A serif only goes on a FREE end. If another stroke's centreline
