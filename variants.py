@@ -21,7 +21,7 @@ VARIANTS = [
     (7,  "Bred og luftig",        {"SIDE": 190}),
     (8,  "Frittstående lemmer",   {"DETACH": 40}),
     (9,  "Sterkt frittstående",   {"DETACH": 80}),
-    (10, "Seriffer",              {"SERIF": True}),
+    (10, "Skrivemaskin",          {"SERIF": True}),
     (11, "Seriffer + lett",       {"SERIF": True, "WEIGHT": 56, "SERIF_LEN": 130}),
     (12, "Frittstående + serif",  {"DETACH": 40, "SERIF": True}),
     (13, "Fulle boller",          {"BP_SPACE": 0, "BP_MIDDLE": "merge"}),
@@ -29,6 +29,11 @@ VARIANTS = [
     (15, "Tett og tung",          {"WEIGHT": 100, "SIDE": 70, "RADIUS": 20}),
     (16, "Tynn, myk, luftig",     {"WEIGHT": 48, "RADIUS": 130, "SIDE": 200,
                                    "DETACH": 30}),
+    (17, "Antikva",               {"SERIF": True, "SERIF_STYLE": "bracketed",
+                                   "CONTRAST": 0.55, "WEIGHT": 88}),
+    (18, "Antikva lett",          {"SERIF": True, "SERIF_STYLE": "bracketed",
+                                   "CONTRAST": 0.45, "WEIGHT": 68,
+                                   "SERIF_LEN": 125}),
 ]
 
 SCALED = {"ONE_M, ONE_W": (404, 564), "SYM_M, SYM_W": (202, 282),

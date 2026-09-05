@@ -41,10 +41,27 @@ MITER_LIMIT = 3.4  # beyond this a sharp corner bevels instead of spiking
 # the stave's edge. The freed end is a free end, so it takes a round cap.
 DETACH = 0
 
-# SERIF adds slab feet and heads: a short horizontal bar wherever a stave
-# or vertical meets the baseline or the cap height.
+# SERIF adds feet and heads wherever a stave or vertical meets the
+# baseline or the cap height. Two styles:
+#   "slab"       a plain bar -- the typewriter look
+#   "bracketed"  a thin base whose sides curve up into the stem, the way
+#                an antikva (Times) serif is cut
 SERIF = False
-SERIF_LEN = 110      # half-length of the bar
+SERIF_STYLE = "slab"
+SERIF_LEN = 110      # half-length of the foot
+SERIF_H = 30         # thickness of the bracketed serif's base
+BRACKET_H = 150      # how far up the stem the bracket curve reaches
+
+# CONTRAST modulates the stroke: 1.0 is monoline; lower values thin the
+# horizontals while stems stay at WEIGHT. 0.55 reads as an antikva.
+CONTRAST = 1.0
+
+
+def _cfac(nx):
+    """Stroke-width factor for a segment whose unit normal has x-component
+    nx: vertical strokes (|nx| = 1) get full weight, horizontals get
+    CONTRAST of it, angles in between interpolate."""
+    return CONTRAST + (1.0 - CONTRAST) * abs(nx)
 CAP_TOL = 30       # how close to the baseline or cap height still counts as
                    # "landing on the line", and so stays flat-ended
 RADIUS = 40        # default corner radius on the centreline. 0 = sharp
@@ -406,31 +423,35 @@ def _offset_path(points, weight, radius=None):
     normals = [seg_normal(pts[i], pts[i + 1]) for i in range(len(pts) - 1)]
 
     def side(sign):
-        out = [(pts[0][0] + sign * normals[0][0] * h,
-                pts[0][1] + sign * normals[0][1] * h)]
+        f0 = _cfac(normals[0][0])
+        out = [(pts[0][0] + sign * normals[0][0] * h * f0,
+                pts[0][1] + sign * normals[0][1] * h * f0)]
         for i in range(1, len(pts) - 1):
             n1, n2 = normals[i - 1], normals[i]
+            f1, f2 = _cfac(n1[0]), _cfac(n2[0])
             mx, my = n1[0] + n2[0], n1[1] + n2[1]
             m = math.hypot(mx, my)
             if m < 1e-9:                       # exact reversal; bevel it
-                out.append((pts[i][0] + sign * n1[0] * h,
-                            pts[i][1] + sign * n1[1] * h))
-                out.append((pts[i][0] + sign * n2[0] * h,
-                            pts[i][1] + sign * n2[1] * h))
+                out.append((pts[i][0] + sign * n1[0] * h * f1,
+                            pts[i][1] + sign * n1[1] * h * f1))
+                out.append((pts[i][0] + sign * n2[0] * h * f2,
+                            pts[i][1] + sign * n2[1] * h * f2))
                 continue
             mx, my = mx / m, my / m
+            fm = _cfac(mx)
             cos_half = mx * n1[0] + my * n1[1]
             scale = 1.0 / max(cos_half, 1e-6)
             if scale > MITER_LIMIT:            # too sharp; bevel instead
-                out.append((pts[i][0] + sign * n1[0] * h,
-                            pts[i][1] + sign * n1[1] * h))
-                out.append((pts[i][0] + sign * n2[0] * h,
-                            pts[i][1] + sign * n2[1] * h))
+                out.append((pts[i][0] + sign * n1[0] * h * f1,
+                            pts[i][1] + sign * n1[1] * h * f1))
+                out.append((pts[i][0] + sign * n2[0] * h * f2,
+                            pts[i][1] + sign * n2[1] * h * f2))
             else:
-                out.append((pts[i][0] + sign * mx * h * scale,
-                            pts[i][1] + sign * my * h * scale))
-        out.append((pts[-1][0] + sign * normals[-1][0] * h,
-                    pts[-1][1] + sign * normals[-1][1] * h))
+                out.append((pts[i][0] + sign * mx * h * scale * fm,
+                            pts[i][1] + sign * my * h * scale * fm))
+        fl = _cfac(normals[-1][0])
+        out.append((pts[-1][0] + sign * normals[-1][0] * h * fl,
+                    pts[-1][1] + sign * normals[-1][1] * h * fl))
         return out
 
     h_ = h
@@ -508,24 +529,26 @@ def _offset_closed(points, weight, radius):
         out = []
         for i in range(n):
             n1, n2 = norms[(i - 1) % n], norms[i]
+            f1, f2 = _cfac(n1[0]), _cfac(n2[0])
             mx, my = n1[0] + n2[0], n1[1] + n2[1]
             m = math.hypot(mx, my)
             if m < 1e-9:
-                out.append((pts[i][0] + sign * n1[0] * h,
-                            pts[i][1] + sign * n1[1] * h))
-                out.append((pts[i][0] + sign * n2[0] * h,
-                            pts[i][1] + sign * n2[1] * h))
+                out.append((pts[i][0] + sign * n1[0] * h * f1,
+                            pts[i][1] + sign * n1[1] * h * f1))
+                out.append((pts[i][0] + sign * n2[0] * h * f2,
+                            pts[i][1] + sign * n2[1] * h * f2))
                 continue
             mx, my = mx / m, my / m
+            fm = _cfac(mx)
             scale = 1.0 / max(mx * n1[0] + my * n1[1], 1e-6)
             if scale > MITER_LIMIT:
-                out.append((pts[i][0] + sign * n1[0] * h,
-                            pts[i][1] + sign * n1[1] * h))
-                out.append((pts[i][0] + sign * n2[0] * h,
-                            pts[i][1] + sign * n2[1] * h))
+                out.append((pts[i][0] + sign * n1[0] * h * f1,
+                            pts[i][1] + sign * n1[1] * h * f1))
+                out.append((pts[i][0] + sign * n2[0] * h * f2,
+                            pts[i][1] + sign * n2[1] * h * f2))
             else:
-                out.append((pts[i][0] + sign * mx * h * scale,
-                            pts[i][1] + sign * my * h * scale))
+                out.append((pts[i][0] + sign * mx * h * scale * fm,
+                            pts[i][1] + sign * my * h * scale * fm))
         return out
 
     # Which side is outside depends on the loop's winding, so decide by
@@ -639,14 +662,31 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
                 xs, y0, y1 = e[1], e[2], e[3]
             else:
                 continue
+            hw = weight / 2
             for y in (y0, y1):
-                if y <= CAP_TOL:                     # a foot on the baseline
-                    bar = [(xs - SERIF_LEN, weight / 2), (xs + SERIF_LEN, weight / 2)]
-                elif y >= CAP - CAP_TOL:             # a head on the cap
-                    bar = [(xs - SERIF_LEN, CAP - weight / 2), (xs + SERIF_LEN, CAP - weight / 2)]
+                if y <= CAP_TOL:
+                    base, up = 0, 1                  # a foot on the baseline
+                elif y >= CAP - CAP_TOL:
+                    base, up = CAP, -1               # a head on the cap
                 else:
                     continue
-                add(_offset_path(bar, weight, r))
+                if SERIF_STYLE == "bracketed":
+                    # Thin base; each side sweeps up into the stem along a
+                    # quadratic bracket, the way an antikva serif is cut.
+                    L, S, B = SERIF_LEN, SERIF_H, BRACKET_H
+                    right = _quad((xs + L, base + up * S),
+                                  (xs + hw, base + up * S),
+                                  (xs + hw, base + up * B), n=10)
+                    left = _quad((xs - hw, base + up * B),
+                                 (xs - hw, base + up * S),
+                                 (xs - L, base + up * S), n=10)
+                    poly = ([(xs - L, base), (xs + L, base)] + right +
+                            [(xs + hw, base + up * B)] + left)
+                    add(poly)
+                else:
+                    bar = [(xs - SERIF_LEN, base + up * hw),
+                           (xs + SERIF_LEN, base + up * hw)]
+                    add(_offset_path(bar, weight, r))
     return out
 
 
