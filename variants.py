@@ -53,10 +53,13 @@ VARIANTS = [
                                    "SERIF_STYLE": "bracketed", "CONTRAST": 0.55,
                                    "WEIGHT": 88}),
     (26, "Digital skarp",         {"DOT_SHAPE": "square", "CORNER_STYLE": "chamfer",
-                                   "RADIUS": 80, "END_CAPS": "flat", "WEIGHT": 82}),
-    (27, "Digital rund",          {"DOT_SHAPE": "square", "RADIUS": 60}),
+                                   "RADIUS": 80, "END_CAPS": "flat", "WEIGHT": 82,
+                                   "TIP_SLICE": True}),
+    (27, "Digital rund",          {"DOT_SHAPE": "square", "RADIUS": 60,
+                                   "TIP_SLICE": True}),
     (28, "Stempel",               {"DETACH": 55, "RADIUS": 0, "END_CAPS": "flat",
-                                   "DOT_SHAPE": "square", "WEIGHT": 92}),
+                                   "DOT_SHAPE": "square", "WEIGHT": 92,
+                                   "TIP_SLICE": True}),
 ]
 
 # Families that also ship bold and italic companions, built from the same

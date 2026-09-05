@@ -66,6 +66,12 @@ STRESS_ANGLE = 0
 SLANT = 0
 
 # --- digital styling --------------------------------------------------
+# TIP_SLICE:    extend a free tip through the cap/baseline and slice it
+#               flat -- the machined look. A sliced diagonal's face is
+#               w/sin(angle) wide, visibly fatter than the stroke, so
+#               this is for the digital and stamp cuts, NOT the default.
+TIP_SLICE = False
+
 # DOT_SHAPE:    "round" or "square" -- squares also apply to c's disc and
 #               the connected punctuation mark.
 # CORNER_STYLE: "round" fillets corners with arcs; "chamfer" cuts them
@@ -859,7 +865,13 @@ def _extend_to_lines(pts, weight):
     """THE ROOF AND THE FLOOR: a free end heading for the cap or the
     baseline is extended through it and left for the clamps to slice
     flat -- so a diagonal arm stands squarely on the line instead of
-    balancing on the point of an angled cut."""
+    balancing on the point of an angled cut.
+
+    Style-gated: the flat face of a sliced diagonal is w/sin(angle)
+    wide, which reads as a fatter stroke -- right for the machined
+    digital/stamp cuts, wrong for everything else."""
+    if not TIP_SLICE:
+        return list(pts)
     near = weight * 1.2
     out = list(pts)
 
