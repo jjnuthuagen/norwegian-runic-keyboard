@@ -54,6 +54,9 @@ RADIUS = 40        # default corner radius on the centreline. 0 = sharp
 #   A [p0,ctrl,p2]    smooth arc through a quadratic control point
 #   O x y r           dot
 #   D x y r           filled disc (the bowl of c)
+#   R x y r           ring -- a circle STROKED at the font's weight, not
+#                     filled. Punctuation uses this so a full stop is built
+#                     the same way as every other mark: a line, not a blob.
 # --- the width module -------------------------------------------------
 # Every glyph's ink is one of three widths, and the reaches are derived
 # from them rather than chosen by eye: a branch springing from the stave
@@ -80,6 +83,13 @@ ARCH = CAP + OVERSHOOT - WEIGHT // 2  # centreline apex of u, w and y, so
 NARROW, MEDIUM, WIDE = 240, 480, 640
 ONE_M, ONE_W = 404, 564              # reach from the stave, one side only
 SYM_M, SYM_W = 202, 282              # reach either side of centre
+# Dots are positioned FROM the geometry they sit in, never by absolute
+# coordinates: a dot placed by hand stays put when a reach changes and
+# ends up colliding with the stroke it was meant to sit beside.
+DOT_CLEAR = 26                       # gap from a dot's edge to any stroke
+ARM_R = 115                          # corner radius of the arm in f v k g
+BOWL_R = 142                         # corner radius of the bowls in b p
+
 STUB_N, STUB_R_N = 164, 82           # narrow side branch -> quarter circle
 STUB_M, STUB_R_M = 202, 101          # medium side branch
 GAP = 160                            # between the arms of f and v; also makes
@@ -89,7 +99,8 @@ GLYPHS = {
     # --- narrow, ink 240 ---------------------------------------------
     "a": [("S",), ("P", [(0, 430), (-STUB_N, 430, STUB_R_N), (-STUB_N, 266)])],
     "c": [("D", 0, 366, 120), ("V", 0, 470, CAP)],
-    "e": [("S",), ("O", 150, 370, DOT_R)],
+    # The dot sets this glyph's width, so its position comes from NARROW.
+    "e": [("S",), ("O", NARROW - WEIGHT // 2 - DOT_R, 370, DOT_R)],
     "i": [("S",)],
     "l": [("S",), ("P", [(0, 660), (STUB_N, 660, STUB_R_N), (STUB_N, 496)])],
     "n": [("S",), ("P", [(0, 430), (STUB_N, 430, STUB_R_N), (STUB_N, 266)])],
@@ -101,21 +112,23 @@ GLYPHS = {
     # --- medium, ink 480 ---------------------------------------------
     # Bowl radius is half the bowl's height, so each outer edge is one
     # continuous semicircle rather than two corners with a flat between.
-    "b": [("S",), ("P", [(0, 676), (ONE_M, 676, 142), (ONE_M, 392, 142), (0, 392)]),
-          ("P", [(0, 322), (ONE_M, 322, 142), (ONE_M, 38, 142), (0, 38)])],
+    "b": [("S",), ("P", [(0, 676), (ONE_M, 676, BOWL_R), (ONE_M, 392, BOWL_R), (0, 392)]),
+          ("P", [(0, 322), (ONE_M, 322, BOWL_R), (ONE_M, 38, BOWL_R), (0, 38)])],
     "d": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, 676, 100), (SYM_M, 676, 100),
                          (SYM_M, 476)]),
-          ("O", DOT_X, 340, DOT_R)],
-    "g": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
-          ("O", 190, 540, DOT_R)],
+          ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
+    # On the arm's own arc centre, so it stays in the crook at any reach.
+    "g": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
+          ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
     "h": [("S",), ("P", [(-SYM_M, 250, 100), (SYM_M, 250, 100), (SYM_M, 490, 100),
                          (-SYM_M, 490, 100), (-SYM_M, 250)])],
     "j": [("P", [(60, 676), (-SYM_M, 676, 125), (-SYM_M, 336, 125), (60, 336)]),
           ("P", [(-60, 166), (SYM_M, 166, 125), (SYM_M, 506, 125), (-60, 506)])],
-    "k": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)])],
-    "p": [("S",), ("P", [(0, 676), (ONE_M, 676, 142), (ONE_M, 392, 142), (0, 392)]),
-          ("P", [(0, 322), (ONE_M, 322, 142), (ONE_M, 38, 142), (0, 38)]),
-          ("O", 262, 534, 50), ("O", 262, 180, 50)],
+    "k": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)])],
+    "p": [("S",), ("P", [(0, 676), (ONE_M, 676, BOWL_R), (ONE_M, 392, BOWL_R), (0, 392)]),
+          ("P", [(0, 322), (ONE_M, 322, BOWL_R), (ONE_M, 38, BOWL_R), (0, 38)]),
+          ("O", ONE_M - BOWL_R, 676 - BOWL_R, DOT_R),
+          ("O", ONE_M - BOWL_R, 38 + BOWL_R, DOT_R)],
     # A square bowl, so one radius is half of both sides at once.
     "q": [("S",), ("P", [(0, 676), (-ONE_M, 676, 183), (-ONE_M, 310, 183), (0, 310)])],
     "r": [("S",), ("P", [(0, 676), (ONE_M, 676, 202), (ONE_M, 0)]),
@@ -127,23 +140,25 @@ GLYPHS = {
           ("P", [(-SYM_M, 470), (-SYM_M, 300, 85), (SYM_M, 300, 85), (SYM_M, 470)])],
     "æ": [("S",), ("P", [(0, 430), (-STUB_M, 430, STUB_R_M), (-STUB_M, 228)]),
           ("P", [(0, 430), (STUB_M, 430, STUB_R_M), (STUB_M, 632)])],
-    "ø": [("S",), ("P", [(0, 520), (-STUB_M, 520, STUB_R_M), (-STUB_M, 318)]),
-          ("P", [(0, 290), (-STUB_M, 290, STUB_R_M), (-STUB_M, 88)]),
-          ("P", [(0, 520), (STUB_M, 520, STUB_R_M), (STUB_M, 318)]),
-          ("P", [(0, 290), (STUB_M, 290, STUB_R_M), (STUB_M, 88)])],
+    # Pulled apart to 560/250: at 520/290 the upper stub's tail ended 28
+    # above the lower stub's arm, and a 76-wide stroke fused the two.
+    "ø": [("S",), ("P", [(0, 560), (-STUB_M, 560, STUB_R_M), (-STUB_M, 358)]),
+          ("P", [(0, 250), (-STUB_M, 250, STUB_R_M), (-STUB_M, 48)]),
+          ("P", [(0, 560), (STUB_M, 560, STUB_R_M), (STUB_M, 358)]),
+          ("P", [(0, 250), (STUB_M, 250, STUB_R_M), (STUB_M, 48)])],
 
     # --- wide, ink 640 -----------------------------------------------
     # The arms are GAP apart on the straights and GAP apart in radius, so
     # both arcs share a centre and the gap never varies.
-    "f": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
+    "f": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
           ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)])],
     "m": [("S",), ("P", [(-SYM_W, 700), (-SYM_W, 470, 115), (SYM_W, 470, 115),
                          (SYM_W, 700)])],
     # Radius equals half the width, so the cap is a single semicircle.
     "u": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)])],
-    "v": [("S",), ("P", [(0, 300), (ONE_M, 300, 115), (ONE_M, 700)]),
+    "v": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
           ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)]),
-          ("O", 170, 545, DOT_R)],
+          ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
     "w": [("P", [(-SYM_W, 0), (-SYM_W, ARCH, SYM_W), (SYM_W, ARCH, SYM_W), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
     "x": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)]),
@@ -152,10 +167,22 @@ GLYPHS = {
           ("O", 0, 300, DOT_R)],
 }
 
+# The runic word dividers keep their solid dots -- that is how they were
+# cut. Latin punctuation is drawn as a ring instead, so a full stop reads
+# as a stroke like everything else in the face rather than a filled blob.
+RING_R = 62          # centreline radius of the punctuation ring
+RING_Y = RING_R + WEIGHT // 2      # sits the ring on the baseline
+
 PUNCT = {
     "᛫": [("O", 0, 357, 46)],
     "᛬": [("O", 0, 214, 46), ("O", 0, 500, 46)],
     "᛭": [("V", 0, 100, 614), ("L", -190, 357, 190, 357)],
+    ".": [("R", 0, RING_Y, RING_R)],
+    "!": [("R", 0, RING_Y, RING_R), ("V", 0, RING_Y + RING_R + 130, CAP)],
+    "?": [("R", 0, RING_Y, RING_R),
+          ("P", [(-110, 520), (-110, CAP - WEIGHT // 2, 110),
+                 (110, CAP - WEIGHT // 2, 110), (110, 470), (0, 470),
+                 (0, RING_Y + RING_R + 130)])],
 }
 
 
@@ -482,6 +509,12 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
         elif kind == "D":
             _, x, y, r = e
             add(_circle(x, y, r, n=48))
+        elif kind == "R":
+            _, x, y, r = e
+            ring = _offset_closed(_circle(x, y, r, n=48), weight, 0)
+            if ring:
+                add(ring[0])
+                add(ring[1], hole=True)
     return out
 
 

@@ -38,6 +38,7 @@ jobs:
           cp dist/cheatsheet/runic-cheatsheet.html _site/
           cp dist/cheatsheet/runic-cheatsheet.pdf _site/
           cp dist/web/runa.html dist/web/glyphredigerer.html _site/
+          cp dist/web/kontrollpanel.html dist/web/delene.html _site/
           cp dist/banner.svg dist/morph.svg dist/morph.gif dist/morph.mp4 _site/
           mkdir -p _site/font && cp dist/font/Runa-Regular.ttf dist/font/LICENSE.md _site/font/
 

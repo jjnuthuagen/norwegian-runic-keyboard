@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runa — kontrollpanel</title>
+</head>
+<body>
+
+<style>
+:root{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;--muted:#6B756F;
+ --rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3}
+@media (prefers-color-scheme:dark){:root{--ground:#141816;--panel:#1B201D;
+ --ink:#E8EBE7;--muted:#94A099;--rule:#333A36;--accent:#7FBE9B;--accent-soft:#20302A}}
+:root[data-theme="dark"]{--ground:#141816;--panel:#1B201D;--ink:#E8EBE7;
+ --muted:#94A099;--rule:#333A36;--accent:#7FBE9B;--accent-soft:#20302A}
+:root[data-theme="light"]{--ground:#F1F2EF;--panel:#FFF;--ink:#191C1A;
+ --muted:#6B756F;--rule:#CBCFC8;--accent:#2F6E4F;--accent-soft:#E0EBE3}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(12px,3vw,26px);background:var(--ground);color:var(--ink);
+ font-family:system-ui,-apple-system,"Segoe UI",Cantarell,sans-serif;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(21px,4vw,28px);margin:0}
+.lede{margin:0;color:var(--muted);max-width:74ch;font-size:14px}
+.main{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+h2{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 10px}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+.val{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent);margin-bottom:9px}
+.seg{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;font:inherit;font-size:12px;padding:6px 4px;border:1px solid var(--rule);
+ border-radius:6px;background:var(--ground);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+ color:var(--accent);font-weight:600}
+.sw{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:13px;cursor:pointer;color:var(--ink)}
+.sw input{accent-color:var(--accent);width:16px;height:16px}
+svg{width:100%;height:auto;display:block}
+.strip{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+button.act{font:inherit;font-size:13px;font-weight:600;padding:8px 13px;border-radius:7px;
+ border:1px solid var(--rule);background:var(--panel);color:var(--ink);cursor:pointer}
+button.act.primary{background:var(--accent);color:var(--panel);border-color:transparent}
+textarea{width:100%;height:132px;font-family:ui-monospace,Menlo,Consolas,monospace;
+ font-size:11.5px;border:1px solid var(--rule);border-radius:7px;padding:9px;
+ background:var(--ground);color:var(--ink);resize:vertical}
+.warn{font-size:12px;color:#C2571F;margin:6px 0 0}
+:root[data-theme="dark"] .warn,@media (prefers-color-scheme:dark){.warn{color:#E8974F}}
+.hint{font-size:12px;color:var(--muted);margin:2px 0 0}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Runa — kontrollpanel</h1>
+  <p class="lede">Alt er en bryter, ingenting er fast. Panelet regner ut
+  formene med samme geometri som <code>runefont.py</code>, så det du ser her
+  er det som kompileres. Nederst får du konstantene tilbake som Python.</p>
+</header>
+
+<div class="main">
+  <div>
+    <div class="card">
+      <h2>Proporsjon</h2>
+      <label for="reach">Rekkevidde — <span class="val" id="v-reach"></span></label>
+      <input type="range" id="reach" min="230" max="440" step="1">
+      <label for="weight">Strektykkelse — <span class="val" id="v-weight"></span></label>
+      <input type="range" id="weight" min="40" max="120" step="2">
+      <label for="radius">Hjørneradius — <span class="val" id="v-radius"></span></label>
+      <input type="range" id="radius" min="0" max="200" step="5">
+      <label for="side">Sidemargin — <span class="val" id="v-side"></span></label>
+      <input type="range" id="side" min="40" max="220" step="5">
+      <label for="overshoot">Overskyting på buer — <span class="val" id="v-overshoot"></span></label>
+      <input type="range" id="overshoot" min="0" max="48" step="2">
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h2>b og p</h2>
+      <label for="bpSpace">Luft over og under — <span class="val" id="v-bpSpace"></span></label>
+      <input type="range" id="bpSpace" min="0" max="200" step="5">
+      <label>Midtparti</label>
+      <div class="seg" id="bpMid">
+        <button data-v="merge">To armer</button>
+        <button data-v="shared">Felles linje</button>
+        <button data-v="split">Ekte gap</button>
+      </div>
+      <p class="warn" id="mergeWarn" hidden></p>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h2>Valg</h2>
+      <label class="sw"><input type="checkbox" id="align"> Juster festepunktene
+        <span class="hint"></span></label>
+      <label for="mid">Felles høyde — <span class="val" id="v-mid"></span></label>
+      <input type="range" id="mid" min="250" max="520" step="5">
+      <label class="sw"><input type="checkbox" id="jGround"> La j stå på grunnlinja</label>
+      <label for="dotClear">Prikkavstand — <span class="val" id="v-dotClear"></span></label>
+      <input type="range" id="dotClear" min="8" max="70" step="2">
+      <label for="dotR">Prikkstørrelse — <span class="val" id="v-dotR"></span></label>
+      <input type="range" id="dotR" min="28" max="76" step="2">
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="acts">
+        <button class="act" id="reset">Tilbakestill</button>
+        <button class="act primary" id="copy">Kopier Python</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="strip"><svg id="alpha" role="img" aria-label="Alfabetet"></svg></div>
+    <div class="strip" style="margin-top:12px">
+      <svg id="line" role="img" aria-label="Setning"></svg>
+    </div>
+    <div class="strip" style="margin-top:12px">
+      <h2>Der linjene møter staven</h2>
+      <svg id="focus" role="img" aria-label="r b p g sammenlignet"></svg>
+      <p class="hint" id="focusNote"></p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Konstantene som Python — lim inn i runefont.py</h2>
+  <textarea id="out" readonly spellcheck="false"></textarea>
+</div>
+</div>
+
+<script>
+const RUNES = {"q": "ᛩ", "w": "ᚥ", "e": "ᛂ", "r": "ᚱ", "t": "ᛏ", "y": "ᚤ", "u": "ᚢ", "i": "ᛁ", "o": "ᚮ", "p": "ᛔ", "å": "ᚭ", "a": "ᛆ", "s": "ᛋ", "d": "ᛑ", "f": "ᚠ", "g": "ᚵ", "h": "ᚼ", "j": "ᛃ", "k": "ᚴ", "l": "ᛚ", "ø": "ᚯ", "æ": "ᛅ", "z": "ᛎ", "x": "ᛪ", "c": "ᛍ", "v": "ᚡ", "b": "ᛒ", "n": "ᚿ", "m": "ᛘ"};
+const ORDER = "abcdefghijklmnopqrstuvwxyzæøå";
+
+function hyp(x,y){return Math.sqrt(x*x+y*y)}
+function dedupe(p){const o=[p[0]];for(const q of p.slice(1))
+  if(hyp(q[0]-o[o.length-1][0],q[1]-o[o.length-1][1])>1e-6)o.push(q);return o}
+function isClosed(p){return p.length>2&&hyp(p[0][0]-p[p.length-1][0],p[0][1]-p[p.length-1][1])<1e-6}
+function arcAt(p,a,b,radius){
+  let ux=a[0]-p[0],uy=a[1]-p[1],vx=b[0]-p[0],vy=b[1]-p[1];
+  const lu=hyp(ux,uy)||1,lv=hyp(vx,vy)||1; ux/=lu;uy/=lu;vx/=lv;vy/=lv;
+  const here=p.length>2?p[2]:radius;
+  const ang=Math.acos(Math.max(-1,Math.min(1,ux*vx+uy*vy)));
+  if(here<=0||ang<1e-3||Math.abs(Math.PI-ang)<1e-3)return[[p[0],p[1]]];
+  const d=Math.min(here/Math.tan(ang/2),lu*0.5,lv*0.5), r=d*Math.tan(ang/2);
+  const t1=[p[0]+ux*d,p[1]+uy*d],t2=[p[0]+vx*d,p[1]+vy*d];
+  let bx=ux+vx,by=uy+vy;const lb=hyp(bx,by)||1;bx/=lb;by/=lb;
+  const c=[p[0]+bx*(r/Math.sin(ang/2)),p[1]+by*(r/Math.sin(ang/2))];
+  const a1=Math.atan2(t1[1]-c[1],t1[0]-c[0]),a2=Math.atan2(t2[1]-c[1],t2[0]-c[0]);
+  let sw=((a2-a1+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;
+  const st=Math.max(3,Math.round(Math.abs(sw)/0.22)),out=[];
+  for(let k=0;k<=st;k++)out.push([c[0]+r*Math.cos(a1+sw*k/st),c[1]+r*Math.sin(a1+sw*k/st)]);
+  return out}
+function fillet(p,radius){if(p.length<3)return p;
+  const o=[p[0]];for(let i=1;i<p.length-1;i++)o.push(...arcAt(p[i],p[i-1],p[i+1],radius));
+  o.push(p[p.length-1]);return o}
+function filletClosed(p,radius){const n=p.length,o=[];
+  for(let i=0;i<n;i++)o.push(...arcAt(p[i],p[(i-1+n)%n],p[(i+1)%n],radius));return o}
+function norms(p,closed){const n=[],L=closed?p.length:p.length-1;
+  for(let i=0;i<L;i++){const j=(i+1)%p.length;
+    const dx=p[j][0]-p[i][0],dy=p[j][1]-p[i][1],l=hyp(dx,dy)||1;n.push([-dy/l,dx/l])}return n}
+function joint(p,i,n1,n2,s,h,MIT){
+  let mx=n1[0]+n2[0],my=n1[1]+n2[1];const m=hyp(mx,my);
+  if(m<1e-9)return[[p[0]+s*n1[0]*h,p[1]+s*n1[1]*h],[p[0]+s*n2[0]*h,p[1]+s*n2[1]*h]];
+  mx/=m;my/=m;const sc=1/Math.max(mx*n1[0]+my*n1[1],1e-6);
+  if(sc>MIT)return[[p[0]+s*n1[0]*h,p[1]+s*n1[1]*h],[p[0]+s*n2[0]*h,p[1]+s*n2[1]*h]];
+  return[[p[0]+s*mx*h*sc,p[1]+s*my*h*sc]]}
+function freeEnd(pt,P){return !(Math.abs(pt[1])<=P.capTol||Math.abs(pt[1]-P.cap)<=P.capTol)}
+function semi(c,nr,h){const a0=Math.atan2(nr[1],nr[0]),o=[];
+  for(let k=1;k<12;k++)o.push([c[0]+h*Math.cos(a0-Math.PI*k/12),c[1]+h*Math.sin(a0-Math.PI*k/12)]);
+  return o}
+function offsetOpen(pts,P){pts=dedupe(fillet(dedupe(pts),P.radius));if(pts.length<2)return[];
+  const h=P.weight/2,nm=norms(pts,false);
+  const side=s=>{const o=[[pts[0][0]+s*nm[0][0]*h,pts[0][1]+s*nm[0][1]*h]];
+    for(let i=1;i<pts.length-1;i++)o.push(...joint(pts[i],i,nm[i-1],nm[i],s,h,P.miter));
+    const L=nm.length-1;o.push([pts[pts.length-1][0]+s*nm[L][0]*h,pts[pts.length-1][1]+s*nm[L][1]*h]);
+    return o};
+  const A=side(1),B=side(-1).reverse();let out=A.slice();
+  if(freeEnd(pts[pts.length-1],P))out=out.concat(semi(pts[pts.length-1],nm[nm.length-1],h));
+  out=out.concat(B);
+  if(freeEnd(pts[0],P))out=out.concat(semi(pts[0],[-nm[0][0],-nm[0][1]],h));
+  return out}
+function offsetClosed(pts,P){let c=dedupe(pts);if(isClosed(c))c=c.slice(0,-1);
+  let p=dedupe(filletClosed(c,P.radius));if(isClosed(p))p=p.slice(0,-1);
+  const n=p.length;if(n<3)return[];const h=P.weight/2,nm=norms(p,true);
+  const side=s=>{const o=[];for(let i=0;i<n;i++)o.push(...joint(p[i],i,nm[(i-1+n)%n],nm[i],s,h,P.miter));return o};
+  const ar=q=>Math.abs(0.5*q.reduce((a,_,i)=>a+q[i][0]*q[(i+1)%q.length][1]-q[(i+1)%q.length][0]*q[i][1],0));
+  const A=side(1),B=side(-1);return ar(A)>ar(B)?[A,B]:[B,A]}
+function circle(cx,cy,r,n){n=n||36;const o=[];
+  for(let i=0;i<n;i++)o.push([cx+r*Math.cos(2*Math.PI*i/n),cy+r*Math.sin(2*Math.PI*i/n)]);return o}
+function cw(p){const a=p.reduce((s,_,i)=>s+p[i][0]*p[(i+1)%p.length][1]-p[(i+1)%p.length][0]*p[i][1],0);
+  return a<0?p:p.slice().reverse()}
+function contours(els,P){const out=[];
+  const add=(q,hole)=>{if(q.length>2)out.push(hole?cw(q).slice().reverse():cw(q))};
+  for(const e of els){const k=e[0];
+    if(k==="S")add(offsetOpen([[0,0],[0,P.cap]],P));
+    else if(k==="V")add(offsetOpen([[e[1],e[2]],[e[1],e[3]]],P));
+    else if(k==="L")add(offsetOpen([[e[1],e[2]],[e[3],e[4]]],P));
+    else if(k==="O"||k==="D")add(circle(e[1],e[2],e[3],k==="D"?48:36));
+    else if(k==="P"){const pts=e[1];
+      if(isClosed(pts)){const r=offsetClosed(pts,P);if(r.length){add(r[0]);add(r[1],true)}}
+      else add(offsetOpen(pts,P))}}
+  return out}
+
+
+function glyphs(P){
+  const CAP=P.cap, W=P.weight, H=W/2;
+  const k=P.reach/404;
+  const M=Math.round(404*k), WD=Math.round(564*k);
+  const SM=Math.round(202*k), SW=Math.round(282*k);
+  const SN=Math.round(164*k), SNR=Math.round(82*k);
+  const STM=Math.round(202*k), STMR=Math.round(101*k);
+  const GAP=Math.round(160*k), ARM=P.armR, BOWL=P.bowlR;
+  const TOP=CAP-H, BOT=H;
+  const ARCH=CAP+P.overshoot-H;
+  const dotX=H+P.dotClear+P.dotR;
+
+  // Where branches leave the stave. With "align" on they share one height.
+  const MID=P.mid;
+  const armY   = P.align ? MID : 300;
+  const rBar   = P.align ? MID : 470;
+  const stubY  = P.align ? MID : 430;
+
+  // b and p: bowls pull back from the line by bpSpace; the middle is either
+  // two arms (which fuse if closer than the stroke width), one shared line,
+  // or two arms at a real gap.
+  const bTop=CAP-P.bpSpace-H, bBot=P.bpSpace+H;
+  let ti,bi;
+  if(P.bpMid==="shared"){ti=bi=MID}
+  else if(P.bpMid==="split"){ti=MID+85;bi=MID-85}
+  else {ti=MID+35;bi=MID-35}
+  const rt=Math.round((bTop-ti)/2), rb=Math.round((bi-bBot)/2);
+  const bowls=[["P",[[0,bTop],[M,bTop,rt],[M,ti,rt],[0,ti]]],
+               ["P",[[0,bi],[M,bi,rb],[M,bBot,rb],[0,bBot]]]];
+
+  const g={};
+  g.a=[["S"],["P",[[0,stubY],[-SN,stubY,SNR],[-SN,stubY-SN]]]];
+  g.c=[["D",0,366,120],["V",0,470,CAP]];
+  g.e=[["S"],["O",P.narrow-H-P.dotR,370,P.dotR]];
+  g.i=[["S"]];
+  g.l=[["S"],["P",[[0,660],[SN,660,SNR],[SN,660-SN]]]];
+  g.n=[["S"],["P",[[0,stubY],[SN,stubY,SNR],[SN,stubY-SN]]]];
+  g.o=[["S"],["P",[[0,520],[-SN,520,SNR],[-SN,520-SN]]],
+             ["P",[[0,290],[-SN,290,SNR],[-SN,290-SN]]]];
+  g["å"]=[["S"],["P",[[0,520],[SN,520,SNR],[SN,520-SN]]],
+                ["P",[[0,290],[SN,290,SNR],[SN,290-SN]]]];
+  g.b=[["S"],...bowls];
+  g.p=[["S"],...bowls,["O",M-rt,bTop-rt,P.dotR],["O",M-rb,bBot+rb,P.dotR]];
+  g.d=[["S"],["P",[[-SM,476],[-SM,TOP,100],[SM,TOP,100],[SM,476]]],["O",dotX,340,P.dotR]];
+  g.t=[["S"],["P",[[-SM,476],[-SM,TOP,100],[SM,TOP,100],[SM,476]]]];
+  g.g=[["S"],["P",[[0,armY],[M,armY,ARM],[M,700]]],["O",M-ARM,armY+ARM,P.dotR]];
+  g.k=[["S"],["P",[[0,armY],[M,armY,ARM],[M,700]]]];
+  g.h=[["S"],["P",[[-SM,250,100],[SM,250,100],[SM,490,100],[-SM,490,100],[-SM,250]]]];
+  g.q=[["S"],["P",[[0,TOP],[-M,TOP,183],[-M,310,183],[0,310]]]];
+  g.r=[["S"],["P",[[0,TOP],[M,TOP,202],[M,0]]],["P",[[0,rBar],[M,rBar]]]];
+  g.s=[["P",[[-SM,CAP],[-SM,392],[SM,392],[SM,0]]]];
+  g.z=[["V",0,300,CAP],["P",[[-SM,470],[-SM,300,85],[SM,300,85],[SM,470]]]];
+  g["æ"]=[["S"],["P",[[0,stubY],[-STM,stubY,STMR],[-STM,stubY-STM]]],
+                ["P",[[0,stubY],[STM,stubY,STMR],[STM,stubY+STM]]]];
+  g["ø"]=[["S"],["P",[[0,520],[-STM,520,STMR],[-STM,520-STM]]],
+                ["P",[[0,290],[-STM,290,STMR],[-STM,290-STM]]],
+                ["P",[[0,520],[STM,520,STMR],[STM,520-STM]]],
+                ["P",[[0,290],[STM,290,STMR],[STM,290-STM]]]];
+  g.f=[["S"],["P",[[0,armY],[M,armY,ARM],[M,700]]],
+             ["P",[[0,armY-GAP],[WD,armY-GAP,275],[WD,700]]]];
+  g.v=[...g.f,["O",M-ARM,armY+ARM,P.dotR]];
+  g.m=[["S"],["P",[[-SW,700],[-SW,470,115],[SW,470,115],[SW,700]]]];
+  g.u=[["P",[[-SW,0],[-SW,ARCH,SW],[SW,ARCH,SW],[SW,0]]]];
+  g.w=[...g.u,["P",[[-SW,330],[Math.round(122*k),330,110],[Math.round(122*k),0]]]];
+  g.y=[...g.u,["O",0,300,P.dotR]];
+  g.x=[["P",[[-SM,CAP],[-SM,392],[SM,392],[SM,0]]],
+       ["L",-SW,600,2,600],["L",-2,120,SW,120]];
+  // j floats by default. Grounded, its lower hook drops to the baseline so
+  // it sits on the line like every other rune.
+  const jb = P.jGround ? 0 : 166;
+  g.j=[["P",[[60,TOP],[-SM,TOP,125],[-SM,336,125],[60,336]]],
+       ["P",[[-60,jb],[SM,jb,125],[SM,506,125],[-60,506]]]];
+  return g;
+}
+
+
+const DEFAULTS = {reach:404, weight:76, radius:40, side:120, overshoot:12,
+  bpSpace:0, bpMid:"merge", align:false, mid:357, jGround:false,
+  dotClear:26, dotR:52, cap:714, miter:3.4, capTol:30, armR:115, bowlR:142,
+  narrow:240};
+let P = {...DEFAULTS};
+
+const $ = id => document.getElementById(id);
+const SVGNS = "http://www.w3.org/2000/svg";
+const el = (t,a)=>{const n=document.createElementNS(SVGNS,t);
+  for(const k in a)n.setAttribute(k,a[k]);return n};
+const toPath = cs => cs.map(c=>"M"+c.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join("L")+"Z").join(" ");
+
+function measure(els){
+  const cs = contours(els,P);
+  const xs = cs.flat().map(p=>p[0]);
+  return {cs, min:Math.min(...xs), max:Math.max(...xs)};
+}
+
+function drawRow(svg, chars, px){
+  svg.textContent="";
+  const G = glyphs(P);
+  let x=0; const parts=[];
+  for(const c of chars){
+    if(c===" "){x+=360;continue}
+    const m = measure(G[c]);
+    const shift = P.side - m.min;
+    parts.push({d:toPath(m.cs.map(k=>k.map(p=>[p[0]+shift+x,p[1]]))) });
+    x += (m.max-m.min) + P.side*2;
+  }
+  const pad=40, h=P.cap+pad*2;
+  svg.setAttribute("viewBox", `${-pad} ${-pad} ${x+pad*2} ${h}`);
+  const g = el("g",{transform:`translate(0,${P.cap}) scale(1,-1)`});
+  g.appendChild(el("line",{x1:-pad,y1:0,x2:x+pad,y2:0,stroke:"var(--rule)","stroke-width":3}));
+  g.appendChild(el("line",{x1:-pad,y1:P.cap,x2:x+pad,y2:P.cap,stroke:"var(--rule)",
+    "stroke-width":3,"stroke-dasharray":"14 12"}));
+  if(P.align){
+    g.appendChild(el("line",{x1:-pad,y1:P.mid,x2:x+pad,y2:P.mid,
+      stroke:"var(--accent)","stroke-width":3,"stroke-dasharray":"10 10",opacity:".8"}));
+  }
+  for(const p of parts) g.appendChild(el("path",{d:p.d,fill:"var(--ink)","fill-rule":"evenodd"}));
+  svg.appendChild(g);
+}
+
+function mergeCheck(){
+  if(P.bpMid!=="merge") return null;
+  const gap = 70;                       // the two arms are MID±35
+  return gap < P.weight ? Math.round(P.weight-gap) : null;
+}
+
+function render(){
+  for(const k of ["reach","weight","radius","side","overshoot","bpSpace","mid","dotClear","dotR"])
+    $("v-"+k).textContent = P[k];
+  drawRow($("alpha"), ORDER);
+  drawRow($("line"), "det er ikke lett å skrive norsk med runer");
+  drawRow($("focus"), "rbpgkn");
+  const overlap = mergeCheck();
+  $("mergeWarn").hidden = !overlap;
+  if(overlap) $("mergeWarn").textContent =
+    `Armene overlapper med ${overlap} enheter og smelter til én tykk strek.`;
+  $("focusNote").textContent = P.align
+    ? `Festepunktene ligger på ${P.mid} — den stiplede grønne linja.`
+    : "Festepunktene er der hver form vil ha dem. Slå på justering for å samle dem.";
+  $("out").value = pythonOut();
+}
+
+function pythonOut(){
+  const k = P.reach/404;
+  const r = v => Math.round(v*k);
+  return [
+   `WEIGHT = ${P.weight}`,
+   `RADIUS = ${P.radius}`,
+   `SIDE = ${P.side}`,
+   `OVERSHOOT = ${P.overshoot}`,
+   `DOT_R = ${P.dotR}`,
+   `DOT_CLEAR = ${P.dotClear}`,
+   `ARM_R = ${P.armR}`,
+   `BOWL_R = ${P.bowlR}`,
+   `ONE_M, ONE_W = ${r(404)}, ${r(564)}`,
+   `SYM_M, SYM_W = ${r(202)}, ${r(282)}`,
+   `STUB_N, STUB_R_N = ${r(164)}, ${r(82)}`,
+   `STUB_M, STUB_R_M = ${r(202)}, ${r(101)}`,
+   `GAP = ${r(160)}`,
+   ``,
+   `# options`,
+   `BP_SPACE = ${P.bpSpace}`,
+   `BP_MIDDLE = "${P.bpMid}"`,
+   `ALIGN_ATTACH = ${P.align?"True":"False"}`,
+   `ATTACH_MID = ${P.mid}`,
+   `J_GROUNDED = ${P.jGround?"True":"False"}`,
+  ].join("\n");
+}
+
+for(const k of ["reach","weight","radius","side","overshoot","bpSpace","mid","dotClear","dotR"])
+  $(k).addEventListener("input", e=>{P[k]=+e.target.value; render()});
+for(const k of ["align","jGround"])
+  $(k).addEventListener("change", e=>{P[k]=e.target.checked; render()});
+$("bpMid").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  P.bpMid=b.dataset.v; syncSeg(); render();
+});
+function syncSeg(){
+  for(const b of $("bpMid").children) b.setAttribute("aria-pressed", b.dataset.v===P.bpMid);
+}
+$("reset").onclick=()=>{P={...DEFAULTS}; syncAll(); render()};
+$("copy").onclick=async()=>{
+  try{await navigator.clipboard.writeText($("out").value); $("copy").textContent="Kopiert"}
+  catch(e){$("out").select(); $("copy").textContent="Merket"}
+  setTimeout(()=>$("copy").textContent="Kopier Python",1400);
+};
+function syncAll(){
+  for(const k of ["reach","weight","radius","side","overshoot","bpSpace","mid","dotClear","dotR"])
+    $(k).value=P[k];
+  $("align").checked=P.align; $("jGround").checked=P.jGround; syncSeg();
+}
+syncAll(); render();
+</script>
+
+</body>
+</html>
