@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
 VARIANTS = [
-    (1,  "Standard",              {}),
+    (1,  "Ny-europeisk",          {}),
     (2,  "Lett",                  {"WEIGHT": 56}),
     (3,  "Tung",                  {"WEIGHT": 100}),
     (4,  "Skarpe hjørner",        {"RADIUS": 0}),
@@ -40,11 +40,17 @@ VARIANTS = [
     (20, "Gammelantikva lett",    {"SERIF": True, "SERIF_STYLE": "bracketed",
                                    "CONTRAST": 0.45, "WEIGHT": 68,
                                    "STRESS_ANGLE": -20, "SERIF_LEN": 125}),
+    (21, "Tradisjonell",          {"SKELETON": "traditional"}),
+    (22, "Tradisjonell lett",     {"SKELETON": "traditional", "WEIGHT": 56}),
+    (23, "Tradisjonell antikva",  {"SKELETON": "traditional", "SERIF": True,
+                                   "SERIF_STYLE": "bracketed", "CONTRAST": 0.55,
+                                   "WEIGHT": 88}),
 ]
 
 # Families that also ship bold and italic companions, built from the same
 # config with the weight raised or the glyph sheared.
-STYLED = {1: "bi", 2: "bi", 3: "i", 10: "b", 17: "bi", 18: "bi", 19: "bi", 20: "bi"}
+STYLED = {1: "bi", 2: "bi", 3: "i", 10: "b", 17: "bi", 18: "bi", 19: "bi",
+          20: "bi", 21: "bi", 23: "bi"}
 
 
 def build_styled(outdir="dist/variants"):

@@ -65,6 +65,14 @@ STRESS_ANGLE = 0
 # SLANT shears the whole glyph for an italic, in degrees clockwise.
 SLANT = 0
 
+# Which skeleton set the font is built from:
+#   "neweuropean"  the orthogonal construction: every bend a right angle,
+#                  arms curved, h a closed box, d and t bracketed
+#   "traditional"  the diagonal skeletons derived from Noto Sans Runic:
+#                  arms straight, h an X, d a single left arm, r a bowl
+#                  with a leg -- the shapes as the tradition draws them
+SKELETON = "neweuropean"
+
 # A flat that is flush with the baseline or cap is placed by its OUTER
 # edge at the thickness contrast actually leaves it -- otherwise the
 # full-weight stave underneath pokes through the thinned flat.
@@ -291,6 +299,53 @@ elif PUNCT_DOT == "ring":
 else:
     _MARK = ("O", 0, DOT_R, DOT_R)
     _STEM_FOOT = DOT_R * 2 + DOT_CLEAR + WEIGHT // 2
+
+
+# The traditional skeletons, taken from Noto Sans Runic's own outlines
+# (cap 714) before the orthogonal rebuild. Diagonals are the point:
+# rune carvers avoided horizontals, so these shapes are mostly stave
+# plus slanted branch. Widths follow the letterforms, not the module.
+GLYPHS_TRADITIONAL = {
+    "a": [("S",), ("L", 0, 346, -201, 263)],
+    "b": [("S",), ("P", [(0, 714), (315, 508), (0, 357), (315, 218), (0, 0)])],
+    "c": [("D", 0, 366, 120), ("V", 0, 470, CAP)],
+    "d": [("S",), ("L", 0, 700, -201, 588), ("O", 108, 340, DOT_R)],
+    "e": [("S",), ("O", 150, 370, DOT_R)],
+    "f": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708)],
+    "g": [("S",), ("L", 0, 316, 366, 708), ("O", 178, 560, DOT_R)],
+    "h": [("S",), ("L", -195, 219, 197, 482), ("L", -195, 482, 197, 219)],
+    "i": [("S",)],
+    "j": [("P", [(10, 714), (-95, 590), (10, 462)]),
+          ("P", [(-10, 252), (95, 380), (-10, 508)])],
+    "k": [("S",), ("L", 0, 316, 366, 708)],
+    "l": [("S",), ("L", 0, 672, 196, 584)],
+    "m": [("S",), ("L", 0, 480, -269, 700), ("L", 0, 480, 269, 700)],
+    "n": [("S",), ("L", 0, 337, 195, 249)],
+    "o": [("S",), ("L", 0, 274, -201, 191), ("L", 0, 435, -201, 352)],
+    "p": [("S",), ("P", [(0, 714), (315, 508), (0, 357), (315, 218), (0, 0)]),
+          ("O", 150, 522, 46), ("O", 150, 202, 46)],
+    "q": [("S",), ("P", [(0, 714), (-262, 478), (0, 228)])],
+    "r": [("S",), ("P", [(0, 714), (275, 535), (0, 345), (300, 0)])],
+    "s": [("P", [(-184, CAP), (-184, 268), (184, 479), (184, 0)])],
+    "t": [("S",), ("L", 0, 700, -201, 588), ("L", 0, 700, 195, 585)],
+    "u": [("P", [(-204, 0), (-204, CAP, 204), (204, CAP, 204), (204, 0)])],
+    "v": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708),
+          ("O", 150, 640, DOT_R)],
+    "w": [("P", [(-240, 0), (-240, CAP, 205), (170, CAP, 205), (170, 0)]),
+          ("P", [(-240, 381), (20, 250, 110), (20, 0)])],
+    "x": [("P", [(-184, CAP), (-184, 268), (184, 479), (184, 0)]),
+          ("L", -372, 600, 2, 600), ("L", -2, 120, 372, 120)],
+    "y": [("P", [(-204, 0), (-204, CAP, 204), (204, CAP, 204), (204, 0)]),
+          ("O", -6, 338, DOT_R)],
+    "z": [("V", 0, 300, CAP), ("L", 0, 330, -196, 401), ("L", 0, 330, 204, 397)],
+    "æ": [("S",), ("L", 0, 346, -201, 263), ("L", 0, 392, 204, 478)],
+    "ø": [("S",), ("L", 0, 274, -201, 191), ("L", 0, 435, -201, 352),
+          ("L", 0, 319, 202, 405), ("L", 0, 480, 202, 566)],
+    "å": [("S",), ("L", 0, 427, 195, 339), ("L", 0, 266, 195, 178)],
+}
+
+if SKELETON == "traditional":
+    GLYPHS = GLYPHS_TRADITIONAL
 
 PUNCT = {
     "᛫": [("O", 0, 357, 46)],
