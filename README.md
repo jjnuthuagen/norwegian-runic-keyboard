@@ -67,6 +67,15 @@ width and nothing can widen it without making it a different letter.
 To install it, copy the TTF to `~/.local/share/fonts` (Linux) or open it and
 click Install (macOS, Windows).
 
+### One line, every rune
+
+![One line morphing through the alphabet](dist/morph.gif)
+
+Every rune reduced to a single polyline of the same length, so the whole
+alphabet can be walked as one line reshaping itself. `python3 morph.py`
+regenerates it; there is also a [vector version](dist/morph.svg) that
+morphs the path itself, and an [MP4](dist/morph.mp4).
+
 **[Glyph editor](dist/web/glyphredigerer.html)** — drag the skeletons, set
 per-corner radii, and export the Python straight back into `runefont.py`.
 
