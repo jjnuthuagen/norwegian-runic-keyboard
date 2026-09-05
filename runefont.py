@@ -134,7 +134,10 @@ RADIUS = 40        # default corner radius on the centreline. 0 = sharp
 # Curves are the exception -- u, w and y overshoot on purpose, or round
 # shapes read short next to flat ones.
 FLAT_TOP, FLAT_BOTTOM = CAP - WEIGHT // 2, WEIGHT // 2
-OVERSHOOT = 12                       # ~1.7% of cap height
+# RULE: the stave is the tallest thing in the font. Nothing may exceed
+# cap height -- so the classical optical overshoot on round tops is OFF
+# by default. Set it back above zero if the arches ever read short.
+OVERSHOOT = 0
 ARCH = CAP + OVERSHOOT - WEIGHT // 2  # centreline apex of u, w and y, so
                                       # their ink clears the flat tops by
                                       # OVERSHOOT rather than half a stroke
@@ -547,10 +550,12 @@ def _offset_path(points, weight, radius=None):
     closed = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
     left, right = side(1), side(-1)
     out = list(left)
-    if _free_end(pts[-1], closed):
+    # Ends buried in the stave column stay flat: a round cap on a buried
+    # end would bulge out the stave's far side.
+    if _free_end(pts[-1], closed) and abs(pts[-1][0]) > weight * 0.55:
         out += _semicircle(pts[-1], normals[-1], h_)
     out += right[::-1]
-    if _free_end(pts[0], closed):
+    if _free_end(pts[0], closed) and abs(pts[0][0]) > weight * 0.55:
         out += _semicircle(pts[0], (-normals[0][0], -normals[0][1]), h_)
     return out
 
@@ -690,18 +695,30 @@ def _trim_from_stave(pts, weight):
 def _extend_into_stave(pts, weight):
     """A limb whose end sits exactly on the stave centreline gets a butt
     cap cut perpendicular to its own direction -- against the stave's
-    flat end that leaves a sliver of daylight at the junction. Push such
-    ends INTO the stave so the two inks overlap and nothing can crack."""
-    reach = weight * 0.6
+    flat side that leaves a sliver of daylight at the junction. Push such
+    ends INTO the stave so the inks overlap.
+
+    The reach is computed per end from the limb's angle so that the cap's
+    far corners land exactly on the stave's far edge and never beyond --
+    a fixed reach bulges out the other side on shallow angles. The buried
+    end is also excluded from round caps (see _offset_path): a round cap
+    on it would poke through regardless."""
+    S = weight / 2.0
     out = list(pts)
+
+    def extended(end, toward):
+        dx, dy = toward[0] - end[0], toward[1] - end[1]
+        L = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / L, dy / L
+        # cap centre travels e*|ux| in x; its corners add S*|uy| more.
+        e = (S - S * abs(uy)) / max(abs(ux), 1e-6)
+        e = max(0.0, min(e, weight))
+        return (end[0] - ux * e, end[1] - uy * e)
+
     if abs(out[0][0]) < 1e-6 and len(out) > 1:
-        dx, dy = out[1][0] - out[0][0], out[1][1] - out[0][1]
-        L = math.hypot(dx, dy) or 1.0
-        out[0] = (out[0][0] - dx / L * reach, out[0][1] - dy / L * reach)
+        out[0] = extended(out[0], out[1])
     if abs(out[-1][0]) < 1e-6 and len(out) > 1:
-        dx, dy = out[-2][0] - out[-1][0], out[-2][1] - out[-1][1]
-        L = math.hypot(dx, dy) or 1.0
-        out[-1] = (out[-1][0] - dx / L * reach, out[-1][1] - dy / L * reach)
+        out[-1] = extended(out[-1], out[-2])
     return out
 
 

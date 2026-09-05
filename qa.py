@@ -184,7 +184,10 @@ def main():
     tops, bots = alignment()
     print("\nINK TOP")
     for k in sorted(tops, reverse=True):
-        print(f"   {k:5}  {''.join(tops[k])}")
+        over = "  <-- EXCEEDS THE STAVE" if k > rf.CAP else ""
+        print(f"   {k:5}  {''.join(tops[k])}{over}")
+        if k > rf.CAP:
+            fails += len(tops[k])
 
     d = distinct()
     print(f"\nDUPLICATE OUTLINES — {len(d)}")
