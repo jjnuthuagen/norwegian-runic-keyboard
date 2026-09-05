@@ -90,6 +90,49 @@ DOT_CLEAR = 26                       # gap from a dot's edge to any stroke
 ARM_R = 115                          # corner radius of the arm in f v k g
 BOWL_R = 142                         # corner radius of the bowls in b p
 
+# --- b and p ----------------------------------------------------------
+# BP_SPACE pulls the bowls back from the cap and the baseline, so the stave
+# shows above and below instead of the bowls filling the whole height.
+# Zero gives full-height bowls.
+#
+# BP_MIDDLE decides what happens where the two bowls meet:
+#   "shared"  one line, both bowls ending on it        <- no fusion possible
+#   "split"   two arms a real BP_GAP apart
+#   "merge"   two arms close together; if that gap is under WEIGHT they
+#             fuse into one bar of nearly double thickness, which qa.py
+#             reports rather than letting it pass
+BP_SPACE = 110
+BP_MIDDLE = "shared"
+BP_GAP = 170
+ATTACH_MID = 357                     # where branches meet the stave
+
+# j is two opposed hooks and the only rune that touches neither line.
+#   "full"    stretched so it sits on the baseline and reaches the cap
+#   "centred" its own proportions, centred between the two lines
+#   "float"   as drawn before: hanging from the cap
+J_STYLE = "full"
+if J_STYLE == "full":
+    _J = (WEIGHT // 2, 251, 464, CAP - WEIGHT // 2)
+elif J_STYLE == "centred":
+    _J = (102, 272, 442, 612)
+else:
+    _J = (166, 336, 506, 676)
+
+_BP_TOP = CAP - BP_SPACE - WEIGHT // 2      # placed by the bowls' OUTER edge
+_BP_BOT = BP_SPACE + WEIGHT // 2
+if BP_MIDDLE == "shared":
+    _BP_TI = _BP_BI = ATTACH_MID
+elif BP_MIDDLE == "split":
+    _BP_TI, _BP_BI = ATTACH_MID + BP_GAP // 2, ATTACH_MID - BP_GAP // 2
+else:
+    _BP_TI, _BP_BI = ATTACH_MID + 35, ATTACH_MID - 35
+# Radius is half the bowl's height, so each outer edge stays a single arc.
+_BP_RT = round((_BP_TOP - _BP_TI) / 2)
+_BP_RB = round((_BP_BI - _BP_BOT) / 2)
+# A dot has to fit the bowl it sits in, and BP_SPACE can make that bowl
+# small, so its radius is capped by the space available rather than fixed.
+_P_DOT = max(24, min(DOT_R, min(_BP_RT, _BP_RB) - WEIGHT // 2 - DOT_CLEAR))
+
 STUB_N, STUB_R_N = 164, 82           # narrow side branch -> quarter circle
 STUB_M, STUB_R_M = 202, 101          # medium side branch
 GAP = 160                            # between the arms of f and v; also makes
@@ -112,8 +155,11 @@ GLYPHS = {
     # --- medium, ink 480 ---------------------------------------------
     # Bowl radius is half the bowl's height, so each outer edge is one
     # continuous semicircle rather than two corners with a flat between.
-    "b": [("S",), ("P", [(0, 676), (ONE_M, 676, BOWL_R), (ONE_M, 392, BOWL_R), (0, 392)]),
-          ("P", [(0, 322), (ONE_M, 322, BOWL_R), (ONE_M, 38, BOWL_R), (0, 38)])],
+    "b": [("S",),
+          ("P", [(0, _BP_TOP), (ONE_M, _BP_TOP, _BP_RT), (ONE_M, _BP_TI, _BP_RT),
+                 (0, _BP_TI)]),
+          ("P", [(0, _BP_BI), (ONE_M, _BP_BI, _BP_RB), (ONE_M, _BP_BOT, _BP_RB),
+                 (0, _BP_BOT)])],
     "d": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, 676, 100), (SYM_M, 676, 100),
                          (SYM_M, 476)]),
           ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
@@ -122,13 +168,16 @@ GLYPHS = {
           ("O", ONE_M - ARM_R, 300 + ARM_R, DOT_R)],
     "h": [("S",), ("P", [(-SYM_M, 250, 100), (SYM_M, 250, 100), (SYM_M, 490, 100),
                          (-SYM_M, 490, 100), (-SYM_M, 250)])],
-    "j": [("P", [(60, 676), (-SYM_M, 676, 125), (-SYM_M, 336, 125), (60, 336)]),
-          ("P", [(-60, 166), (SYM_M, 166, 125), (SYM_M, 506, 125), (-60, 506)])],
+    "j": [("P", [(60, _J[3]), (-SYM_M, _J[3], 125), (-SYM_M, _J[1], 125), (60, _J[1])]),
+          ("P", [(-60, _J[0]), (SYM_M, _J[0], 125), (SYM_M, _J[2], 125), (-60, _J[2])])],
     "k": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)])],
-    "p": [("S",), ("P", [(0, 676), (ONE_M, 676, BOWL_R), (ONE_M, 392, BOWL_R), (0, 392)]),
-          ("P", [(0, 322), (ONE_M, 322, BOWL_R), (ONE_M, 38, BOWL_R), (0, 38)]),
-          ("O", ONE_M - BOWL_R, 676 - BOWL_R, DOT_R),
-          ("O", ONE_M - BOWL_R, 38 + BOWL_R, DOT_R)],
+    "p": [("S",),
+          ("P", [(0, _BP_TOP), (ONE_M, _BP_TOP, _BP_RT), (ONE_M, _BP_TI, _BP_RT),
+                 (0, _BP_TI)]),
+          ("P", [(0, _BP_BI), (ONE_M, _BP_BI, _BP_RB), (ONE_M, _BP_BOT, _BP_RB),
+                 (0, _BP_BOT)]),
+          ("O", ONE_M - _BP_RT, _BP_TOP - _BP_RT, _P_DOT),
+          ("O", ONE_M - _BP_RB, _BP_BOT + _BP_RB, _P_DOT)],
     # A square bowl, so one radius is half of both sides at once.
     "q": [("S",), ("P", [(0, 676), (-ONE_M, 676, 183), (-ONE_M, 310, 183), (0, 310)])],
     "r": [("S",), ("P", [(0, 676), (ONE_M, 676, 202), (ONE_M, 0)]),
@@ -171,22 +220,33 @@ GLYPHS = {
 # cut. Latin punctuation is drawn as a ring instead, so a full stop reads
 # as a stroke like everything else in the face rather than a filled blob.
 HOOK_R = 85          # the hook's corner radius, shared with j
-RING_R = 62          # centreline radius of the punctuation ring
-RING_Y = RING_R + WEIGHT // 2      # sits the ring on the baseline
+RING_R = 62          # centreline radius when the mark is drawn as a ring
+RING_Y = RING_R + WEIGHT // 2      # sits it on the baseline
+
+# How the mark under ! and ? is drawn:
+#   "dot"   a filled dot, exactly as e d g p v y carry theirs -- the mark
+#           then belongs to the same family as the dotted runes
+#   "ring"  a circle stroked at the font's weight, so it is made of line
+#           like everything else
+PUNCT_DOT = "dot"
+_MARK_R = DOT_R if PUNCT_DOT == "dot" else RING_R
+_MARK_Y = _MARK_R + (0 if PUNCT_DOT == "dot" else WEIGHT // 2)
+_MARK = ("O" if PUNCT_DOT == "dot" else "R", 0, _MARK_Y, _MARK_R)
+_STEM_FOOT = _MARK_Y + _MARK_R + (WEIGHT // 2 if PUNCT_DOT == "dot" else 0) + DOT_CLEAR + WEIGHT // 2
 
 PUNCT = {
     "᛫": [("O", 0, 357, 46)],
     "᛬": [("O", 0, 214, 46), ("O", 0, 500, 46)],
     "᛭": [("V", 0, 100, 614), ("L", -190, 357, 190, 357)],
-    ".": [("R", 0, RING_Y, RING_R)],
-    "!": [("R", 0, RING_Y, RING_R), ("V", 0, RING_Y + RING_R + 130, CAP)],
+    ".": [_MARK],
+    "!": [_MARK, ("V", 0, _STEM_FOOT, CAP)],
     # Built from the parts the alphabet already uses: a HOOK, like j's, with
     # a stem down to the ring. Every segment is at least twice HOOK_R long,
     # so no corner is clamped and all four match.
-    "?": [("R", 0, RING_Y, RING_R),
+    "?": [_MARK,
           ("P", [(-170, 440), (-170, CAP - WEIGHT // 2, HOOK_R),
                  (170, CAP - WEIGHT // 2, HOOK_R), (170, 470, HOOK_R),
-                 (0, 470, HOOK_R), (0, 300)])],
+                 (0, 470, HOOK_R), (0, _STEM_FOOT)])],
 }
 
 
