@@ -84,7 +84,10 @@ END_CAPS = "round"
 #                  with a leg -- the shapes as the tradition draws them
 #   "hybrid"       traditional arms and crosses, ny-europeisk curves:
 #                  bowls, arches and hooks are round, arms stay straight
-SKELETON = "neweuropean"
+#
+# Hybrid is the DEFAULT: curves are for bowls, arches and hooks; an arm
+# or a stub is a diagonal line, as the tradition draws it.
+SKELETON = "hybrid"
 
 # A flat that is flush with the baseline or cap is placed by its OUTER
 # edge at the thickness contrast actually leaves it -- otherwise the

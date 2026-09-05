@@ -12,7 +12,10 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
 VARIANTS = [
-    (1,  "Ny-europeisk",          {}),
+    # The default skeleton is hybrid: diagonal arms and stubs, curved
+    # bowls and arches. Ny-europeisk (all-orthogonal) is kept as its own
+    # explicit variant.
+    (1,  "Ny-europeisk",          {"SKELETON": "neweuropean"}),
     (2,  "Lett",                  {"WEIGHT": 56}),
     (3,  "Tung",                  {"WEIGHT": 100}),
     (4,  "Skarpe hjørner",        {"RADIUS": 0}),
@@ -46,7 +49,7 @@ VARIANTS = [
                                    "SERIF_STYLE": "bracketed", "CONTRAST": 0.55,
                                    "WEIGHT": 88}),
     (24, "Hybrid",                {"SKELETON": "hybrid"}),
-    (25, "Hybrid antikva",        {"SKELETON": "hybrid", "SERIF": True,
+    (25, "Ny-europeisk antikva",  {"SKELETON": "neweuropean", "SERIF": True,
                                    "SERIF_STYLE": "bracketed", "CONTRAST": 0.55,
                                    "WEIGHT": 88}),
     (26, "Digital skarp",         {"DOT_SHAPE": "square", "CORNER_STYLE": "chamfer",

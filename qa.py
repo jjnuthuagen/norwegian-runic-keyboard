@@ -79,6 +79,7 @@ def merges():
     bad = []
     half = rf.WEIGHT / 2
     for c in ORDER:
+        has_stave = any(e[0] == "S" for e in rf.GLYPHS[c])
         cls = [_sample(p) for p in centrelines(rf.GLYPHS[c])]
         for i in range(len(cls)):
             for j in range(i + 1, len(cls)):
@@ -97,10 +98,15 @@ def merges():
                 best, at = 1e9, None
                 for p in cls[i]:
                     for q in cls[j]:
+                        # proximity buried inside the stave's own ink is
+                        # invisible -- two arms meeting the stave from
+                        # opposite sides are not a merge
+                        if has_stave and abs(p[0]) <= half + 2 and abs(q[0]) <= half + 2:
+                            continue
                         d = math.hypot(p[0] - q[0], p[1] - q[1])
                         if d < best:
                             best, at = d, p
-                if best < rf.WEIGHT:
+                if at is not None and best < rf.WEIGHT:
                     bad.append((c, i, j, round(best), round(rf.WEIGHT - best),
                                 (round(at[0]), round(at[1]))))
     return bad
