@@ -252,10 +252,13 @@ PUNCT = {
     # Built from the parts the alphabet already uses: a HOOK, like j's, with
     # a stem down to the ring. Every segment is at least twice HOOK_R long,
     # so no corner is clamped and all four match.
-    "?": [_MARK,
-          ("P", [(-170, 440), (-170, CAP - WEIGHT // 2, HOOK_R),
-                 (170, CAP - WEIGHT // 2, HOOK_R), (170, 470, HOOK_R),
-                 (0, 470, HOOK_R), (0, _STEM_FOOT)])],
+    # Two corners, not four: a short left leg, an ARCH over the top, and the
+    # descender running straight down into the disc. The radius is half the
+    # top's width, so the two corner arcs meet and the top is a single
+    # semicircle -- the same construction as u, w and y.
+    "?": [("D", 161, MARK_R, MARK_R),
+          ("P", [(-161, 354), (-161, CAP - WEIGHT // 2, 161),
+                 (161, CAP - WEIGHT // 2, 161), (161, _STEM_FOOT)])],
 }
 
 
