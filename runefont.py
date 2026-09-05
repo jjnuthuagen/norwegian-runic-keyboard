@@ -34,6 +34,17 @@ DOT_R = 52         # radius of the dot on dotted runes
 DOT_X = 108        # how far the dot sits from the stave centre
 SEGMENTS = 20      # sampling resolution for curved strokes
 MITER_LIMIT = 3.4  # beyond this a sharp corner bevels instead of spiking
+
+# --- style switches ---------------------------------------------------
+# DETACH lifts every limb off the stave: a stroke that begins or ends on
+# the stave centreline is trimmed so its edge stops DETACH units short of
+# the stave's edge. The freed end is a free end, so it takes a round cap.
+DETACH = 0
+
+# SERIF adds slab feet and heads: a short horizontal bar wherever a stave
+# or vertical meets the baseline or the cap height.
+SERIF = False
+SERIF_LEN = 110      # half-length of the bar
 CAP_TOL = 30       # how close to the baseline or cap height still counts as
                    # "landing on the line", and so stays flat-ended
 RADIUS = 40        # default corner radius on the centreline. 0 = sharp
@@ -541,6 +552,29 @@ def _clockwise(poly):
     return poly if area < 0 else poly[::-1]
 
 
+def _trim_from_stave(pts, weight):
+    """Shorten a centreline whose first/last point sits on the stave, so
+    the limb's ink clears the stave's ink by DETACH."""
+    cut = weight + DETACH        # half stave + gap + half limb
+    def trim(seq):
+        acc = 0.0
+        for i in range(len(seq) - 1):
+            seg = math.hypot(seq[i+1][0]-seq[i][0], seq[i+1][1]-seq[i][1])
+            if acc + seg >= cut:
+                t = (cut - acc) / (seg or 1.0)
+                new0 = (seq[i][0] + (seq[i+1][0]-seq[i][0])*t,
+                        seq[i][1] + (seq[i+1][1]-seq[i][1])*t)
+                return [new0] + list(seq[i+1:])
+            acc += seg
+        return list(seq)
+    out = list(pts)
+    if abs(out[0][0]) < 1e-6:
+        out = trim(out)
+    if abs(out[-1][0]) < 1e-6:
+        out = trim(out[::-1])[::-1]
+    return out
+
+
 def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
     """Turn one glyph's skeleton into a list of closed contours.
 
@@ -562,14 +596,20 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             add(_offset_path([(x, y0), (x, y1)], weight, r))
         elif kind == "L":
             _, x0, y0, x1, y1 = e
-            add(_offset_path([(x0, y0), (x1, y1)], weight, r))
+            pts = [(x0, y0), (x1, y1)]
+            if DETACH:
+                pts = _trim_from_stave(pts, weight)
+            add(_offset_path(pts, weight, r))
         elif kind == "C":
             x0, y0, x1, y1 = e[1:5]
             sign = e[5] if len(e) > 5 else 1
             add(_offset_path(_bow(x0, y0, x1, y1, curve * sign), weight, r))
         elif kind == "P":
             pts = _expand(e[1], curve)
-            if math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6:
+            closed_p = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
+            if DETACH and not closed_p:
+                pts = _trim_from_stave(pts, weight)
+            if closed_p:
                 ring = _offset_closed(pts, weight, r)
                 if ring:
                     add(ring[0])
@@ -591,6 +631,22 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             if ring:
                 add(ring[0])
                 add(ring[1], hole=True)
+    if SERIF:
+        for e in elements:
+            if e[0] == "S":
+                xs, y0, y1 = 0, 0, CAP
+            elif e[0] == "V":
+                xs, y0, y1 = e[1], e[2], e[3]
+            else:
+                continue
+            for y in (y0, y1):
+                if y <= CAP_TOL:                     # a foot on the baseline
+                    bar = [(xs - SERIF_LEN, weight / 2), (xs + SERIF_LEN, weight / 2)]
+                elif y >= CAP - CAP_TOL:             # a head on the cap
+                    bar = [(xs - SERIF_LEN, CAP - weight / 2), (xs + SERIF_LEN, CAP - weight / 2)]
+                else:
+                    continue
+                add(_offset_path(bar, weight, r))
     return out
 
 
