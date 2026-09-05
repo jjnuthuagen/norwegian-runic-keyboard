@@ -223,16 +223,25 @@ HOOK_R = 85          # the hook's corner radius, shared with j
 RING_R = 62          # centreline radius when the mark is drawn as a ring
 RING_Y = RING_R + WEIGHT // 2      # sits it on the baseline
 
-# How the mark under ! and ? is drawn:
-#   "dot"   a filled dot, exactly as e d g p v y carry theirs -- the mark
-#           then belongs to the same family as the dotted runes
-#   "ring"  a circle stroked at the font's weight, so it is made of line
-#           like everything else
-PUNCT_DOT = "dot"
-_MARK_R = DOT_R if PUNCT_DOT == "dot" else RING_R
-_MARK_Y = _MARK_R + (0 if PUNCT_DOT == "dot" else WEIGHT // 2)
-_MARK = ("O" if PUNCT_DOT == "dot" else "R", 0, _MARK_Y, _MARK_R)
-_STEM_FOOT = _MARK_Y + _MARK_R + (WEIGHT // 2 if PUNCT_DOT == "dot" else 0) + DOT_CLEAR + WEIGHT // 2
+# How the mark under . ! and ? is drawn:
+#   "connected"  a disc with the line growing out of it, exactly the way c
+#                is built -- one shape, not a line hovering over a dot
+#   "dot"        a separate filled dot, as e d g p v y carry theirs
+#   "ring"       a circle stroked at the font's weight
+PUNCT_DOT = "connected"
+
+MARK_R = 120         # matches c's disc, and makes the mark exactly NARROW wide
+MARK_OVERLAP = 16    # how far the line reaches into the disc, as in c
+
+if PUNCT_DOT == "connected":
+    _MARK = ("D", 0, MARK_R, MARK_R)
+    _STEM_FOOT = MARK_R * 2 - MARK_OVERLAP        # ends inside the disc
+elif PUNCT_DOT == "ring":
+    _MARK = ("R", 0, RING_R + WEIGHT // 2, RING_R)
+    _STEM_FOOT = RING_R * 2 + WEIGHT + DOT_CLEAR
+else:
+    _MARK = ("O", 0, DOT_R, DOT_R)
+    _STEM_FOOT = DOT_R * 2 + DOT_CLEAR + WEIGHT // 2
 
 PUNCT = {
     "᛫": [("O", 0, 357, 46)],
