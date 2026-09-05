@@ -59,9 +59,12 @@ CONTRAST = 1.0
 
 def _cfac(nx):
     """Stroke-width factor for a segment whose unit normal has x-component
-    nx: vertical strokes (|nx| = 1) get full weight, horizontals get
-    CONTRAST of it, angles in between interpolate."""
-    return CONTRAST + (1.0 - CONTRAST) * abs(nx)
+    nx: vertical strokes (|nx| = 1) get full weight, horizontals CONTRAST
+    of it. The blend is elliptical -- the width a broad nib of ratio
+    CONTRAST would leave -- so it changes smoothly through a curve. A
+    linear blend puts a visible kink exactly at the corner arcs."""
+    ny2 = 1.0 - nx * nx
+    return math.sqrt(nx * nx + CONTRAST * CONTRAST * ny2)
 CAP_TOL = 30       # how close to the baseline or cap height still counts as
                    # "landing on the line", and so stays flat-ended
 RADIUS = 40        # default corner radius on the centreline. 0 = sharp
@@ -369,7 +372,7 @@ def _fillet(pts, radius):
         a1 = math.atan2(t1[1] - centre[1], t1[0] - centre[0])
         a2 = math.atan2(t2[1] - centre[1], t2[0] - centre[0])
         sweep = (a2 - a1 + math.pi) % (2 * math.pi) - math.pi
-        steps = max(3, int(abs(sweep) / 0.22))
+        steps = max(6, int(abs(sweep) / 0.09))
         out += [(centre[0] + r * math.cos(a1 + sweep * k / steps),
                  centre[1] + r * math.sin(a1 + sweep * k / steps))
                 for k in range(steps + 1)]
@@ -493,7 +496,7 @@ def _fillet_closed(pts, radius):
         a1 = math.atan2(t1[1] - centre[1], t1[0] - centre[0])
         a2 = math.atan2(t2[1] - centre[1], t2[0] - centre[0])
         sweep = (a2 - a1 + math.pi) % (2 * math.pi) - math.pi
-        steps = max(3, int(abs(sweep) / 0.22))
+        steps = max(6, int(abs(sweep) / 0.09))
         out += [(centre[0] + r * math.cos(a1 + sweep * k / steps),
                  centre[1] + r * math.sin(a1 + sweep * k / steps))
                 for k in range(steps + 1)]
