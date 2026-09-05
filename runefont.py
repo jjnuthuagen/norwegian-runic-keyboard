@@ -687,6 +687,24 @@ def _trim_from_stave(pts, weight):
     return out
 
 
+def _extend_into_stave(pts, weight):
+    """A limb whose end sits exactly on the stave centreline gets a butt
+    cap cut perpendicular to its own direction -- against the stave's
+    flat end that leaves a sliver of daylight at the junction. Push such
+    ends INTO the stave so the two inks overlap and nothing can crack."""
+    reach = weight * 0.6
+    out = list(pts)
+    if abs(out[0][0]) < 1e-6 and len(out) > 1:
+        dx, dy = out[1][0] - out[0][0], out[1][1] - out[0][1]
+        L = math.hypot(dx, dy) or 1.0
+        out[0] = (out[0][0] - dx / L * reach, out[0][1] - dy / L * reach)
+    if abs(out[-1][0]) < 1e-6 and len(out) > 1:
+        dx, dy = out[-2][0] - out[-1][0], out[-2][1] - out[-1][1]
+        L = math.hypot(dx, dy) or 1.0
+        out[-1] = (out[-1][0] - dx / L * reach, out[-1][1] - dy / L * reach)
+    return out
+
+
 def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
     """Turn one glyph's skeleton into a list of closed contours.
 
@@ -711,6 +729,8 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             pts = [(x0, y0), (x1, y1)]
             if DETACH:
                 pts = _trim_from_stave(pts, weight)
+            else:
+                pts = _extend_into_stave(pts, weight)
             add(_offset_path(pts, weight, r))
         elif kind == "C":
             x0, y0, x1, y1 = e[1:5]
@@ -721,6 +741,8 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             closed_p = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
             if DETACH and not closed_p:
                 pts = _trim_from_stave(pts, weight)
+            elif not closed_p:
+                pts = _extend_into_stave(pts, weight)
             if closed_p:
                 ring = _offset_closed(pts, weight, r)
                 if ring:
