@@ -62,6 +62,9 @@ CONTRAST = 1.0
 # other way. Only matters when CONTRAST < 1.
 STRESS_ANGLE = 0
 
+# SLANT shears the whole glyph for an italic, in degrees clockwise.
+SLANT = 0
+
 # A flat that is flush with the baseline or cap is placed by its OUTER
 # edge at the thickness contrast actually leaves it -- otherwise the
 # full-weight stave underneath pokes through the thinned flat.
@@ -770,8 +773,11 @@ def build(path, family="Runa", weight=WEIGHT, curve=CURVE, side=SIDE,
     metrics["space"] = (360, 0)
     cmap[0x20] = "space"
 
+    shear = math.tan(math.radians(SLANT))
     for ch, elements in targets.items():
         cs = contours(elements, weight, curve, radius)
+        if shear:
+            cs = [[(q[0] + q[1] * shear, q[1]) for q in c] for c in cs]
         xs = [p[0] for c in cs for p in c]
         minx, maxx = (min(xs), max(xs)) if xs else (0, 0)
         shift = side - minx

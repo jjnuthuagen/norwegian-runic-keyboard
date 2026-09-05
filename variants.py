@@ -34,13 +34,38 @@ VARIANTS = [
     (18, "Antikva lett",          {"SERIF": True, "SERIF_STYLE": "bracketed",
                                    "CONTRAST": 0.45, "WEIGHT": 68,
                                    "SERIF_LEN": 125}),
+    (19, "Gammelantikva",         {"SERIF": True, "SERIF_STYLE": "bracketed",
+                                   "CONTRAST": 0.52, "WEIGHT": 88,
+                                   "STRESS_ANGLE": -20}),
+    (20, "Gammelantikva lett",    {"SERIF": True, "SERIF_STYLE": "bracketed",
+                                   "CONTRAST": 0.45, "WEIGHT": 68,
+                                   "STRESS_ANGLE": -20, "SERIF_LEN": 125}),
 ]
+
+# Families that also ship bold and italic companions, built from the same
+# config with the weight raised or the glyph sheared.
+STYLED = {1: "bi", 2: "bi", 3: "i", 10: "b", 17: "bi", 18: "bi", 19: "bi", 20: "bi"}
+
+
+def build_styled(outdir="dist/variants"):
+    out = pathlib.Path(__file__).parent / outdir
+    for no, name, ov in VARIANTS:
+        flags = STYLED.get(no, "")
+        if "b" in flags:
+            b = dict(ov); b["WEIGHT"] = ov.get("WEIGHT", 76) + 26
+            build_variant(no, name, b, out, suffix="-Bold")
+        if "i" in flags:
+            i = dict(ov); i["SLANT"] = 12
+            build_variant(no, name, i, out, suffix="-Italic")
+        if flags:
+            print(f"  {no:2d} {name}: {'fet ' if 'b' in flags else ''}{'kursiv' if 'i' in flags else ''}")
+
 
 SCALED = {"ONE_M, ONE_W": (404, 564), "SYM_M, SYM_W": (202, 282),
           "STUB_N, STUB_R_N": (164, 82), "STUB_M, STUB_R_M": (202, 101)}
 
 
-def build_variant(no, name, overrides, outdir):
+def build_variant(no, name, overrides, outdir, suffix=""):
     """Apply overrides at SOURCE level and re-exec.
 
     setattr after import is not enough: build()'s defaults and every
@@ -65,8 +90,9 @@ def build_variant(no, name, overrides, outdir):
     ns = {"__name__": "variant",
           "__file__": str(pathlib.Path(__file__).parent / "runefont.py")}
     exec(compile(src, f"runefont_v{no}", "exec"), ns)
-    path = pathlib.Path(outdir) / f"Runa-V{no:02d}.ttf"
-    ns["build"](str(path), family=f"Runa V{no:02d}", weight=ns["WEIGHT"],
+    path = pathlib.Path(outdir) / f"Runa-V{no:02d}{suffix}.ttf"
+    fam = f"Runa V{no:02d}" + suffix.replace("-", " ")
+    ns["build"](str(path), family=fam, weight=ns["WEIGHT"],
                 curve=ns["CURVE"], radius=ns["RADIUS"], side=ns["SIDE"])
     return path
 
@@ -82,3 +108,4 @@ def main(outdir="dist/variants"):
 
 if __name__ == "__main__":
     main()
+    build_styled()
