@@ -241,13 +241,13 @@ GLYPHS = {
                  (0, _BP_BOT)])],
     # An arm on the LEFT plus the dot -- d is never a bracket. The mirror
     # of kaun's arm.
-    "d": [("S",), ("P", [(0, 474), (-ONE_M, 474, ARM_R), (-ONE_M, 714)]),
+    "d": [("S",), ("P", [(0, H_TOP), (-ONE_M, H_TOP, ARM_R), (-ONE_M, 436)]),
           ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
     # On the arm's own arc centre, so it stays in the crook at any reach.
     # Arms attach high, as traditional places them, and run flush to the
     # cap -- the ruler cuts them off level with the stave's top.
     "g": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
-          ("O", 140, 620, DOT_R)],
+          ("O", 210, 350, DOT_R)],
     # Two brackets facing opposite ways, joined in the middle: a side post
     # either side of the stave with one crossbar bridging all three. It is
     # the elder hagall ᚺ made orthogonal -- H is what the rune always was --
@@ -298,7 +298,7 @@ GLYPHS = {
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)])],
     "v": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
           ("P", [(0, 314), (ONE_W, 314, ARM_R + GAP), (ONE_W, 714)]),
-          ("O", 150, 160, DOT_R)],
+          ("O", 210, 190, DOT_R)],
     "w": [("V", -SYM_W, 0, CAP),
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
@@ -768,8 +768,13 @@ def _near_other(pt, lines, dots, weight):
 
 def _trim_from_others(pts, lines, dots, weight):
     """Stamp-style DETACH: shorten any end that lands on ANY other
-    element -- stave, post, arch leg, disc -- not just the centre stave."""
-    cut = weight + DETACH
+    element -- stave, post, arch leg, disc -- not just the centre stave.
+
+    The cut is half the neighbour's stroke plus the gap, plus this
+    stroke's own cap only if it is round -- a flat cap adds no ink past
+    the end, and charging for it over-trimmed the short stubs of a, l,
+    o and å into slivers."""
+    cut = weight / 2 + DETACH + (weight / 2 if END_CAPS == "round" else 0)
 
     def trim(seq):
         acc = 0.0
@@ -860,9 +865,18 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
             pts = _expand(e[1], curve)
             closed_p = math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 1e-6
             if DETACH and not closed_p:
+                # Fillet FIRST, then trim: trimming the raw skeleton eats
+                # the run-up a corner needs, and the fillet then clamps to
+                # a mangled micro-bend. Trimming the finished centreline
+                # keeps the corner's shape and takes the gap out of the
+                # straight (or, on the shortest stubs, cleanly out of the
+                # arc itself).
                 _ln, _dt = _element_centrelines(elements, curve, skip=e)
+                pts = _dedupe(_fillet(_dedupe(pts), r))
                 pts = _trim_from_others(pts, _ln, _dt, weight)
-            elif not closed_p:
+                add(_offset_path(pts, weight, 0))
+                continue
+            if not closed_p:
                 pts = _extend_into_stave(pts, weight)
             if closed_p:
                 ring = _offset_closed(pts, weight, r)
