@@ -655,6 +655,43 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
                 add(ring[0])
                 add(ring[1], hole=True)
     if SERIF:
+        # A serif only goes on a FREE end. If another stroke's centreline
+        # runs through the serif's footprint -- t and d's bracket over the
+        # top, r and q's arm meeting the cap -- the serif would stamp over
+        # ink that is already there.
+        def _others(skip):
+            out = []
+            for o in elements:
+                if o is skip:
+                    continue
+                k2 = o[0]
+                if k2 == "S":
+                    out.append([(0, 0), (0, CAP)])
+                elif k2 == "V":
+                    out.append([(o[1], o[2]), (o[1], o[3])])
+                elif k2 == "L":
+                    out.append([(o[1], o[2]), (o[3], o[4])])
+                elif k2 == "P":
+                    out.append(_expand(o[1], curve))
+                elif k2 == "A":
+                    out.append(_quad(*o[1]))
+            return out
+
+        def _blocked(xs, base, skip):
+            reach_x = SERIF_LEN + weight / 2
+            reach_y = (BRACKET_H if SERIF_STYLE == "bracketed"
+                       else weight * 1.5)
+            for poly in _others(skip):
+                for i in range(len(poly) - 1):
+                    a, b = poly[i], poly[i + 1]
+                    steps = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / 20))
+                    for t_ in range(steps + 1):
+                        q = (a[0] + (b[0] - a[0]) * t_ / steps,
+                             a[1] + (b[1] - a[1]) * t_ / steps)
+                        if abs(q[0] - xs) < reach_x and abs(q[1] - base) < reach_y:
+                            return True
+            return False
+
         for e in elements:
             if e[0] == "S":
                 xs, y0, y1 = 0, 0, CAP
@@ -669,6 +706,8 @@ def contours(elements, weight=WEIGHT, curve=CURVE, radius=None):
                 elif y >= CAP - CAP_TOL:
                     base, up = CAP, -1               # a head on the cap
                 else:
+                    continue
+                if _blocked(xs, base, e):
                     continue
                 if SERIF_STYLE == "bracketed":
                     # Thin base; each side sweeps up into the stem along a
