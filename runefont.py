@@ -160,7 +160,10 @@ SYM_M, SYM_W = 202, 282              # reach either side of centre
 # coordinates: a dot placed by hand stays put when a reach changes and
 # ends up colliding with the stroke it was meant to sit beside.
 DOT_CLEAR = 26                       # gap from a dot's edge to any stroke
-ARM_R = 115                          # corner radius of the arm in f v k g
+ARM_R = 40                           # inner-arm corner: tight, as the
+                                     # tradition draws it. The OUTER arm of
+                                     # f and v keeps its big sweep at
+                                     # ARM_R + GAP, concentric as always.
 BOWL_R = 142                         # corner radius of the bowls in b p
 
 # --- b and p ----------------------------------------------------------
@@ -238,11 +241,13 @@ GLYPHS = {
                  (0, _BP_BOT)])],
     # An arm on the LEFT plus the dot -- d is never a bracket. The mirror
     # of kaun's arm.
-    "d": [("S",), ("P", [(0, 300), (-ONE_M, 300, ARM_R), (-ONE_M, 700)]),
+    "d": [("S",), ("P", [(0, 474), (-ONE_M, 474, ARM_R), (-ONE_M, 714)]),
           ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
     # On the arm's own arc centre, so it stays in the crook at any reach.
-    "g": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
-          ("O", ONE_M - ARM_R, 300 + ARM_R, _G_DOT)],
+    # Arms attach high, as traditional places them, and run flush to the
+    # cap -- the ruler cuts them off level with the stave's top.
+    "g": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
+          ("O", 140, 620, DOT_R)],
     # Two brackets facing opposite ways, joined in the middle: a side post
     # either side of the stave with one crossbar bridging all three. It is
     # the elder hagall ᚺ made orthogonal -- H is what the rune always was --
@@ -251,7 +256,7 @@ GLYPHS = {
           ("L", -SYM_M, 370, SYM_M, 370)],
     "j": [("P", [(60, _J[3]), (-SYM_M, _J[3], 125), (-SYM_M, _J[1], 125), (60, _J[1])]),
           ("P", [(-60, _J[0]), (SYM_M, _J[0], 125), (SYM_M, _J[2], 125), (-60, _J[2])])],
-    "k": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)])],
+    "k": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)])],
     "p": [("S",),
           ("P", [(0, _BP_TOP), (ONE_M, _BP_TOP, _BP_RT), (ONE_M, _BP_TI, _BP_RT),
                  (0, _BP_TI)]),
@@ -283,17 +288,17 @@ GLYPHS = {
     # --- wide, ink 640 -----------------------------------------------
     # The arms are GAP apart on the straights and GAP apart in radius, so
     # both arcs share a centre and the gap never varies.
-    "f": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
-          ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)])],
+    "f": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
+          ("P", [(0, 314), (ONE_W, 314, ARM_R + GAP), (ONE_W, 714)])],
     "m": [("S",), ("P", [(-SYM_W, 700), (-SYM_W, 470, 115), (SYM_W, 470, 115),
                          (SYM_W, 700)])],
     # The left side IS a stave -- full height, straight, never half of a
     # bend. Only the top-right corner bends, rounded off moderately.
     "u": [("V", -SYM_W, 0, CAP),
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)])],
-    "v": [("S",), ("P", [(0, 300), (ONE_M, 300, ARM_R), (ONE_M, 700)]),
-          ("P", [(0, 140), (ONE_W, 140, 275), (ONE_W, 700)]),
-          ("O", ONE_M - ARM_R, 300 + ARM_R, _G_DOT)],
+    "v": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
+          ("P", [(0, 314), (ONE_W, 314, ARM_R + GAP), (ONE_W, 714)]),
+          ("O", 150, 160, DOT_R)],
     "w": [("V", -SYM_W, 0, CAP),
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
