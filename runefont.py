@@ -214,6 +214,9 @@ _P_DOT = max(24, min(DOT_R, min(_BP_RT, _BP_RB) - WEIGHT // 2 - DOT_CLEAR))
 # The dot in g and v's crook has ARM_R of room; heavy weights eat into it,
 # so the dot gives way rather than merging with the arm.
 _G_DOT = max(24, min(DOT_R, ARM_R - WEIGHT // 2 - DOT_CLEAR))
+# A dot tucked tight into a crook sits tangent to BOTH lines with exact
+# clearance -- the same rule that centres p's dots in their bowls.
+TIGHT = WEIGHT // 2 + DOT_CLEAR + DOT_R
 
 STUB_N, STUB_R_N = 164, 82           # narrow side branch -> quarter circle
 STUB_M, STUB_R_M = 202, 101          # medium side branch
@@ -250,7 +253,7 @@ GLYPHS = {
     # Arms attach high, as traditional places them, and run flush to the
     # cap -- the ruler cuts them off level with the stave's top.
     "g": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
-          ("O", 210, 350, DOT_R)],
+          ("O", TIGHT, 474 - TIGHT, DOT_R)],
     # Two brackets facing opposite ways, joined in the middle: a side post
     # either side of the stave with one crossbar bridging all three. It is
     # the elder hagall ᚺ made orthogonal -- H is what the rune always was --
@@ -301,7 +304,7 @@ GLYPHS = {
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)])],
     "v": [("S",), ("P", [(0, 474), (ONE_M, 474, ARM_R), (ONE_M, 714)]),
           ("P", [(0, 314), (ONE_W, 314, ARM_R + GAP), (ONE_W, 714)]),
-          ("O", 210, 190, DOT_R)],
+          ("O", TIGHT, 314 - TIGHT, DOT_R)],
     "w": [("V", -SYM_W, 0, CAP),
           ("P", [(-SYM_W, H_TOP), (SYM_W, H_TOP, 150), (SYM_W, 0)]),
           ("P", [(-SYM_W, 330), (122, 330, 110), (122, 0)])],
@@ -351,7 +354,8 @@ GLYPHS_TRADITIONAL = {
     "d": [("S",), ("L", 0, 700, -201, 588), ("O", 108, 340, DOT_R)],
     "e": [("S",), ("O", 150, 370, DOT_R)],
     "f": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708)],
-    "g": [("S",), ("L", 0, 316, 366, 708), ("O", 140, 640, DOT_R)],
+    "g": [("S",), ("L", 0, 316, 366, 708),
+          ("O", TIGHT, 316 + TIGHT * 929 // 366, DOT_R)],
     "h": [("S",), ("L", -195, 219, 197, 482), ("L", -195, 482, 197, 219)],
     "i": [("S",)],
     "j": [("P", [(10, 714), (-95, 590), (10, 462)]),
@@ -370,7 +374,7 @@ GLYPHS_TRADITIONAL = {
     "u": [("V", -204, 0, CAP),
           ("P", [(-204, 676), (204, 676, 130), (204, 0)])],
     "v": [("S",), ("L", 0, 480, 255, 708), ("L", 0, 289, 476, 708),
-          ("O", 150, 180, DOT_R)],
+          ("O", TIGHT, 289 - TIGHT * 215 // 476, DOT_R)],
     "w": [("V", -240, 0, CAP),
           ("P", [(-240, 676), (170, 676, 130), (170, 0)]),
           ("P", [(-240, 381), (20, 250, 110), (20, 0)])],
@@ -390,10 +394,19 @@ GLYPHS_TRADITIONAL = {
 # ny-europeisk wherever it is a bowl, arch or hook. r keeps its
 # traditional bowl-and-leg shape but the bowl's vertices are rounded.
 GLYPHS_HYBRID = dict(GLYPHS_TRADITIONAL)
-for _k in ("b", "p", "q", "u", "w", "y", "j"):
+for _k in ("u", "w", "y", "j"):
     GLYPHS_HYBRID[_k] = GLYPHS[_k]
-GLYPHS_HYBRID["r"] = [("S",), ("P", [(0, 714), (275, 535, 120), (0, 345, 120),
-                                     (300, 0)])]
+# The bowls are POINTED, not curved: small diamonds off the stave, sharp
+# at the vertex, consistent with the pointed diagonal arms. They keep the
+# air above and below and the shared middle line. p's dots sit tight off
+# each vertex -- TIGHT away, the same clearance rule as everywhere else.
+GLYPHS_HYBRID["b"] = [("S",),
+    ("P", [(0, 566), (270, 462), (0, 357)]),
+    ("P", [(0, 357), (270, 252), (0, 148)])]
+GLYPHS_HYBRID["p"] = GLYPHS_HYBRID["b"] + [
+    ("O", 270 + TIGHT, 462, DOT_R), ("O", 270 + TIGHT, 252, DOT_R)]
+GLYPHS_HYBRID["q"] = [("S",), ("P", [(0, 714), (-262, 478), (0, 228)])]
+GLYPHS_HYBRID["r"] = [("S",), ("P", [(0, 714), (260, 535), (0, 345), (300, 0)])]
 
 if SKELETON == "traditional":
     GLYPHS = GLYPHS_TRADITIONAL
