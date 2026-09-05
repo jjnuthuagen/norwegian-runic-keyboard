@@ -258,10 +258,13 @@ GLYPHS = {
           ("P", [(0, 430), (STUB_M, 430, STUB_R_M), (STUB_M, 632)])],
     # Pulled apart to 560/250: at 520/290 the upper stub's tail ended 28
     # above the lower stub's arm, and a 76-wide stroke fused the two.
+    # Same rule as æ: arms on the left bend DOWN, arms on the right bend
+    # UP. The right pair attaches lower so the rising tails stay under the
+    # cap and clear of each other.
     "ø": [("S",), ("P", [(0, 560), (-STUB_M, 560, STUB_R_M), (-STUB_M, 358)]),
           ("P", [(0, 250), (-STUB_M, 250, STUB_R_M), (-STUB_M, 48)]),
-          ("P", [(0, 560), (STUB_M, 560, STUB_R_M), (STUB_M, 358)]),
-          ("P", [(0, 250), (STUB_M, 250, STUB_R_M), (STUB_M, 48)])],
+          ("P", [(0, 440), (STUB_M, 440, STUB_R_M), (STUB_M, 642)]),
+          ("P", [(0, 130), (STUB_M, 130, STUB_R_M), (STUB_M, 332)])],
 
     # --- wide, ink 640 -----------------------------------------------
     # The arms are GAP apart on the straights and GAP apart in radius, so
