@@ -56,15 +56,30 @@ BRACKET_H = 150      # how far up the stem the bracket curve reaches
 # horizontals while stems stay at WEIGHT. 0.55 reads as an antikva.
 CONTRAST = 1.0
 
+# STRESS_ANGLE tilts the thin axis, in degrees. 0 is vertical stress (thin
+# exactly at the top of a curve, the Times model); negative angles lean the
+# nib the way a right hand holds it (old-style); positive leans it the
+# other way. Only matters when CONTRAST < 1.
+STRESS_ANGLE = 0
 
-def _cfac(nx):
-    """Stroke-width factor for a segment whose unit normal has x-component
-    nx: vertical strokes (|nx| = 1) get full weight, horizontals CONTRAST
-    of it. The blend is elliptical -- the width a broad nib of ratio
-    CONTRAST would leave -- so it changes smoothly through a curve. A
-    linear blend puts a visible kink exactly at the corner arcs."""
-    ny2 = 1.0 - nx * nx
-    return math.sqrt(nx * nx + CONTRAST * CONTRAST * ny2)
+# A flat that is flush with the baseline or cap is placed by its OUTER
+# edge at the thickness contrast actually leaves it -- otherwise the
+# full-weight stave underneath pokes through the thinned flat.
+H_TOP = CAP - max(1, round(WEIGHT * CONTRAST)) // 2
+
+
+def _cfac(nx, ny=0.0):
+    """Stroke-width factor for a segment with unit normal (nx, ny).
+
+    Elliptical -- the width a broad nib of ratio CONTRAST would leave --
+    so it changes smoothly through a curve; a linear blend kinks at the
+    corner arcs. STRESS_ANGLE rotates the nib, moving where on a curve
+    the thin point falls."""
+    if CONTRAST >= 1.0:
+        return 1.0
+    a = math.radians(STRESS_ANGLE)
+    nr = nx * math.cos(a) + ny * math.sin(a)
+    return math.sqrt(nr * nr + CONTRAST * CONTRAST * (1.0 - nr * nr))
 CAP_TOL = 30       # how close to the baseline or cap height still counts as
                    # "landing on the line", and so stays flat-ended
 RADIUS = 40        # default corner radius on the centreline. 0 = sharp
@@ -191,7 +206,7 @@ GLYPHS = {
                  (0, _BP_TI)]),
           ("P", [(0, _BP_BI), (ONE_M, _BP_BI, _BP_RB), (ONE_M, _BP_BOT, _BP_RB),
                  (0, _BP_BOT)])],
-    "d": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, 676, 100), (SYM_M, 676, 100),
+    "d": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, H_TOP, 100), (SYM_M, H_TOP, 100),
                          (SYM_M, 476)]),
           ("O", WEIGHT // 2 + DOT_CLEAR + DOT_R, 340, DOT_R)],
     # On the arm's own arc centre, so it stays in the crook at any reach.
@@ -210,11 +225,11 @@ GLYPHS = {
           ("O", ONE_M - _BP_RT, _BP_TOP - _BP_RT, _P_DOT),
           ("O", ONE_M - _BP_RB, _BP_BOT + _BP_RB, _P_DOT)],
     # A square bowl, so one radius is half of both sides at once.
-    "q": [("S",), ("P", [(0, 676), (-ONE_M, 676, 183), (-ONE_M, 310, 183), (0, 310)])],
-    "r": [("S",), ("P", [(0, 676), (ONE_M, 676, 202), (ONE_M, 0)]),
+    "q": [("S",), ("P", [(0, H_TOP), (-ONE_M, H_TOP, 183), (-ONE_M, 310, 183), (0, 310)])],
+    "r": [("S",), ("P", [(0, H_TOP), (ONE_M, H_TOP, 202), (ONE_M, 0)]),
           ("P", [(0, 470), (ONE_M, 470)])],
     "s": [("P", [(-SYM_M, CAP), (-SYM_M, 392), (SYM_M, 392), (SYM_M, 0)])],
-    "t": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, 676, 100), (SYM_M, 676, 100),
+    "t": [("S",), ("P", [(-SYM_M, 476), (-SYM_M, H_TOP, 100), (SYM_M, H_TOP, 100),
                          (SYM_M, 476)])],
     "z": [("V", 0, 300, CAP),
           ("P", [(-SYM_M, 470), (-SYM_M, 300, 85), (SYM_M, 300, 85), (SYM_M, 470)])],
@@ -431,7 +446,7 @@ def _offset_path(points, weight, radius=None):
                 pts[0][1] + sign * normals[0][1] * h * f0)]
         for i in range(1, len(pts) - 1):
             n1, n2 = normals[i - 1], normals[i]
-            f1, f2 = _cfac(n1[0]), _cfac(n2[0])
+            f1, f2 = _cfac(n1[0], n1[1]), _cfac(n2[0], n2[1])
             mx, my = n1[0] + n2[0], n1[1] + n2[1]
             m = math.hypot(mx, my)
             if m < 1e-9:                       # exact reversal; bevel it
@@ -441,7 +456,7 @@ def _offset_path(points, weight, radius=None):
                             pts[i][1] + sign * n2[1] * h * f2))
                 continue
             mx, my = mx / m, my / m
-            fm = _cfac(mx)
+            fm = _cfac(mx, my)
             cos_half = mx * n1[0] + my * n1[1]
             scale = 1.0 / max(cos_half, 1e-6)
             if scale > MITER_LIMIT:            # too sharp; bevel instead
@@ -532,7 +547,7 @@ def _offset_closed(points, weight, radius):
         out = []
         for i in range(n):
             n1, n2 = norms[(i - 1) % n], norms[i]
-            f1, f2 = _cfac(n1[0]), _cfac(n2[0])
+            f1, f2 = _cfac(n1[0], n1[1]), _cfac(n2[0], n2[1])
             mx, my = n1[0] + n2[0], n1[1] + n2[1]
             m = math.hypot(mx, my)
             if m < 1e-9:
@@ -542,7 +557,7 @@ def _offset_closed(points, weight, radius):
                             pts[i][1] + sign * n2[1] * h * f2))
                 continue
             mx, my = mx / m, my / m
-            fm = _cfac(mx)
+            fm = _cfac(mx, my)
             scale = 1.0 / max(mx * n1[0] + my * n1[1], 1e-6)
             if scale > MITER_LIMIT:
                 out.append((pts[i][0] + sign * n1[0] * h * f1,
